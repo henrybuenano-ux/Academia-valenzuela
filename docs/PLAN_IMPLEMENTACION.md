@@ -3,6 +3,9 @@
 > Presupuesto aceptado: **Pack completo (4 sistemas) — 3.200 € implementación + 340 €/mes**
 > (https://presupuestos.omniainbusiness.com/academia_valenzuela-977978)
 > Sub-cuenta GHL: `hBvP7lemQSMibPYcJPEP` ("Academia Valenz") · Agencia Omnia `e9Wavfr6i9YX8qJYixY2`
+> **Equipo (act. jul-2026):** Oliver, Henry, Germán + Horacio (nuevo). Víctor ya no está.
+> Jaime (dev externo del cliente) no es contacto del equipo → los accesos técnicos se piden a Paco/Fran.
+> **Ejecución por fases = 1 sistema por fase, en el orden del presupuesto: 1 Acceso → 2 Facturación → 3 Agente IA → 4 Captación.**
 
 ---
 
@@ -35,8 +38,13 @@ externo (WordPress/EvoCampus) y se *refleja* en GHL vía webhooks.
 - El mismo plugin (o WP Webhooks) dispara un webhook a GHL → trigger *Inbound Webhook* en un workflow.
 - El workflow: actualiza tag del contacto (`alumno-activo` / `alumno-impago` / `alumno-baja`), notifica al equipo, crea tarea de seguimiento y lanza secuencia de dunning (WhatsApp/email al alumno: "tu pago ha fallado, regulariza aquí").
 
-**Validar en staging (reunión con Jaime — GATE del sistema):**
-- Option real del conector evolCampus (credenciales), forma exacta de respuesta de `getEnrollments`/`updateEnrollment`, acceso a staging, y export del banco de preguntas (para el futuro).
+**Validar en staging — GATE del sistema (sin Jaime):**
+El desarrollador externo que montó la conexión de pagos (Jaime) no es contacto
+del equipo actual, así que los accesos se consiguen directamente con Paco/Fran:
+- Acceso wp-admin + hosting (para crear staging; ya se entró al panel en el discovery — login por URL personalizada de WPS Hide Login).
+- Key completa de la API EvoCampus: está visible en el propio panel (Configuración › Complementos › API, ClientId 83208) — no depende de nadie externo.
+- En staging: option real del conector evolCampus (credenciales), forma exacta de respuesta de `getEnrollments`/`updateEnrollment`, y prueba DRY-RUN → real.
+- Export del banco de preguntas: preguntar directamente a EvolMind (soporte), ya no vía Jaime. No bloquea las fases 1–4; solo afecta a una futura migración.
 
 ---
 
@@ -97,7 +105,7 @@ un SIF certificado** → GHL no puede ser el emisor legal de las facturas.
 
 | Semana | Hito |
 |---|---|
-| 1 | Fase 0 completa + **reunión técnica con Jaime** (gate) + solicitud WhatsApp Meta |
+| 1 | Fase 0 completa + **accesos técnicos con Paco/Fran** (wp-admin, hosting/staging, key API EvoCampus) + solicitud WhatsApp Meta |
 | 2–3 | Sistema 1 en staging (DRY-RUN) → validación → producción + espejo en GHL |
 | 3–4 | Sistema 2 (tras decisión gestoría/VeriFactu) |
 | 4–5 | Sistema 3 (bot + KB + calendario) |
@@ -111,11 +119,11 @@ un SIF certificado** → GHL no puede ser el emisor legal de las facturas.
 2. **Emisor legal de facturas** (Sistema 2): ¿gestoría, herramienta certificada nueva, o ya existe una? → condiciona todo el alcance del sistema. Preguntar a Fran/gestoría.
 3. **Espejo Woo→GHL** del Sistema 1: ¿día 1 (recomendado) o segunda fase?
 4. **Importación inicial**: ¿incluir los 119 en baja? ¿qué campos históricos?
-5. **Responsables por tarea** (Oliver / Víctor / Jaime / externo) y horas estimadas por bloque — necesario para la vista de carga en ClickUp (petición de David).
+5. **Responsables por tarea** (Oliver / Henry / Germán / Horacio) y horas estimadas por bloque — necesario para la vista de carga en ClickUp (petición de David). Definir el rol de Horacio (perfil técnico WP/PHP vs. GHL/campañas).
 6. **Orden de despliegue**: propuesto 1→2→3→4 (dolores primero); ¿adelantar el 3 si WhatsApp se aprueba rápido?
 
 ## Estructura ClickUp propuesta (cuando lo anterior esté cerrado)
 
 - 1 Lista por sistema (+1 de Fase 0) · tareas = bloques de arriba · subtareas = checklist técnico.
 - Campos: responsable, horas estimadas, entorno (GHL / WordPress / EvoCampus / Terceros), dependencia, estado (Backlog → En curso → Validación staging → Producción).
-- Hitos: gate Jaime, DRY-RUN OK, primera factura automática, primer lead del bot, primera campaña live.
+- Hitos: accesos técnicos conseguidos, DRY-RUN OK, primera factura automática, primer lead del bot, primera campaña live.

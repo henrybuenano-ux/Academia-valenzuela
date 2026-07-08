@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
- * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.3.0  (fusión: scaffold Cowork + espejo GHL — validar en staging)
+ * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta).
+ * Version:     0.1.0  (scaffold de arranque — validar en staging)
  * Author:      Omnia
- * Requires Plugins: woocommerce
+ * Requires Plugins: woocommerce, woocommerce-subscriptions
  *
  * ─────────────────────────────────────────────────────────────────────────────
  *  CÓMO FUNCIONA
@@ -13,15 +13,8 @@
  *  3) Resuelve el/los enrollmentid del alumno por su email (getEnrollments).
  *  4) Llama a updateEnrollment con status=2 (baja) o status=0 (activa).
  *  + Cron diario de conciliación como red de seguridad.
- *  + (Opcional) Notifica cada evento a un Inbound Webhook de GoHighLevel.
  * ─────────────────────────────────────────────────────────────────────────────
  *  Estados de matrícula EvoCampus:  0=activa · 1=archivada · 2=baja · 3=solo lectura
- * ─────────────────────────────────────────────────────────────────────────────
- *  Configuración en wp-config.php:
- *    define( 'OMNIA_EVO_CLIENTID', '83208' );
- *    define( 'OMNIA_EVO_KEY',      '...' );
- *    define( 'OMNIA_EVO_DRYRUN',   true );            // empezar SIEMPRE en true
- *    define( 'OMNIA_GHL_WEBHOOK_URL', 'https://...' ); // opcional: espejo CRM
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -29,8 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
  * MODO DE PRUEBA (DRY-RUN).
- * true  = NO cambia nada en EvoCampus; solo escribe en los logs lo que HARÍA.
+ * true  = NO cambia nada en EvoCampus; solo escribe en los logs lo que HARÍA. (Empezar siempre así.)
  * false = actúa de verdad (da de baja / reactiva).
+ * Se puede sobreescribir desde wp-config.php con: define('OMNIA_EVO_DRYRUN', false);
  */
 if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 	define( 'OMNIA_EVO_DRYRUN', true );
@@ -38,15 +32,14 @@ if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 
 class Omnia_EvoCampus_Sync {
 
-	const API_BASE        = 'https://api.evolcampus.com/api/v1';
-	const TOKEN_TRANSIENT = 'omnia_evo_token';
-	const LOG_SOURCE      = 'omnia-evocampus-sync';
+	const API_BASE         = 'https://api.evolcampus.com/api/v1';
+	const TOKEN_TRANSIENT  = 'omnia_evo_token';
+	const LOG_SOURCE       = 'omnia-evocampus-sync';
 
 	/** Bootstrap */
 	public static function init() {
 		// --- Hooks de estado de la suscripción --------------------------------
 		// Baja: impago (tras reintentos), cancelación y expiración.
-		// Nota de negocio: si se pacta periodo de gracia, quitar 'on-hold'.
 		add_action( 'woocommerce_subscription_status_on-hold',   array( __CLASS__, 'on_revoke' ), 10, 1 );
 		add_action( 'woocommerce_subscription_status_cancelled', array( __CLASS__, 'on_revoke' ), 10, 1 );
 		add_action( 'woocommerce_subscription_status_expired',   array( __CLASS__, 'on_revoke' ), 10, 1 );
@@ -58,14 +51,12 @@ class Omnia_EvoCampus_Sync {
 		if ( ! wp_next_scheduled( 'omnia_evo_reconcile' ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'omnia_evo_reconcile' );
 		}
-
-		add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
 	}
 
 	/**
 	 * Credenciales de la API. Orden de preferencia:
 	 *   1) Constantes en wp-config.php:  OMNIA_EVO_CLIENTID / OMNIA_EVO_KEY   ← lo más simple
-	 *   2) Option del conector de Evolmind (confirmar nombre real en staging)
+	 *   2) Option del conector de Evolmind (confirmar nombre real)
 	 *   3) Filtros omnia_evo_clientid / omnia_evo_key
 	 */
 	private static function creds() {
@@ -77,11 +68,9 @@ class Omnia_EvoCampus_Sync {
 	}
 
 	/** Devuelve un token JWT (cacheado en transient para no re-autenticar en cada evento). */
-	private static function token( $force = false ) {
-		if ( ! $force ) {
-			$cached = get_transient( self::TOKEN_TRANSIENT );
-			if ( $cached ) { return $cached; }
-		}
+	private static function token() {
+		$cached = get_transient( self::TOKEN_TRANSIENT );
+		if ( $cached ) { return $cached; }
 
 		list( $clientid, $key ) = self::creds();
 		$res = wp_remote_post( self::API_BASE . '/token', array(
@@ -97,14 +86,12 @@ class Omnia_EvoCampus_Sync {
 		$token = isset( $body['token'] ) ? $body['token'] : false;
 		if ( $token ) {
 			set_transient( self::TOKEN_TRANSIENT, $token, 50 * MINUTE_IN_SECONDS );
-		} else {
-			self::log( 'token: respuesta sin campo token: ' . substr( wp_remote_retrieve_body( $res ), 0, 300 ), 'error' );
 		}
 		return $token;
 	}
 
-	/** Llamada genérica POST autenticada a la API (reintenta 1 vez si el token caducó). */
-	private static function api( $endpoint, $params, $retry = true ) {
+	/** Llamada genérica POST autenticada a la API. */
+	private static function api( $endpoint, $params ) {
 		$token = self::token();
 		if ( ! $token ) { return false; }
 
@@ -118,12 +105,6 @@ class Omnia_EvoCampus_Sync {
 			self::log( "$endpoint error: " . $res->get_error_message(), 'error' );
 			return false;
 		}
-
-		if ( $retry && 401 === wp_remote_retrieve_response_code( $res ) ) {
-			delete_transient( self::TOKEN_TRANSIENT );
-			return self::api( $endpoint, $params, false );
-		}
-
 		return json_decode( wp_remote_retrieve_body( $res ), true );
 	}
 
@@ -161,20 +142,17 @@ class Omnia_EvoCampus_Sync {
 	 * Cambia el estado de TODAS las matrículas del alumno.
 	 * Modelo de esta academia: 1 suscripción = acceso a todo → operamos sobre todas.
 	 * (Para cortar curso a curso se usaría el mapeo Producto→Grupo del conector.)
-	 * @return int[] ids actualizados (o que se actualizarían en DRY-RUN)
 	 */
 	private static function set_status_for_email( $email, $status ) {
-		if ( empty( $email ) ) { return array(); }
+		if ( empty( $email ) ) { return; }
 
 		// Para baja (2) buscamos las activas; para activar (0) buscamos las que están en baja.
 		$want_active = ( 0 === (int) $status ) ? false : true;
-		$ids  = self::enrollment_ids( $email, $want_active );
-		$done = array();
+		$ids = self::enrollment_ids( $email, $want_active );
 
 		foreach ( $ids as $eid ) {
 			if ( OMNIA_EVO_DRYRUN ) {
 				self::log( sprintf( '[DRY-RUN] %s → pondría matrícula #%d en status=%d', $email, $eid, $status ), 'info' );
-				$done[] = $eid;
 				continue;
 			}
 			$res = self::api( 'updateEnrollment', array(
@@ -182,42 +160,30 @@ class Omnia_EvoCampus_Sync {
 				'status'       => (int) $status,
 			) );
 			$ok = ( $res && isset( $res['result'] ) && (int) $res['result'] === 1 );
-			if ( $ok ) { $done[] = $eid; }
 			self::log( sprintf(
 				'updateEnrollment #%d → status=%d : %s',
 				$eid, $status, $ok ? 'OK' : wp_json_encode( $res )
 			), $ok ? 'info' : 'error' );
 		}
-
-		return $done;
 	}
 
 	/** Handler de baja. */
 	public static function on_revoke( $subscription ) {
-		$subscription = self::normalize( $subscription );
-		$email        = self::email_from( $subscription );
-		$ids          = self::set_status_for_email( $email, 2 ); // 2 = Baja
-		self::notify_ghl( 'baja', $email, $subscription, $ids );
+		$email = self::email_from( $subscription );
+		self::set_status_for_email( $email, 2 ); // 2 = Baja
 	}
 
 	/** Handler de reactivación. */
 	public static function on_activate( $subscription ) {
-		$subscription = self::normalize( $subscription );
-		$email        = self::email_from( $subscription );
-		$ids          = self::set_status_for_email( $email, 0 ); // 0 = Activa
-		self::notify_ghl( 'reactivacion', $email, $subscription, $ids );
+		$email = self::email_from( $subscription );
+		self::set_status_for_email( $email, 0 ); // 0 = Activa
 	}
 
-	/** Normaliza ID numérico → objeto WC_Subscription. */
-	private static function normalize( $subscription ) {
+	/** Extrae el email del objeto/ID de suscripción. */
+	private static function email_from( $subscription ) {
 		if ( is_numeric( $subscription ) && function_exists( 'wcs_get_subscription' ) ) {
 			$subscription = wcs_get_subscription( $subscription );
 		}
-		return $subscription;
-	}
-
-	/** Extrae el email del objeto de suscripción. */
-	private static function email_from( $subscription ) {
 		return ( $subscription && is_a( $subscription, 'WC_Subscription' ) )
 			? $subscription->get_billing_email()
 			: '';
@@ -252,51 +218,10 @@ class Omnia_EvoCampus_Sync {
 		self::log( 'Conciliación diaria completada.', 'info' );
 	}
 
-	/* ---------------------------------------------------------------------
-	 * Espejo hacia GoHighLevel (opcional): tag de estado + dunning.
-	 * Requiere OMNIA_GHL_WEBHOOK_URL (Inbound Webhook de un workflow GHL).
-	 * ------------------------------------------------------------------- */
-	private static function notify_ghl( $event, $email, $subscription, array $enrollment_ids = array() ) {
-		if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL' ) || empty( OMNIA_GHL_WEBHOOK_URL ) || empty( $email ) ) {
-			return;
-		}
-		$is_sub = $subscription && is_a( $subscription, 'WC_Subscription' );
-		wp_remote_post( OMNIA_GHL_WEBHOOK_URL, array(
-			'timeout'  => 10,
-			'blocking' => false, // no frenar el hook por el CRM
-			'headers'  => array( 'Content-Type' => 'application/json' ),
-			'body'     => wp_json_encode( array(
-				'event'           => $event, // baja | reactivacion
-				'email'           => $email,
-				'first_name'      => $is_sub ? $subscription->get_billing_first_name() : '',
-				'last_name'       => $is_sub ? $subscription->get_billing_last_name() : '',
-				'phone'           => $is_sub ? $subscription->get_billing_phone() : '',
-				'subscription_id' => $is_sub ? $subscription->get_id() : 0,
-				'woo_status'      => $is_sub ? $subscription->get_status() : '',
-				'enrollments'     => $enrollment_ids,
-				'dryrun'          => (bool) OMNIA_EVO_DRYRUN,
-				'timestamp'       => current_time( 'mysql', true ),
-			) ),
-		) );
-	}
-
-	/** Avisos en el admin: credenciales ausentes o DRY-RUN activo. */
-	public static function admin_notices() {
-		if ( ! current_user_can( 'manage_options' ) ) { return; }
-		list( , $key ) = self::creds();
-		if ( empty( $key ) ) {
-			echo '<div class="notice notice-error"><p><strong>Omnia EvoCampus Sync:</strong> falta la key de la API (definir <code>OMNIA_EVO_KEY</code> en <code>wp-config.php</code>). El plugin no hará nada.</p></div>';
-		} elseif ( OMNIA_EVO_DRYRUN ) {
-			echo '<div class="notice notice-warning"><p><strong>Omnia EvoCampus Sync:</strong> modo <strong>DRY-RUN</strong> activo — se loguea todo pero no se modifica ninguna matrícula. Definir <code>OMNIA_EVO_DRYRUN</code> como <code>false</code> en <code>wp-config.php</code> para activar en real.</p></div>';
-		}
-	}
-
 	/** Log en WooCommerce → Estado → Registros (source: omnia-evocampus-sync). */
 	private static function log( $message, $level = 'info' ) {
 		if ( function_exists( 'wc_get_logger' ) ) {
 			wc_get_logger()->log( $level, $message, array( 'source' => self::LOG_SOURCE ) );
-		} else {
-			error_log( '[' . self::LOG_SOURCE . "] {$level}: {$message}" );
 		}
 	}
 }

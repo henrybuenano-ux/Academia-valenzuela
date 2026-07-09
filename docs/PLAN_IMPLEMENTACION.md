@@ -113,6 +113,25 @@ un SIF certificado** → GHL no puede ser el emisor legal de las facturas.
 
 ---
 
+## Estimación de horas (referencia para ClickUp — petición de David)
+
+Marco: pack vendido a 3.200 € · tarifa interna 55 €/h → presupuesto soporta ~58 h.
+
+| Bloque | Horas est. | Nota |
+|---|---|---|
+| Fase 0 · Fundaciones GHL | 6–9 h | Campos, tags, pipeline, dominio email, import ~386 alumnos |
+| Fase 1 · Sincronización de acceso | 10–15 h | Plugin ya escrito (ahorró ~8–12 h); queda staging + validación + espejo GHL + producción |
+| Fase 2 · Facturación | 10–16 h | Horquilla depende de la respuesta VeriFactu de la gestoría |
+| Fase 3 · Agente IA Setter | 12–16 h | KB, bot, calendario, ajuste (WhatsApp = espera, no horas) |
+| Fase 4 · Captación | 10–14 h | Landing, forms, secuencias, tracking, primera campaña |
+| Gestión (reuniones, ClickUp, demos) | 5–8 h | Repartido en las ~6 semanas |
+| **Total** | **53–78 h** | Escenario medio ~60–65 h, al límite de lo vendido |
+
+Riesgo de desvío principal: Fase 2 (decisión VeriFactu pendiente). Palanca de
+ahorro: generar configuración GHL por API (campos, workflows, plantillas) y
+que el equipo solo revise/ajuste. La cuota de 340 €/mes cubre ~5–6 h/mes de
+servicio continuo posterior (no mezclar con implementación).
+
 ## Decisiones abiertas — iterar ANTES de subir a ClickUp
 
 1. **Política de corte** (Sistema 1): ¿baja inmediata en `on-hold` o periodo de gracia X días con reintentos de Woo? (definir con Paco).

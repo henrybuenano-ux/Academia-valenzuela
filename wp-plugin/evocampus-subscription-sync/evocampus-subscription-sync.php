@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.6.1  (OMNIA_GHL_DRYRUN desacopla el espejo GHL del DRY-RUN de EvoCampus)
+ * Version:     0.7.0  (informe mensual de "acceso sin pago": alumnos activos en EvoCampus sin registro en la tienda)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -86,6 +86,7 @@ class Omnia_EvoCampus_Sync {
 	const TOKEN_TRANSIENT = 'omnia_evo_token';
 	const LOG_SOURCE      = 'omnia-evocampus-sync';
 	const CRON_HOOK       = 'omnia_evo_reconcile';
+	const AUDIT_HOOK      = 'omnia_evo_manual_audit';
 
 	/** Bootstrap */
 	public static function init() {
@@ -99,9 +100,18 @@ class Omnia_EvoCampus_Sync {
 		add_action( 'woocommerce_subscription_status_active',    array( __CLASS__, 'on_activate' ), 10, 1 );
 
 		// --- Conciliación diaria (red de seguridad) ---------------------------
-		add_action( 'omnia_evo_reconcile', array( __CLASS__, 'reconcile' ) );
-		if ( ! wp_next_scheduled( 'omnia_evo_reconcile' ) ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'omnia_evo_reconcile' );
+		add_action( self::CRON_HOOK, array( __CLASS__, 'reconcile' ) );
+		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
+			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CRON_HOOK );
+		}
+
+		// --- Auditoría periódica de acceso sin pago (solo lectura, informe) ---
+		// Lista los alumnos activos en EvoCampus que NO tienen registro en la
+		// tienda (matriculación manual). No corta a nadie. Ver más abajo.
+		add_filter( 'cron_schedules', array( __CLASS__, 'add_monthly_schedule' ) );
+		add_action( self::AUDIT_HOOK, array( __CLASS__, 'audit_manual_access' ) );
+		if ( ! wp_next_scheduled( self::AUDIT_HOOK ) ) {
+			wp_schedule_event( time() + 2 * HOUR_IN_SECONDS, 'omnia_monthly', self::AUDIT_HOOK );
 		}
 
 		add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
@@ -134,6 +144,11 @@ class Omnia_EvoCampus_Sync {
 			self::reconcile();
 			$ran = true;
 		}
+		$audited = false;
+		if ( isset( $_POST['omnia_evo_audit'] ) && check_admin_referer( 'omnia_evo_run_now' ) ) {
+			self::audit_manual_access();
+			$audited = true;
+		}
 
 		$grace  = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
 		$dryrun = OMNIA_EVO_DRYRUN;
@@ -150,8 +165,37 @@ class Omnia_EvoCampus_Sync {
 		}
 		echo '<form method="post">';
 		wp_nonce_field( 'omnia_evo_run_now' );
-		submit_button( 'Ejecutar conciliación ahora', 'primary', 'omnia_evo_run' );
+		submit_button( 'Ejecutar conciliación ahora', 'primary', 'omnia_evo_run', false );
+		echo ' ';
+		submit_button( 'Generar informe de acceso sin pago', 'secondary', 'omnia_evo_audit', false );
 		echo '</form>';
+
+		// Informe de acceso sin pago (matriculaciones manuales sin registro en Woo).
+		$audit = get_option( 'omnia_evo_manual_access' );
+		if ( $audited ) {
+			echo '<div class="notice notice-success"><p>Informe de acceso sin pago regenerado.</p></div>';
+		}
+		echo '<h2>Acceso sin pago (alumnos activos en el campus sin registro en la tienda)</h2>';
+		if ( is_array( $audit ) && isset( $audit['list'] ) ) {
+			printf(
+				'<p>Última revisión: <strong>%s</strong> · <strong>%d</strong> alumno(s) con acceso al campus y sin registro en la web (matriculación manual). No se corta el acceso; es una lista para revisar a mano.</p>',
+				esc_html( $audit['when'] ), count( $audit['list'] )
+			);
+			if ( $audit['list'] ) {
+				echo '<table class="widefat striped"><thead><tr><th>Email</th><th>Nombre</th><th>Grupos</th><th>Última conexión</th></tr></thead><tbody>';
+				foreach ( $audit['list'] as $r ) {
+					printf(
+						'<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
+						esc_html( $r['email'] ), esc_html( $r['name'] ),
+						esc_html( implode( ', ', (array) $r['groups'] ) ),
+						esc_html( $r['lastconnect'] ?: '—' )
+					);
+				}
+				echo '</tbody></table>';
+			}
+		} else {
+			echo '<p><em>Aún no se ha generado el informe. Pulsa "Generar informe de acceso sin pago".</em></p>';
+		}
 
 		// Visor: últimas líneas del log de hoy.
 		echo '<h2>Log (últimas 150 líneas)</h2>';
@@ -455,6 +499,119 @@ class Omnia_EvoCampus_Sync {
 		) );
 	}
 
+	/* ---------------------------------------------------------------------
+	 * Auditoría de "acceso sin pago" (solo lectura, informe mensual).
+	 *
+	 * Hallazgo 10-jul-2026: hay alumnos activos EN EvoCampus que NO tienen
+	 * ningún registro en la tienda (ni usuario WP, ni pedido, ni suscripción):
+	 * están matriculados a mano en el campus, saltándose WooCommerce. El plugin
+	 * NO los corta (no hay pago que vigilar y su acceso caduca por la fecha fin
+	 * de EvoCampus), pero sí los LISTA para que la academia los revise a mano
+	 * (posible fuga de ingresos / becas / pagos por transferencia).
+	 * ------------------------------------------------------------------- */
+
+	/** Añade una recurrencia mensual a wp-cron. */
+	public static function add_monthly_schedule( $schedules ) {
+		if ( ! isset( $schedules['omnia_monthly'] ) ) {
+			$schedules['omnia_monthly'] = array(
+				'interval' => 30 * DAY_IN_SECONDS,
+				'display'  => 'Una vez al mes (Omnia)',
+			);
+		}
+		return $schedules;
+	}
+
+	/**
+	 * Recorre TODAS las matrículas de EvoCampus y devuelve los alumnos activos
+	 * que no tienen ningún registro en la tienda. Guarda el informe en una
+	 * option y lo escribe en el log. No modifica nada. Devuelve la lista.
+	 */
+	public static function audit_manual_access() {
+		self::log( 'Auditoría de acceso sin pago: inicio (solo lectura).' );
+		if ( function_exists( 'set_time_limit' ) ) { @set_time_limit( 300 ); }
+
+		// 1. Recolectar todas las matrículas del campus (todas las páginas).
+		$students = array(); // email(min) => datos agregados
+		$page = 1;
+		do {
+			$res = self::api( 'getEnrollments', array( 'page' => $page, 'regs_per_page' => 100 ) );
+			if ( ! $res || empty( $res['data'] ) ) { break; }
+			foreach ( $res['data'] as $row ) {
+				$p     = isset( $row['person'] ) ? $row['person'] : array();
+				$en    = isset( $row['enroll'] ) ? $row['enroll'] : array();
+				$email = isset( $p['email'] ) ? strtolower( $p['email'] ) : '';
+				if ( '' === $email ) { continue; }
+				if ( ! isset( $students[ $email ] ) ) {
+					$students[ $email ] = array(
+						'email'       => $p['email'],
+						'name'        => trim( ( isset( $p['name'] ) ? $p['name'] : '' ) . ' ' . ( isset( $p['lastname'] ) ? $p['lastname'] : '' ) ),
+						'groups'      => array(),
+						'active'      => false,
+						'lastconnect' => '',
+					);
+				}
+				if ( isset( $en['enrollmentstatus'] ) && 0 === (int) $en['enrollmentstatus'] ) {
+					$students[ $email ]['active'] = true;
+				}
+				if ( ! empty( $en['group'] ) ) { $students[ $email ]['groups'][ $en['group'] ] = true; }
+				$lc = isset( $en['lastconnect'] ) ? (string) $en['lastconnect'] : '';
+				if ( $lc > $students[ $email ]['lastconnect'] ) { $students[ $email ]['lastconnect'] = $lc; }
+			}
+			$pages = isset( $res['pages'] ) ? (int) $res['pages'] : 1;
+			$page++;
+		} while ( $page <= $pages && $page <= 60 );
+
+		// 2. De los activos, quedarse con los que NO tienen registro en la tienda.
+		$active  = 0;
+		$flagged = array();
+		foreach ( $students as $info ) {
+			if ( ! $info['active'] ) { continue; }
+			$active++;
+			if ( self::has_woo_footprint( $info['email'] ) ) { continue; }
+			$flagged[] = array(
+				'email'       => $info['email'],
+				'name'        => $info['name'],
+				'groups'      => array_keys( $info['groups'] ),
+				'lastconnect' => $info['lastconnect'],
+			);
+		}
+
+		self::log( sprintf(
+			'Auditoría: %d alumnos activos en EvoCampus · %d SIN registro en la tienda (matriculación manual).',
+			$active, count( $flagged )
+		) );
+		foreach ( $flagged as $f ) {
+			self::log( sprintf(
+				'ACCESO SIN PAGO: %s (%s) · grupos: %s · últ. conexión %s',
+				$f['email'], $f['name'], implode( ', ', $f['groups'] ), $f['lastconnect'] ? $f['lastconnect'] : '—'
+			) );
+		}
+
+		update_option( 'omnia_evo_manual_access', array(
+			'when'   => current_time( 'mysql', true ),
+			'active' => $active,
+			'list'   => $flagged,
+		), false );
+
+		return $flagged;
+	}
+
+	/**
+	 * ¿El email tiene algún rastro en la tienda? (pedido en cualquier estado,
+	 * usuario WP, o suscripción). Si no, es una matriculación manual.
+	 */
+	private static function has_woo_footprint( $email ) {
+		if ( get_user_by( 'email', $email ) ) { return true; }
+		$orders = wc_get_orders( array(
+			'billing_email' => $email,
+			'limit'         => 1,
+			'status'        => array_keys( wc_get_order_statuses() ),
+			'type'          => 'shop_order',
+			'return'        => 'ids',
+		) );
+		return ! empty( $orders );
+	}
+
 	/** Timestamp del último pedido PAGADO (processing/completed) de un email. */
 	private static function last_paid_timestamp_by_email( $email ) {
 		$orders = wc_get_orders( array(
@@ -657,6 +814,8 @@ add_action( 'plugins_loaded', array( 'Omnia_EvoCampus_Sync', 'init' ) );
 
 /** Limpieza del cron al desactivar. */
 register_deactivation_hook( __FILE__, function () {
-	$ts = wp_next_scheduled( 'omnia_evo_reconcile' );
-	if ( $ts ) { wp_unschedule_event( $ts, 'omnia_evo_reconcile' ); }
+	foreach ( array( 'omnia_evo_reconcile', 'omnia_evo_manual_audit' ) as $hook ) {
+		$ts = wp_next_scheduled( $hook );
+		if ( $ts ) { wp_unschedule_event( $ts, $hook ); }
+	}
 } );

@@ -85,6 +85,22 @@ Modelo: 1 suscripción = acceso a todo → se opera por email sobre todas las
 matrículas. Para granularidad curso a curso, usar el mapeo Producto→Grupo
 del conector oficial de Evolmind.
 
+## Informe de "acceso sin pago" (v0.7.0)
+
+Además de la conciliación, el plugin genera un **informe mensual de solo
+lectura** que lista los alumnos **activos en EvoCampus que NO tienen ningún
+registro en la tienda** (ni usuario WP, ni pedido, ni suscripción) — es decir,
+matriculaciones **manuales** hechas directamente en el campus.
+
+- **No corta el acceso a nadie**: solo informa. Esos alumnos no tienen pago que
+  vigilar y su acceso caduca por la fecha fin de EvoCampus.
+- Sirve para que la academia los revise a mano (becas, cortesía, pagos por
+  transferencia, o posible fuga de ingresos).
+- Se ve en **WooCommerce → EvoCampus Sync** (tabla "Acceso sin pago") y hay un
+  botón "Generar informe de acceso sin pago" para lanzarlo bajo demanda.
+- Corre solo una vez al mes por wp-cron. Recomendación de negocio: matricular
+  siempre por la tienda web para que el sistema automático cubra al 100 %.
+
 ## Seguridad
 
 - Las credenciales viven SOLO en `wp-config.php` (nunca en la base de datos

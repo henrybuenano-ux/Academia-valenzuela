@@ -1,4 +1,4 @@
-# CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1)
+# CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1; verificación sesión 2)
 
 > **Act. sesión 2 (10-jul):** red verificada — academiavalenz.com/staging (200 OK)
 > y api.evolcampus.com (alcanzable) SÍ están permitidos; **fathom.video NO**
@@ -11,6 +11,77 @@
 
 > Para la nueva sesión de Claude Code: lee este archivo + `PLAN_MAESTRO.md`
 > (plan por bloques con registro de progreso) y retoma desde "Siguiente paso".
+
+## Sesión 2 (10-jul, tarde) — CENSO EJECUTADO ✅
+- ✅ Red confirmada (A2 operativa) y wp-admin del staging accesible con el
+  usuario DevOmibu (credenciales por chat; NO commiteadas).
+- ✅ Diagnóstico del "plugin muerto" de la sesión 1: en staging una inclusión
+  temprana ajena define la clase sin arrancarla y la carga normal chocaba con
+  el guard → sin cron, sin menú, sin avisos (causa raíz del incluidor fantasma
+  aún sin identificar; active_plugins/mu-plugins/wp-config limpios).
+- ✅ Plugin **v0.5.2** desplegado en staging vía editor de plugins:
+  1) guard con "arranque de rescate" (si la clase existe sin iniciar → init),
+  2) fix fatal `self::CRON_HOOK` sin definir (la página admin daba 500 —
+     por esto "no llegó a probarse" en sesión 1),
+  3) fix paginación de la recolección (`paged` ignorado → censo incompleto,
+     49 de 59 alumnos).
+- ✅ **CENSO COMPLETO ejecutado desde la página con botón (DRY-RUN)**:
+  59 alumnos · 22 al corriente · 37 en baja de pago. Cruce con API EvoCampus:
+  **16 impagados con acceso activo HOY**, de ellos 3 morosos reales
+  (63/68/**144** días) usando el campus esta misma semana.
+  → `docs/entregables/censo_conciliacion_2026-07-10.md`
+- ✅ API EvoCampus validada por curl (token + getEnrollments; ClientId 83208,
+  key en el mini-plugin de config del staging).
+- ✅ Evidencia P2: no hay cobros de julio (13 alumnos "frontera" 36-40 días +
+  activos en 33-35). Si nadie lanza las renovaciones, en 1-2 semanas todo el
+  censo cae en baja. SIGUE BLOQUEANDO B6.
+- ⚠️ GHL BLOQUEADO por infraestructura (no por credenciales): con el login de
+  agencia (victor.molina@omibu.com, location hBvP7lemQSMibPYcJPEP) no se puede
+  autenticar desde este entorno por DOS motivos independientes:
+  (a) el login por API rechaza (`Invalid email or password` en el backend;
+      Firebase `PASSWORD_LOGIN_DISABLED`) — GHL exige reCAPTCHA, así que el
+      login headless NO funciona ni con credenciales correctas;
+  (b) los dominios de la app (app.gohighlevel.com y el whitelabel
+      accesocrm.omniainbusiness.com) están BLOQUEADOS por la política de red
+      del entorno (proxy → 403 al CONNECT); no se puede conducir el navegador.
+  → Para desbloquear el trabajo sobre los workflows espejo hace falta UNA de:
+    1) el **Firebase refresh token** sacado con la extensión Chrome del CLI
+       (gohighlevel-cli/README.md §Step 1) desde un navegador con sesión
+       iniciada, pegado en el chat → guardar como GHL_FIREBASE_REFRESH_TOKEN
+       (habilita la API interna: crear/editar/guardar workflows);
+    2) o un **PIT** de la sub-cuenta Academia Valenz (solo API pública:
+       lecturas, contactos, oportunidades — NO edita workflows).
+  Material listo para cuando llegue el token: las 51 peticiones DRY-RUN del
+  censo de hoy son ejemplos reales de payload para el Mapping Reference.
+- CLI gohighlevel-cli instalado y funcionando (.venv + .env gitignorado).
+- ✅ GHL DESBLOQUEADO con el Firebase refresh token (API interna). Auditados
+  los 2 workflows espejo → `docs/entregables/estado_workflows_ghl_2026-07-10.md`:
+  Create Opportunity YA existe (Recobro impagos/Impago detectado), workflows
+  publicados, PERO los triggers **no tienen Mapping Reference** → la sub-cuenta
+  tiene **0 contactos** pese a 51+ disparos: el espejo está publicado pero
+  INOPERATIVO (el webhook no crea el contacto). Downstream verificado OK
+  (crear contacto+tag+oportunidad → 201). ✅ RESUELTO por vía A (validado):
+  · Vía A (plugin → API pública, robusta): IMPLEMENTADA en plugin **v0.6.0**
+    en plugin **v0.6.1**: upsert contacto + tags de estado + oportunidad de
+    recobro. PIT instalado en el config del staging. VALIDADO extremo a extremo
+    (baja → contacto+alumno-impago+oportunidad Recobro; reactivación →
+    alumno-activo/recuperado; contacto de prueba borrado). OMNIA_GHL_DRYRUN
+    desacopla el espejo del DRY-RUN de EvoCampus; en staging hereda DRY-RUN
+    (no escribe en el CRM real). En producción, OMNIA_EVO_DRYRUN=false lo activa.
+  · Vía B (mapeo en la UI de GHL) queda como alternativa innecesaria,
+    documentada en `docs/entregables/instrucciones_mapping_ghl_oliver.md`.
+- Nota: los id_token de GHL caducan ~1 h; usar el helper de scratchpad que
+  reacuña por expiración (o el CLI). El PIT del entorno sigue siendo de otra
+  location (403 en API pública contra Academia Valenz).
+
+## Estado al cierre de la sesión 2 (10-jul, noche)
+- Email a Paco ENVIADO (7 manuales + fecha 133ª + política de corte). ⏳ A la
+  espera de respuesta — sus 3 respuestas desbloquean el paso a producción (B6).
+- Plan mapeado a ClickUp (Omnia → Academia Valenzuela, 6 listas, 30 tareas,
+  responsables asignados). La tarea del email ya está completada.
+- Próximo paso al volver: si Paco respondió → aplicar política de corte en la
+  config, deploy a producción con DRY-RUN=true (checklist wp-plugin/README.md)
+  y agendar demo. Si no → seguir con lo no bloqueado (Fase 3: D1 canal email).
 
 ## Estado en una línea
 Fase 1 validada en DRY-RUN en staging; falta ejecutar el CENSO completo de la
@@ -40,24 +111,43 @@ ahora la red del entorno ya permite academiavalenz.com y api.evolcampus.com
 - wp-admin del staging: pedir usuario admin (sugerido: crear usuario temporal
   `omnia-bot` rol Administrador solo en staging).
 
-## Siguiente paso (donde se quedó)
-1. Con Playwright (Chromium en /opt/pw-browsers/chromium): login en
-   https://academiavalenz.com/staging/wp-admin → verificar que SOLO hay una
-   copia del plugin (v0.5.1) activa → WooCommerce → EvoCampus Sync →
-   "Ejecutar conciliación ahora" → capturar el censo del log.
-2. Validar también la API EvoCampus directo por curl (POST /api/v1/token con
-   clientid+key form-encoded; getEnrollments email=...&page=1&regs_per_page=100).
-3. Analizar el censo (morosidad real de la 132ª promoción) → preparar demo Paco.
-4. Leer con Playwright las transcripciones de las 2 llamadas de Fathom
-   (pedido expreso del usuario; requiere que la red permita fathom.video):
-   - Discovery (10-jun): https://fathom.video/share/pvmoGTnqnHKZuMTooTpwhKUXieK7ofwh
-   - Impromptu equipo (11-jun): https://fathom.video/share/SPVd4y6mK6Zz21pJRaKhxf5i_YNWkch7
-   Si Fathom exige login o no renderiza el texto, plan B: el equipo exporta
-   la transcripción desde Fathom y la sube al chat.
+## Siguiente paso (act. sesión 2)
+~~1-3: censo + validación API + análisis~~ ✅ HECHOS (ver arriba y
+`docs/entregables/censo_conciliacion_2026-07-10.md`). ✅ Transcripciones
+Fathom recibidas por chat y analizadas → `docs/LLAMADAS_FATHOM_HALLAZGOS.md`.
+Ahora:
+1. **P2 RESUELTO — actuar con el equipo**: la causa de que no haya cobros es
+   una **edición en lote del 24-jun-2026 14:05 (usuario DeVOmibu) que pasó
+   las suscripciones de Activa → "En espera" EN PRODUCCIÓN**. WCS no cobra
+   suscripciones en espera → facturación congelada desde entonces
+   (~39 subs × ~80 € ≈ 3.100 €/mes parados). Ver
+   `docs/entregables/p2_causa_raiz_2026-07-10.md`. Preguntar a Henry/equipo
+   quién y por qué (¿confusión con el staging, creado por esas fechas?) y
+   planificar la reactivación CONTROLADA (1 alumno primero: al reactivar,
+   WCS intentará el cobro vencido).
+2. Llevar el censo a la reunión con Paco/Fran: los 3 morosos con acceso
+   (63/68/144 días) venden la Fase 1 solos.
+3. Con credenciales GHL de la sub-cuenta: completar lo de Oliver (Mapping
+   Reference en los 2 triggers, guardar workflows, paso Create Opportunity
+   en Baja) — las 51 peticiones DRY-RUN de hoy ya dan ejemplos de payload.
+4. Cazar al "incluidor fantasma" del staging (pedir a Henry acceso SSH/FTP o
+   al panel del hosting; grep -r de 'evocampus-subscription-sync' fuera de
+   wp-content/plugins). La v0.5.2 lo neutraliza, pero mejor entenderlo antes
+   de producción (B6).
+5. Nota Playwright: Chromium no puede salir por el proxy del entorno
+   (ERR_CONNECTION_RESET en el handshake TLS del MITM). Todo el trabajo
+   wp-admin se hizo con requests/HTTP puro — funciona perfectamente; usarlo
+   también en la próxima sesión. Login de PRODUCCIÓN (solo lectura): el
+   wp-login está oculto con WPS Hide Login → slug `av-login`.
 
 ## Pendientes de negocio (Bloque A del plan)
-- P1 ¿Cómo pagan los ~200 alumnos que no están en Woo? (solo hay 60 suscripciones)
-- P2 ¿Por qué no hay pedidos de julio? ¿Quién lanza los cobros mensuales?
+- ✅ P1 CERRADO: 57 activos reales en EvoCampus (no ~267); 38 suscripción +
+  11-12 intensivo (pago único) + 7 matriculación manual sin rastro en Woo
+  (uno es info@academiavalenz.com). Falta solo la respuesta de Paco sobre
+  los 7 manuales.
+- ✅ P2 CERRADO (causa raíz): edición en lote 24-jun Activa→En espera en
+  producción por DeVOmibu → renovaciones congeladas (último pedido: 19-jun).
+  Falta la decisión de negocio: quién/por qué + plan de reactivación.
 - A3 Solicitud WhatsApp a Meta (Fase 3, lead time).
 - A4 Pregunta VeriFactu a la gestoría (bloquea Fase 2).
 - A6 Política de corte con Paco (¿gracia?; GRACE_DAYS del plugin).

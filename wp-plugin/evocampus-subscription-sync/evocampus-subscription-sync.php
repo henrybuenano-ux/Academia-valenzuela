@@ -2,18 +2,24 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.3.2  (webhook GHL bloqueante con log — validado B4 en staging)
+ * Version:     0.4.0  (detección de impago por PEDIDOS pagados — hallazgo B4-bis)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
  * ─────────────────────────────────────────────────────────────────────────────
  *  CÓMO FUNCIONA
- *  1) Escucha los cambios de estado de WooCommerce Subscriptions (hooks).
- *  2) Pide un token JWT a la API de EvoCampus (cacheado ~50 min).
- *  3) Resuelve el/los enrollmentid del alumno por su email (getEnrollments).
- *  4) Llama a updateEnrollment con status=2 (baja) o status=0 (activa).
- *  + Cron diario de conciliación como red de seguridad.
- *  + (Opcional) Notifica cada evento a un Inbound Webhook de GoHighLevel.
+ *  Señal PRINCIPAL (conciliación diaria por PEDIDOS): en esta tienda el
+ *  estado de la suscripción NO refleja el pago (las 60 viven "en espera"
+ *  aunque sus renovaciones se cobren por Redsys). Por eso el veredicto se
+ *  calcula por pedidos: último pedido PAGADO (processing/completed) del
+ *  alumno hace ≤ OMNIA_EVO_GRACE_DAYS días → acceso activo; si no → baja.
+ *  Señal de REFUERZO (hooks): los cambios de estado de la suscripción
+ *  siguen escuchándose por si el flujo de estados se corrige en el futuro.
+ *  1) Token JWT de la API EvoCampus (cacheado ~50 min).
+ *  2) enrollmentid(s) del alumno por email (getEnrollments).
+ *  3) updateEnrollment con status=2 (baja) o status=0 (activa).
+ *  + (Opcional) Espejo de eventos a Inbound Webhooks de GoHighLevel.
+ *  Prueba manual de la conciliación: /wp-admin/?omnia_evo_reconcile_now=1
  * ─────────────────────────────────────────────────────────────────────────────
  *  Estados de matrícula EvoCampus:  0=activa · 1=archivada · 2=baja · 3=solo lectura
  * ─────────────────────────────────────────────────────────────────────────────
@@ -21,6 +27,7 @@
  *    define( 'OMNIA_EVO_CLIENTID', '83208' );
  *    define( 'OMNIA_EVO_KEY',      '...' );
  *    define( 'OMNIA_EVO_DRYRUN',   true );            // empezar SIEMPRE en true
+ *    define( 'OMNIA_EVO_GRACE_DAYS', 35 );            // ventana de pago (días)
  *    // Espejo CRM (opcional): un workflow GHL por tipo de evento.
  *    define( 'OMNIA_GHL_WEBHOOK_URL_BAJA',         'https://...' );
  *    define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://...' );
@@ -63,6 +70,22 @@ class Omnia_EvoCampus_Sync {
 		}
 
 		add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
+
+		// Disparador manual para pruebas: /wp-admin/?omnia_evo_reconcile_now=1
+		add_action( 'admin_init', array( __CLASS__, 'maybe_manual_reconcile' ) );
+	}
+
+	/** Ejecuta la conciliación bajo demanda (solo administradores). */
+	public static function maybe_manual_reconcile() {
+		if ( empty( $_GET['omnia_evo_reconcile_now'] ) || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		self::log( 'Conciliación lanzada MANUALMENTE desde el admin.', 'info' );
+		self::reconcile();
+		wp_die(
+			'Conciliación ejecutada. Revisa el log en WooCommerce → Estado → Registros → fuente <code>omnia-evocampus-sync</code>. <a href="' . esc_url( admin_url() ) . '">Volver al escritorio</a>',
+			'Omnia EvoCampus Sync'
+		);
 	}
 
 	/**
@@ -227,32 +250,91 @@ class Omnia_EvoCampus_Sync {
 	}
 
 	/**
-	 * Conciliación diaria: recorre las suscripciones y asegura coherencia con EvoCampus.
-	 * Activas → matrícula status=0 ; impago/cancelada/expirada → status=2.
+	 * Conciliación diaria — SEÑAL PRINCIPAL de esta tienda.
+	 *
+	 * El estado de la suscripción no refleja el pago (hallazgo 10-jul-2026:
+	 * las 60 suscripciones viven "en espera" con renovaciones cobradas por
+	 * Redsys), así que el veredicto se calcula por PEDIDOS: si el último
+	 * pedido pagado del alumno tiene ≤ GRACE_DAYS días → activo; si no → baja.
 	 */
 	public static function reconcile() {
 		if ( ! function_exists( 'wcs_get_subscriptions' ) ) { return; }
 
-		$revoke_states = array( 'on-hold', 'cancelled', 'expired' );
-		$page = 1;
+		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
+		self::log( sprintf(
+			'Conciliación diaria: inicio (ventana de pago: %d días)%s',
+			$grace, OMNIA_EVO_DRYRUN ? ' [DRY-RUN]' : ''
+		) );
+
+		// 1. Último pago por alumno (email), mirando TODAS sus suscripciones.
+		$students = array();
+		$page     = 1;
 		do {
 			$subs = wcs_get_subscriptions( array(
 				'subscriptions_per_page' => 50,
 				'paged'                  => $page,
 			) );
 			foreach ( $subs as $sub ) {
-				$email  = $sub->get_billing_email();
-				$status = $sub->get_status();
-				if ( 'active' === $status ) {
-					self::set_status_for_email( $email, 0 );
-				} elseif ( in_array( $status, $revoke_states, true ) ) {
-					self::set_status_for_email( $email, 2 );
+				$email = $sub->get_billing_email();
+				if ( empty( $email ) ) { continue; }
+				$key  = strtolower( $email );
+				$last = self::last_paid_timestamp( $sub );
+				if ( ! isset( $students[ $key ] )
+					|| ( $last && $last > (int) $students[ $key ]['last_paid'] ) ) {
+					$students[ $key ] = array( 'email' => $email, 'last_paid' => $last, 'sub' => $sub );
 				}
 			}
 			$page++;
 		} while ( ! empty( $subs ) && count( $subs ) === 50 );
 
-		self::log( 'Conciliación diaria completada.', 'info' );
+		// 2. Veredicto por alumno + acción idempotente + espejo GHL si cambió.
+		$verdicts = get_option( 'omnia_evo_verdicts', array() );
+		$now      = time();
+		foreach ( $students as $key => $info ) {
+			$days = $info['last_paid']
+				? (int) floor( ( $now - $info['last_paid'] ) / DAY_IN_SECONDS )
+				: null;
+			$ok      = ( null !== $days && $days <= $grace );
+			$verdict = $ok ? 'activo' : 'baja';
+
+			self::log( sprintf(
+				'%s — último pago %s → %s',
+				$info['email'],
+				null === $days ? 'NUNCA' : "hace {$days} días",
+				$verdict
+			) );
+
+			self::set_status_for_email( $info['email'], $ok ? 0 : 2 );
+
+			if ( ( $verdicts[ $key ] ?? '' ) !== $verdict ) {
+				self::notify_ghl( $ok ? 'reactivacion' : 'baja', $info['email'], $info['sub'] );
+				$verdicts[ $key ] = $verdict;
+			}
+		}
+
+		// En DRY-RUN no se persisten veredictos: el primer pase real
+		// notificará a GHL el estado inicial de todos los alumnos.
+		if ( ! OMNIA_EVO_DRYRUN ) {
+			update_option( 'omnia_evo_verdicts', $verdicts, false );
+		}
+
+		self::log( sprintf( 'Conciliación diaria: fin (%d alumnos evaluados)', count( $students ) ) );
+	}
+
+	/** Timestamp del último pedido PAGADO (processing/completed) de una suscripción. */
+	private static function last_paid_timestamp( $subscription ) {
+		$latest = null;
+		$ids    = $subscription->get_related_orders( 'ids', array( 'parent', 'renewal' ) );
+		foreach ( $ids as $oid ) {
+			$order = wc_get_order( $oid );
+			if ( ! $order || ! $order->is_paid() ) { continue; }
+			$date = $order->get_date_paid();
+			if ( ! $date ) { $date = $order->get_date_created(); }
+			if ( $date && ( null === $latest || $date->getTimestamp() > $latest ) ) {
+				$latest = $date->getTimestamp();
+			}
+		}
+		return $latest;
 	}
 
 	/* ---------------------------------------------------------------------

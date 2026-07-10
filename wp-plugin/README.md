@@ -40,13 +40,28 @@ define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.
 - [ ] Desplegar a producción (de nuevo con DRY-RUN=true 24–48 h, revisar
       logs y conciliación, y entonces activar en real).
 
-## Comportamiento
+## Comportamiento (v0.4+)
+
+**Señal principal — conciliación diaria por PEDIDOS** (hallazgo 10-jul-2026:
+en esta tienda el estado de la suscripción no refleja el pago):
+
+| Situación del alumno | Acción EvoCampus |
+|---|---|
+| Último pedido PAGADO hace ≤ `OMNIA_EVO_GRACE_DAYS` (35) | `status=0` (activo) |
+| Último pedido pagado hace más de la ventana (o nunca) | `status=2` (baja) |
+
+La conciliación corre a diario (cron 04:30) y loguea el censo completo
+("email — último pago hace N días → veredicto"). El espejo a GHL solo se
+notifica cuando el veredicto de un alumno CAMBIA. Prueba manual:
+`/wp-admin/?omnia_evo_reconcile_now=1` (solo administradores).
+
+**Señal de refuerzo — hooks de estado** (por si el flujo de estados se
+corrige en el futuro):
 
 | Evento WooCommerce Subscriptions | Acción EvoCampus |
 |---|---|
-| `on-hold` / `cancelled` / `expired` | `updateEnrollment status=2` (baja) en TODAS las matrículas del email |
+| `on-hold` / `cancelled` / `expired` | `updateEnrollment status=2` (baja) |
 | `active` (reactivación) | `updateEnrollment status=0` (activa) |
-| Cron diario 04:30 | Concilia estado Woo vs matrícula y corrige desajustes |
 
 Modelo: 1 suscripción = acceso a todo → se opera por email sobre todas las
 matrículas. Para granularidad curso a curso, usar el mapeo Producto→Grupo

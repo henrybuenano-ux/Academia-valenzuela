@@ -39,6 +39,12 @@ ahora la red del entorno ya permite academiavalenz.com y api.evolcampus.com
 2. Validar también la API EvoCampus directo por curl (POST /api/v1/token con
    clientid+key form-encoded; getEnrollments email=...&page=1&regs_per_page=100).
 3. Analizar el censo (morosidad real de la 132ª promoción) → preparar demo Paco.
+4. Leer con Playwright las transcripciones de las 2 llamadas de Fathom
+   (pedido expreso del usuario; requiere que la red permita fathom.video):
+   - Discovery (10-jun): https://fathom.video/share/pvmoGTnqnHKZuMTooTpwhKUXieK7ofwh
+   - Impromptu equipo (11-jun): https://fathom.video/share/SPVd4y6mK6Zz21pJRaKhxf5i_YNWkch7
+   Si Fathom exige login o no renderiza el texto, plan B: el equipo exporta
+   la transcripción desde Fathom y la sube al chat.
 
 ## Pendientes de negocio (Bloque A del plan)
 - P1 ¿Cómo pagan los ~200 alumnos que no están en Woo? (solo hay 60 suscripciones)

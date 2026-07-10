@@ -15,8 +15,9 @@ seguridad. Espejo opcional de eventos hacia GoHighLevel (tags + dunning).
 define( 'OMNIA_EVO_CLIENTID', '83208' );
 define( 'OMNIA_EVO_KEY',      '<key del panel EvoCampus>' );
 define( 'OMNIA_EVO_DRYRUN',   true );  // ¡empezar SIEMPRE en true!
-// Opcional — espejo CRM (Inbound Webhook de un workflow GHL):
-// define( 'OMNIA_GHL_WEBHOOK_URL', 'https://services.leadconnectorhq.com/hooks/...' );
+// Espejo CRM — workflows "Espejo EvoCampus" en la sub-cuenta Academia Valenz:
+define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/vJkOtiVDBtx0TChtWl9U' );
+define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/DHGCTUxHMdwjVIMKbSOt' );
 ```
 
 4. Ver logs en WooCommerce → Estado → Registros → fuente `omnia-evocampus-sync`.

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.4.2  (conciliación con log de progreso y captura de errores)
+ * Version:     0.5.0  (búsqueda de pagos por email — evita el timeout de related-orders)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -280,7 +280,11 @@ class Omnia_EvoCampus_Sync {
 			$grace, OMNIA_EVO_DRYRUN ? ' [DRY-RUN]' : ''
 		) );
 
-		// 1. Último pago por alumno (email), mirando TODAS sus suscripciones.
+		$started = time();
+
+		// 1. Censo de alumnos: emails únicos de las suscripciones (SIN tocar
+		//    sus pedidos relacionados — la caché de related-orders de WCS
+		//    tarda >180 s en este hosting y provoca el timeout).
 		$students = array();
 		$page     = 1;
 		try {
@@ -293,11 +297,9 @@ class Omnia_EvoCampus_Sync {
 				foreach ( $subs as $sub ) {
 					$email = $sub->get_billing_email();
 					if ( empty( $email ) ) { continue; }
-					$key  = strtolower( $email );
-					$last = self::last_paid_timestamp( $sub );
-					if ( ! isset( $students[ $key ] )
-						|| ( $last && $last > (int) $students[ $key ]['last_paid'] ) ) {
-						$students[ $key ] = array( 'email' => $email, 'last_paid' => $last, 'sub' => $sub );
+					$key = strtolower( $email );
+					if ( ! isset( $students[ $key ] ) ) {
+						$students[ $key ] = array( 'email' => $email, 'sub' => $sub );
 					}
 				}
 				$page++;
@@ -315,10 +317,25 @@ class Omnia_EvoCampus_Sync {
 		}
 		self::log( sprintf( 'Conciliación: recolección completa — %d alumnos únicos.', count( $students ) ) );
 
+		// 1b. Último pedido PAGADO por email (consulta ligera e indexada,
+		//     compatible con almacenamiento en posts y HPOS).
+		foreach ( $students as $key => $info ) {
+			$students[ $key ]['last_paid'] = self::last_paid_timestamp_by_email( $info['email'] );
+		}
+
 		// 2. Veredicto por alumno + acción idempotente + espejo GHL si cambió.
 		$verdicts = get_option( 'omnia_evo_verdicts', array() );
 		$now      = time();
+		$done = 0;
 		foreach ( $students as $key => $info ) {
+			// Parada limpia antes del límite duro de PHP del hosting (180 s).
+			if ( ( time() - $started ) > 150 ) {
+				self::log( sprintf(
+					'Conciliación: tiempo casi agotado — evaluados %d de %d alumnos; el resto quedará para el próximo pase.',
+					$done, count( $students )
+				), 'warning' );
+				break;
+			}
 			try {
 				$days = $info['last_paid']
 					? (int) floor( ( $now - $info['last_paid'] ) / DAY_IN_SECONDS )
@@ -345,6 +362,7 @@ class Omnia_EvoCampus_Sync {
 					$info['email'], $e->getMessage(), basename( $e->getFile() ), $e->getLine()
 				), 'error' );
 			}
+			$done++;
 		}
 
 		// En DRY-RUN no se persisten veredictos: el primer pase real
@@ -353,23 +371,29 @@ class Omnia_EvoCampus_Sync {
 			update_option( 'omnia_evo_verdicts', $verdicts, false );
 		}
 
-		self::log( sprintf( 'Conciliación diaria: fin (%d alumnos evaluados)', count( $students ) ) );
+		self::log( sprintf(
+			'Conciliación diaria: fin (%d de %d alumnos evaluados en %d s)',
+			$done, count( $students ), time() - $started
+		) );
 	}
 
-	/** Timestamp del último pedido PAGADO (processing/completed) de una suscripción. */
-	private static function last_paid_timestamp( $subscription ) {
-		$latest = null;
-		$ids    = $subscription->get_related_orders( 'ids', array( 'parent', 'renewal' ) );
-		foreach ( $ids as $oid ) {
-			$order = wc_get_order( $oid );
-			if ( ! $order || ! $order->is_paid() ) { continue; }
-			$date = $order->get_date_paid();
-			if ( ! $date ) { $date = $order->get_date_created(); }
-			if ( $date && ( null === $latest || $date->getTimestamp() > $latest ) ) {
-				$latest = $date->getTimestamp();
-			}
+	/** Timestamp del último pedido PAGADO (processing/completed) de un email. */
+	private static function last_paid_timestamp_by_email( $email ) {
+		$orders = wc_get_orders( array(
+			'limit'         => 1,
+			'status'        => array( 'processing', 'completed' ),
+			'billing_email' => $email,
+			'orderby'       => 'date',
+			'order'         => 'DESC',
+			'type'          => 'shop_order', // solo pedidos, no suscripciones
+		) );
+		if ( empty( $orders ) ) {
+			return null;
 		}
-		return $latest;
+		$order = $orders[0];
+		$date  = $order->get_date_paid();
+		if ( ! $date ) { $date = $order->get_date_created(); }
+		return $date ? $date->getTimestamp() : null;
 	}
 
 	/* ---------------------------------------------------------------------

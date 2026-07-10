@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.5.2  (arranque de rescate si otra inclusión definió la clase sin iniciarla; recolección sin paginación)
+ * Version:     0.6.0  (espejo GHL por API pública directa —upsert contacto+tags+oportunidad— además del Inbound Webhook)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -28,7 +28,18 @@
  *    define( 'OMNIA_EVO_KEY',      '...' );
  *    define( 'OMNIA_EVO_DRYRUN',   true );            // empezar SIEMPRE en true
  *    define( 'OMNIA_EVO_GRACE_DAYS', 35 );            // ventana de pago (días)
- *    // Espejo CRM (opcional): un workflow GHL por tipo de evento.
+ *    // Espejo CRM — OPCIÓN A (recomendada): API pública de GHL directa.
+ *    // El plugin hace upsert del contacto + tags de estado + oportunidad de
+ *    // recobro. NO depende de configurar el Mapping Reference del webhook.
+ *    define( 'OMNIA_GHL_PIT',         'pit-...' );          // Private Integration Token de la sub-cuenta
+ *    define( 'OMNIA_GHL_LOCATION_ID', 'hBvP7lemQSMibPYcJPEP' );
+ *    // (opcional; por defecto van al pipeline "Recobro impagos" / "Impago detectado")
+ *    define( 'OMNIA_GHL_PIPELINE_RECOBRO', 'TwmjrZZ5LLAYmnVdIkNT' );
+ *    define( 'OMNIA_GHL_STAGE_IMPAGO',     'd8904ba6-e713-4ac9-82d3-f38124620c13' );
+ *
+ *    // Espejo CRM — OPCIÓN B (fallback): Inbound Webhook por tipo de evento.
+ *    // Requiere el Mapping Reference configurado en la UI de GHL (si no, no
+ *    // crea el contacto). Solo se usa si NO hay OMNIA_GHL_PIT definido.
  *    define( 'OMNIA_GHL_WEBHOOK_URL_BAJA',         'https://...' );
  *    define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://...' );
  *    // (compat: OMNIA_GHL_WEBHOOK_URL como URL única para ambos eventos)
@@ -461,10 +472,112 @@ class Omnia_EvoCampus_Sync {
 	}
 
 	/* ---------------------------------------------------------------------
-	 * Espejo hacia GoHighLevel (opcional): tag de estado + dunning.
-	 * Requiere OMNIA_GHL_WEBHOOK_URL (Inbound Webhook de un workflow GHL).
+	 * Espejo hacia GoHighLevel (opcional): tag de estado + oportunidad + dunning.
+	 * Dos vías (se elige por configuración):
+	 *   A) API pública directa (OMNIA_GHL_PIT): upsert contacto + tags +
+	 *      oportunidad. Robusta; NO depende del Mapping Reference del webhook.
+	 *   B) Inbound Webhook (OMNIA_GHL_WEBHOOK_URL_*): fallback si no hay PIT.
 	 * ------------------------------------------------------------------- */
 	private static function notify_ghl( $event, $email, $subscription, array $enrollment_ids = array() ) {
+		if ( empty( $email ) ) { return; }
+		if ( defined( 'OMNIA_GHL_PIT' ) && OMNIA_GHL_PIT ) {
+			self::notify_ghl_api( $event, $email, $subscription );
+			return;
+		}
+		self::notify_ghl_webhook( $event, $email, $subscription, $enrollment_ids );
+	}
+
+	/**
+	 * Vía A — API pública de GHL (services.leadconnectorhq.com, v2021-07-28).
+	 * baja:         upsert contacto +tag alumno-impago, -activo/-recuperado,
+	 *               + oportunidad en "Recobro impagos / Impago detectado".
+	 * reactivacion: upsert contacto +tags alumno-activo/recuperado, -impago/-baja.
+	 */
+	private static function notify_ghl_api( $event, $email, $subscription ) {
+		$loc     = defined( 'OMNIA_GHL_LOCATION_ID' ) ? OMNIA_GHL_LOCATION_ID : 'hBvP7lemQSMibPYcJPEP';
+		$is_sub  = $subscription && is_a( $subscription, 'WC_Subscription' );
+		$is_baja = ( 'baja' === $event );
+
+		$add_tags    = $is_baja ? array( 'alumno-impago' ) : array( 'alumno-activo', 'alumno-recuperado' );
+		$remove_tags = $is_baja ? array( 'alumno-activo', 'alumno-recuperado' ) : array( 'alumno-impago', 'alumno-baja' );
+
+		if ( OMNIA_EVO_DRYRUN ) {
+			self::log( sprintf(
+				'[DRY-RUN] GHL API: upsert %s (+%s / -%s)%s',
+				$email, implode( ',', $add_tags ), implode( ',', $remove_tags ),
+				$is_baja ? ' + oportunidad recobro' : ''
+			), 'info' );
+			return;
+		}
+
+		// 1) Upsert del contacto (crea o actualiza por email; añade los tags de estado).
+		$payload = array( 'locationId' => $loc, 'email' => $email, 'tags' => $add_tags );
+		if ( $is_sub ) {
+			$payload['firstName'] = $subscription->get_billing_first_name();
+			$payload['lastName']  = $subscription->get_billing_last_name();
+			$phone = $subscription->get_billing_phone();
+			if ( $phone ) { $payload['phone'] = $phone; }
+		}
+		$res        = self::ghl_api( 'POST', '/contacts/upsert', $payload );
+		$contact_id = ( is_array( $res ) && ! empty( $res['contact']['id'] ) ) ? $res['contact']['id'] : '';
+		if ( ! $contact_id ) {
+			self::log( "GHL API: upsert de {$email} sin contact id: " . wp_json_encode( $res ), 'error' );
+			return;
+		}
+		self::log( "GHL API: contacto {$email} → {$contact_id} (+" . implode( ',', $add_tags ) . ')' );
+
+		// 2) Quitar los tags del estado contrario.
+		self::ghl_api( 'DELETE', "/contacts/{$contact_id}/tags", array( 'tags' => $remove_tags ) );
+
+		// 3) En baja, oportunidad en el pipeline de recobro (evita duplicar si ya hay una abierta).
+		if ( $is_baja ) {
+			$pipeline = defined( 'OMNIA_GHL_PIPELINE_RECOBRO' ) ? OMNIA_GHL_PIPELINE_RECOBRO : 'TwmjrZZ5LLAYmnVdIkNT';
+			$stage    = defined( 'OMNIA_GHL_STAGE_IMPAGO' ) ? OMNIA_GHL_STAGE_IMPAGO : 'd8904ba6-e713-4ac9-82d3-f38124620c13';
+			$existing = self::ghl_api( 'GET', "/opportunities/search?location_id={$loc}&contact_id={$contact_id}&pipeline_id={$pipeline}&status=open&limit=1" );
+			$has_open = is_array( $existing ) && ! empty( $existing['opportunities'] );
+			if ( $has_open ) {
+				self::log( "GHL API: {$email} ya tiene oportunidad abierta en recobro; no se duplica." );
+			} else {
+				$opp = self::ghl_api( 'POST', '/opportunities/', array(
+					'locationId'      => $loc,
+					'pipelineId'      => $pipeline,
+					'pipelineStageId' => $stage,
+					'name'            => $email,
+					'contactId'       => $contact_id,
+					'status'          => 'open',
+				) );
+				$ok = is_array( $opp ) && ( ! empty( $opp['opportunity']['id'] ) || ! empty( $opp['id'] ) );
+				self::log( "GHL API: oportunidad recobro para {$email} : " . ( $ok ? 'OK' : wp_json_encode( $opp ) ), $ok ? 'info' : 'error' );
+			}
+		}
+	}
+
+	/** Llamada genérica a la API pública de GHL con el PIT. */
+	private static function ghl_api( $method, $path, $body = null ) {
+		$res = wp_remote_request( 'https://services.leadconnectorhq.com' . $path, array(
+			'method'  => $method,
+			'timeout' => 15,
+			'headers' => array(
+				'Authorization' => 'Bearer ' . OMNIA_GHL_PIT,
+				'Version'       => '2021-07-28',
+				'Content-Type'  => 'application/json',
+				'Accept'        => 'application/json',
+			),
+			'body'    => ( null === $body ) ? null : wp_json_encode( $body ),
+		) );
+		if ( is_wp_error( $res ) ) {
+			self::log( "GHL API {$method} {$path} error: " . $res->get_error_message(), 'error' );
+			return null;
+		}
+		$code = wp_remote_retrieve_response_code( $res );
+		if ( $code < 200 || $code >= 300 ) {
+			self::log( "GHL API {$method} {$path} → HTTP {$code}: " . substr( wp_remote_retrieve_body( $res ), 0, 200 ), 'error' );
+		}
+		return json_decode( wp_remote_retrieve_body( $res ), true );
+	}
+
+	/** Vía B — Inbound Webhook (requiere Mapping Reference configurado en GHL). */
+	private static function notify_ghl_webhook( $event, $email, $subscription, array $enrollment_ids = array() ) {
 		// URL por evento; OMNIA_GHL_WEBHOOK_URL sirve de fallback común.
 		$url = '';
 		if ( 'baja' === $event && defined( 'OMNIA_GHL_WEBHOOK_URL_BAJA' ) ) {

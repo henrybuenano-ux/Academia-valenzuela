@@ -51,9 +51,15 @@
   publicados, PERO los triggers **no tienen Mapping Reference** → la sub-cuenta
   tiene **0 contactos** pese a 51+ disparos: el espejo está publicado pero
   INOPERATIVO (el webhook no crea el contacto). Downstream verificado OK
-  (crear contacto+tag+oportunidad → 201). Falta decidir arreglo A (mapeo en UI,
-  lo hace Oliver — el entorno no llega a la app GHL) o B (plugin → API pública
-  con un PIT, lo implementa Claude). PENDIENTE de decisión del equipo.
+  (crear contacto+tag+oportunidad → 201). AMBOS arreglos preparados:
+  · Vía A (plugin → API pública, robusta): IMPLEMENTADA en plugin **v0.6.0**
+    (upsert contacto+tags+oportunidad; inerte hasta definir OMNIA_GHL_PIT;
+    respeta DRY-RUN). FALTA: pegar un PIT de la sub-cuenta (Settings → Private
+    Integrations, scopes contacts+opportunities) y validar en staging.
+  · Vía B (mapeo en la UI de GHL, la hace Oliver): instrucciones exactas en
+    `docs/entregables/instrucciones_mapping_ghl_oliver.md`.
+  (La pregunta de decisión al equipo falló por un corte del permiso; dejo las
+  dos vías listas para no bloquear. Elegir una y ejecutarla.)
 - Nota: los id_token de GHL caducan ~1 h; usar el helper de scratchpad que
   reacuña por expiración (o el CLI). El PIT del entorno sigue siendo de otra
   location (403 en API pública contra Academia Valenz).

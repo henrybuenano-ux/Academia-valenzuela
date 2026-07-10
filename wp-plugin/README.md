@@ -15,10 +15,27 @@ seguridad. Espejo opcional de eventos hacia GoHighLevel (tags + dunning).
 define( 'OMNIA_EVO_CLIENTID', '83208' );
 define( 'OMNIA_EVO_KEY',      '<key del panel EvoCampus>' );
 define( 'OMNIA_EVO_DRYRUN',   true );  // ¡empezar SIEMPRE en true!
-// Espejo CRM — workflows "Espejo EvoCampus" en la sub-cuenta Academia Valenz:
+
+// ── Espejo CRM · OPCIÓN A (recomendada, v0.6.0): API pública de GHL ──
+// El plugin hace upsert del contacto + tags + oportunidad de recobro por sí
+// mismo. NO depende del Mapping Reference del webhook (que quedó sin
+// configurar → el webhook NO crea el contacto; ver docs/entregables/
+// estado_workflows_ghl_2026-07-10.md). Requiere un PIT de la sub-cuenta
+// (Settings → Private Integrations, con scopes contacts + opportunities).
+define( 'OMNIA_GHL_PIT',         '<pit de la sub-cuenta Academia Valenz>' );
+define( 'OMNIA_GHL_LOCATION_ID', 'hBvP7lemQSMibPYcJPEP' );
+
+// ── Espejo CRM · OPCIÓN B (fallback): Inbound Webhook ──
+// Solo se usa si NO hay OMNIA_GHL_PIT. Requiere configurar el Mapping
+// Reference en la UI de GHL para que el webhook cree el contacto.
 define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/vJkOtiVDBtx0TChtWl9U' );
 define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/DHGCTUxHMdwjVIMKbSOt' );
 ```
+
+> ⚠️ La OPCIÓN A (v0.6.0) está implementada pero **pendiente de validar en
+> staging con un PIT real** (upsert + tags + oportunidad). Los endpoints y el
+> modelo de datos —pipeline/stage/tags— están verificados; falta la prueba
+> extremo a extremo con el PIT. Mantener `OMNIA_EVO_DRYRUN=true` hasta validar.
 
 4. Ver logs en WooCommerce → Estado → Registros → fuente `omnia-evocampus-sync`.
 

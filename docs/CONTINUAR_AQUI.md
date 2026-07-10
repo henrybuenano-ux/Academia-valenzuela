@@ -1,7 +1,17 @@
-# CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1)
+# CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1; verificación sesión 2)
 
 > Para la nueva sesión de Claude Code: lee este archivo + `PLAN_MAESTRO.md`
 > (plan por bloques con registro de progreso) y retoma desde "Siguiente paso".
+
+## Verificación sesión 2 (10-jul, tarde) — BLOQUEADA POR CREDENCIALES
+- ✅ Red confirmada: https://academiavalenz.com/staging (200) y
+  api.evolcampus.com responden desde el entorno (A2 operativa).
+- ⚠️ Las variables de entorno GHL_API_KEY / GHL_FIREBASE_REFRESH_TOKEN /
+  GHL_LOCATION_ID que hay configuradas en el entorno remoto pertenecen a OTRA
+  sub-cuenta (DjVejJurmfmaPhDlDkBg): el PIT devuelve 403 y el token Firebase
+  401 contra Academia Valenz (hBvP7lemQSMibPYcJPEP). NO sirven para este
+  proyecto — hay que pegar en el chat las credenciales de la lista de abajo.
+- CLI gohighlevel-cli instalado y funcionando (.venv + .env gitignorado).
 
 ## Estado en una línea
 Fase 1 validada en DRY-RUN en staging; falta ejecutar el CENSO completo de la

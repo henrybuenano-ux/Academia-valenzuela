@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.6.0  (espejo GHL por API pública directa —upsert contacto+tags+oportunidad— además del Inbound Webhook)
+ * Version:     0.6.1  (OMNIA_GHL_DRYRUN desacopla el espejo GHL del DRY-RUN de EvoCampus)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -33,6 +33,9 @@
  *    // recobro. NO depende de configurar el Mapping Reference del webhook.
  *    define( 'OMNIA_GHL_PIT',         'pit-...' );          // Private Integration Token de la sub-cuenta
  *    define( 'OMNIA_GHL_LOCATION_ID', 'hBvP7lemQSMibPYcJPEP' );
+ *    // (opcional) DRY-RUN del espejo GHL independiente del de EvoCampus:
+ *    // permite validar el espejo en real dejando EvoCampus en simulación.
+ *    define( 'OMNIA_GHL_DRYRUN', false );
  *    // (opcional; por defecto van al pipeline "Recobro impagos" / "Impago detectado")
  *    define( 'OMNIA_GHL_PIPELINE_RECOBRO', 'TwmjrZZ5LLAYmnVdIkNT' );
  *    define( 'OMNIA_GHL_STAGE_IMPAGO',     'd8904ba6-e713-4ac9-82d3-f38124620c13' );
@@ -501,7 +504,7 @@ class Omnia_EvoCampus_Sync {
 		$add_tags    = $is_baja ? array( 'alumno-impago' ) : array( 'alumno-activo', 'alumno-recuperado' );
 		$remove_tags = $is_baja ? array( 'alumno-activo', 'alumno-recuperado' ) : array( 'alumno-impago', 'alumno-baja' );
 
-		if ( OMNIA_EVO_DRYRUN ) {
+		if ( self::ghl_dryrun() ) {
 			self::log( sprintf(
 				'[DRY-RUN] GHL API: upsert %s (+%s / -%s)%s',
 				$email, implode( ',', $add_tags ), implode( ',', $remove_tags ),
@@ -550,6 +553,16 @@ class Omnia_EvoCampus_Sync {
 				self::log( "GHL API: oportunidad recobro para {$email} : " . ( $ok ? 'OK' : wp_json_encode( $opp ) ), $ok ? 'info' : 'error' );
 			}
 		}
+	}
+
+	/**
+	 * DRY-RUN del espejo GHL, desacoplado del de EvoCampus.
+	 * Permite validar el espejo en REAL mientras EvoCampus sigue en DRY-RUN:
+	 * define OMNIA_GHL_DRYRUN=false y deja OMNIA_EVO_DRYRUN=true. Si no se
+	 * define, hereda el DRY-RUN de EvoCampus (comportamiento por defecto).
+	 */
+	private static function ghl_dryrun() {
+		return defined( 'OMNIA_GHL_DRYRUN' ) ? (bool) OMNIA_GHL_DRYRUN : (bool) OMNIA_EVO_DRYRUN;
 	}
 
 	/** Llamada genérica a la API pública de GHL con el PIT. */

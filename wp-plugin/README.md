@@ -32,10 +32,11 @@ define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hook
 define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/DHGCTUxHMdwjVIMKbSOt' );
 ```
 
-> ⚠️ La OPCIÓN A (v0.6.0) está implementada pero **pendiente de validar en
-> staging con un PIT real** (upsert + tags + oportunidad). Los endpoints y el
-> modelo de datos —pipeline/stage/tags— están verificados; falta la prueba
-> extremo a extremo con el PIT. Mantener `OMNIA_EVO_DRYRUN=true` hasta validar.
+> ✅ La OPCIÓN A (v0.6.1) está **implementada y validada en staging** con un
+> PIT real (upsert + tags + oportunidad, ida y vuelta baja↔reactivación). Para
+> validar el espejo en real dejando EvoCampus en simulación, usar
+> `OMNIA_GHL_DRYRUN=false` (desacopla ambos DRY-RUN). En staging se deja el
+> espejo heredando el DRY-RUN de EvoCampus para no escribir en el CRM real.
 
 4. Ver logs en WooCommerce → Estado → Registros → fuente `omnia-evocampus-sync`.
 

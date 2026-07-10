@@ -75,7 +75,25 @@ falta que el contacto entre.
 }
 ```
 
-## Dos caminos para arreglarlo
+## ✅ RESUELTO por la vía A (validado en staging)
+
+Se eligió la **Opción A**. El plugin **v0.6.1** hace el espejo por la API
+pública de GHL. Validado extremo a extremo el 10-jul:
+- Prueba directa con el PIT (upsert +tags, delete tags, search anti-duplicado,
+  create opportunity, reactivación): todo 2xx.
+- Prueba del camino PHP real del plugin en staging (con `OMNIA_GHL_DRYRUN=false`
+  temporal, EvoCampus intacto en DRY-RUN): baja → contacto creado con
+  `alumno-impago` + oportunidad en Recobro/Impago detectado; reactivación →
+  contacto a `alumno-activo`+`alumno-recuperado`. Contacto de prueba borrado;
+  sub-cuenta de nuevo en 0 contactos.
+- Estado final del staging: PIT + LOCATION configurados; el espejo hereda el
+  DRY-RUN de EvoCampus (staging NO escribe en el CRM de producción). En
+  producción, al poner `OMNIA_EVO_DRYRUN=false`, el espejo pasará a real junto
+  con EvoCampus.
+
+La Opción B (mapeo en UI) queda como alternativa documentada pero innecesaria.
+
+## Dos caminos para arreglarlo (referencia histórica)
 
 **A) Mapeo en la UI de GHL (rápido, conserva la arquitectura actual).**
 En cada trigger Inbound Webhook: "Fetch Sample Request" (recoge el último

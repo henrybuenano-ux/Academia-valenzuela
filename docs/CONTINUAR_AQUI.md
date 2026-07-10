@@ -65,6 +65,15 @@
   reacuña por expiración (o el CLI). El PIT del entorno sigue siendo de otra
   location (403 en API pública contra Academia Valenz).
 
+## Estado al cierre de la sesión 2 (10-jul, noche)
+- Email a Paco ENVIADO (7 manuales + fecha 133ª + política de corte). ⏳ A la
+  espera de respuesta — sus 3 respuestas desbloquean el paso a producción (B6).
+- Plan mapeado a ClickUp (Omnia → Academia Valenzuela, 6 listas, 30 tareas,
+  responsables asignados). La tarea del email ya está completada.
+- Próximo paso al volver: si Paco respondió → aplicar política de corte en la
+  config, deploy a producción con DRY-RUN=true (checklist wp-plugin/README.md)
+  y agendar demo. Si no → seguir con lo no bloqueado (Fase 3: D1 canal email).
+
 ## Estado en una línea
 Fase 1 validada en DRY-RUN en staging; falta ejecutar el CENSO completo de la
 conciliación (la página con botón de la v0.5.1 no llegó a probarse bien) y

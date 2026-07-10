@@ -1,0 +1,26 @@
+<?php
+/**
+ * Plugin Name: 00 — Omnia EvoCampus Config (STAGING)
+ * Description: Constantes de configuración del plugin "EvoCampus ↔ WooCommerce Subscriptions Sync". Alternativa a editarlas en wp-config.php. El prefijo "00" hace que cargue antes que el plugin principal.
+ * Version:     1.0.0
+ * Author:      Omnia
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+if ( ! defined( 'OMNIA_EVO_CLIENTID' ) ) {
+	define( 'OMNIA_EVO_CLIENTID', '83208' );
+}
+if ( ! defined( 'OMNIA_EVO_KEY' ) ) {
+	define( 'OMNIA_EVO_KEY', '<KEY-DEL-PANEL-EVOCAMPUS>' );
+}
+if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
+	// true = modo prueba (solo log). Cambiar a false SOLO tras validar en staging.
+	define( 'OMNIA_EVO_DRYRUN', true );
+}
+if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL_BAJA' ) ) {
+	define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/vJkOtiVDBtx0TChtWl9U' );
+}
+if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION' ) ) {
+	define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/DHGCTUxHMdwjVIMKbSOt' );
+}

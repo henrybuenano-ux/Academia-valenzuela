@@ -26,10 +26,24 @@
 - ✅ Evidencia P2: no hay cobros de julio (13 alumnos "frontera" 36-40 días +
   activos en 33-35). Si nadie lanza las renovaciones, en 1-2 semanas todo el
   censo cae en baja. SIGUE BLOQUEANDO B6.
-- ⚠️ GHL sigue pendiente: las credenciales del entorno remoto son de OTRA
-  sub-cuenta (DjVejJurmfmaPhDlDkBg); PIT 403 / Firebase 401 contra Academia
-  Valenz (hBvP7lemQSMibPYcJPEP). Para tocar los workflows espejo hacen falta
-  el PIT de la sub-cuenta o un Firebase token con acceso.
+- ⚠️ GHL BLOQUEADO por infraestructura (no por credenciales): con el login de
+  agencia (victor.molina@omibu.com, location hBvP7lemQSMibPYcJPEP) no se puede
+  autenticar desde este entorno por DOS motivos independientes:
+  (a) el login por API rechaza (`Invalid email or password` en el backend;
+      Firebase `PASSWORD_LOGIN_DISABLED`) — GHL exige reCAPTCHA, así que el
+      login headless NO funciona ni con credenciales correctas;
+  (b) los dominios de la app (app.gohighlevel.com y el whitelabel
+      accesocrm.omniainbusiness.com) están BLOQUEADOS por la política de red
+      del entorno (proxy → 403 al CONNECT); no se puede conducir el navegador.
+  → Para desbloquear el trabajo sobre los workflows espejo hace falta UNA de:
+    1) el **Firebase refresh token** sacado con la extensión Chrome del CLI
+       (gohighlevel-cli/README.md §Step 1) desde un navegador con sesión
+       iniciada, pegado en el chat → guardar como GHL_FIREBASE_REFRESH_TOKEN
+       (habilita la API interna: crear/editar/guardar workflows);
+    2) o un **PIT** de la sub-cuenta Academia Valenz (solo API pública:
+       lecturas, contactos, oportunidades — NO edita workflows).
+  Material listo para cuando llegue el token: las 51 peticiones DRY-RUN del
+  censo de hoy son ejemplos reales de payload para el Mapping Reference.
 - CLI gohighlevel-cli instalado y funcionando (.venv + .env gitignorado).
 
 ## Estado en una línea

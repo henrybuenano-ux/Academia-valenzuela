@@ -70,9 +70,42 @@ buena parte de estos 19.
    el número real y el negocio es más pequeño de lo que se creía.)
 3. De los 19 sin Woo: ¿cómo pagan? (Confirma si el intensivo va por otra vía.)
 
+## Los 19 "sin Woo", desglosados por pedidos (consulta a WooCommerce)
+
+Se revisaron los **pedidos** (no solo suscripciones) de esos 19 en Woo:
+
+- **11 tienen un pedido de pago único del INTENSIVO** — "Intensivo Ingreso
+  Guardia Civil 132ª promoción" (270–295 €, estado *processing*, marzo–abril
+  2026). Pagan por Woo, pero con un pedido único, no una suscripción → por eso
+  el censo (que miró suscripciones) no los contó.
+- **8 sin NINGÚN pedido en Woo** — de ellos uno es `info@academiavalenz.com`
+  (cuenta de la academia) → **7 alumnos reales** sin rastro de pago en Woo:
+  danielsanchezluc55, juanjolirio2003, juncaluam, marioventapuer,
+  mirellacrespo29, santiml.89, sergiohuelma_123. (¿acceso de cortesía/prueba?,
+  ¿beca?, ¿pago fuera de Woo?, ¿alumnos antiguos con acceso vivo?)
+
+### Balance final de los 57 activos
+
+| Cómo pagan | Alumnos |
+|---|---|
+| Suscripción recurrente en Woo | 38 |
+| Pedido único de intensivo en Woo | 11 |
+| **Pagan por Woo (total)** | **49 (86%)** |
+| Sin rastro de pago en Woo (1 es la academia) | 8 → **7 reales** |
+
+**Conclusión: no hay ~200 alumnos fantasma. 49 de 57 activos pagan por Woo;
+quedan 7 por aclarar con Paco.** El número ~267 no lo respalda ningún dato.
+
 ## Implicación para el plugin
 
-La conciliación por pedidos de Woo cubre a los 38 que están en ambos sistemas.
-Los 19 activos sin suscripción Woo **no los ve el plugin** (no tienen pedidos):
-si son intensivos de pago único, habría que tratarlos aparte (p. ej. por fecha
-fin de matrícula en EvoCampus, no por suscripción). A decidir con negocio.
+La conciliación arma la lista de alumnos a partir de **suscripciones**
+(`wcs_get_subscriptions`), así que los **11 alumnos de intensivo (pago único)
+son invisibles para ella** — nunca se evalúan. Para el intensivo, el acceso
+debe regirse por la **fecha fin de matrícula en EvoCampus** (`enroll.end`,
+abril→julio hasta el examen), no por pago recurrente: expira solo. Opciones:
+1. Dejar el intensivo fuera del plugin (expira por fecha fin en EvoCampus). Es
+   lo más simple y probablemente correcto.
+2. Si se quiere cubrir también, añadir un segundo pase de conciliación que
+   recorra los pedidos de intensivo (producto único) y controle acceso por
+   fecha fin, no por recurrencia.
+A decidir con negocio (Paco). Los 7 sin pago en Woo se revisan aparte.

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.3.1  (fusión: scaffold Cowork + espejo GHL — validar en staging)
+ * Version:     0.3.2  (webhook GHL bloqueante con log — validado B4 en staging)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -273,9 +273,11 @@ class Omnia_EvoCampus_Sync {
 			return;
 		}
 		$is_sub = $subscription && is_a( $subscription, 'WC_Subscription' );
-		wp_remote_post( $url, array(
+		// Bloqueante a propósito: fire-and-forget se pierde en algunos hostings
+		// y son ~2 eventos/alumno/mes — la latencia es irrelevante.
+		$res = wp_remote_post( $url, array(
 			'timeout'  => 10,
-			'blocking' => false, // no frenar el hook por el CRM
+			'blocking' => true,
 			'headers'  => array( 'Content-Type' => 'application/json' ),
 			'body'     => wp_json_encode( array(
 				'event'           => $event, // baja | reactivacion
@@ -290,6 +292,13 @@ class Omnia_EvoCampus_Sync {
 				'timestamp'       => current_time( 'mysql', true ),
 			) ),
 		) );
+
+		if ( is_wp_error( $res ) ) {
+			self::log( "webhook GHL ({$event}) FALLÓ: " . $res->get_error_message(), 'error' );
+		} else {
+			$code = wp_remote_retrieve_response_code( $res );
+			self::log( "webhook GHL ({$event}) para {$email} → HTTP {$code}", ( $code >= 200 && $code < 300 ) ? 'info' : 'error' );
+		}
 	}
 
 	/** Avisos en el admin: credenciales ausentes o DRY-RUN activo. */

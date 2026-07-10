@@ -89,6 +89,25 @@ Panel de EvoCampus (`campus.academiavalenz.com`) NO accesible desde el entorno
 - 5 son de la promoción regular (curso completo desde octubre) sin ningún
   rastro de pago en Woo → los verdaderos casos a aclarar con Paco.
 
+**Verificación a fondo (10-jul): los 7 existen SOLO en EvoCampus.** Se comprobó
+cada uno en WordPress/WooCommerce (usuario WP, pedidos en CUALQUIER estado por
+email y por apellido, suscripciones): **ninguno tiene usuario WP ni un solo
+pedido**. No es que hayan pagado y cancelado — **nunca han pasado por la tienda
+web**. Están **matriculados a mano directamente en el campus** (pago por
+transferencia/efectivo, cortesía o beca).
+
+Ejemplo mirado en detalle (JUNCAL CABRERIZO MARTÍN, juncaluam@gmail.com): 6
+módulos de la 132ª, acceso desde 01-oct-2025, pero **6,81% de avance, resto al
+0%, última conexión 23-abr** y fecha fin 10-11-jul (ya venciendo). Cero rastro
+en Woo/WP.
+
+**Implicación operativa (nueva):** existe un **canal de matriculación manual**
+en EvoCampus que se salta WooCommerce. Estos alumnos son **invisibles para el
+plugin** (no tienen datos de pago que vigilar) y su acceso se rige solo por la
+**fecha fin de EvoCampus**. Para que el control de acceso sea completo, la
+academia debe: (a) matricular SIEMPRE por la tienda web, o (b) asumir que los
+manuales se gestionan aparte (por fecha fin). Son 7 de 57 (~12%).
+
 ## P2 (cobros de julio): hipótesis fuerte con los datos
 
 **TODAS las matrículas de la 132ª promoción terminan el 10-11 de julio de 2026**

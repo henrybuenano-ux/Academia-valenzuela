@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.3.0  (fusión: scaffold Cowork + espejo GHL — validar en staging)
+ * Version:     0.3.1  (fusión: scaffold Cowork + espejo GHL — validar en staging)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -21,7 +21,10 @@
  *    define( 'OMNIA_EVO_CLIENTID', '83208' );
  *    define( 'OMNIA_EVO_KEY',      '...' );
  *    define( 'OMNIA_EVO_DRYRUN',   true );            // empezar SIEMPRE en true
- *    define( 'OMNIA_GHL_WEBHOOK_URL', 'https://...' ); // opcional: espejo CRM
+ *    // Espejo CRM (opcional): un workflow GHL por tipo de evento.
+ *    define( 'OMNIA_GHL_WEBHOOK_URL_BAJA',         'https://...' );
+ *    define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://...' );
+ *    // (compat: OMNIA_GHL_WEBHOOK_URL como URL única para ambos eventos)
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -257,11 +260,20 @@ class Omnia_EvoCampus_Sync {
 	 * Requiere OMNIA_GHL_WEBHOOK_URL (Inbound Webhook de un workflow GHL).
 	 * ------------------------------------------------------------------- */
 	private static function notify_ghl( $event, $email, $subscription, array $enrollment_ids = array() ) {
-		if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL' ) || empty( OMNIA_GHL_WEBHOOK_URL ) || empty( $email ) ) {
+		// URL por evento; OMNIA_GHL_WEBHOOK_URL sirve de fallback común.
+		$url = '';
+		if ( 'baja' === $event && defined( 'OMNIA_GHL_WEBHOOK_URL_BAJA' ) ) {
+			$url = OMNIA_GHL_WEBHOOK_URL_BAJA;
+		} elseif ( 'reactivacion' === $event && defined( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION' ) ) {
+			$url = OMNIA_GHL_WEBHOOK_URL_REACTIVACION;
+		} elseif ( defined( 'OMNIA_GHL_WEBHOOK_URL' ) ) {
+			$url = OMNIA_GHL_WEBHOOK_URL;
+		}
+		if ( empty( $url ) || empty( $email ) ) {
 			return;
 		}
 		$is_sub = $subscription && is_a( $subscription, 'WC_Subscription' );
-		wp_remote_post( OMNIA_GHL_WEBHOOK_URL, array(
+		wp_remote_post( $url, array(
 			'timeout'  => 10,
 			'blocking' => false, // no frenar el hook por el CRM
 			'headers'  => array( 'Content-Type' => 'application/json' ),

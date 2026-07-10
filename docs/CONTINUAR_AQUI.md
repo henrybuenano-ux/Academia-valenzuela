@@ -45,6 +45,18 @@
   Material listo para cuando llegue el token: las 51 peticiones DRY-RUN del
   censo de hoy son ejemplos reales de payload para el Mapping Reference.
 - CLI gohighlevel-cli instalado y funcionando (.venv + .env gitignorado).
+- ✅ GHL DESBLOQUEADO con el Firebase refresh token (API interna). Auditados
+  los 2 workflows espejo → `docs/entregables/estado_workflows_ghl_2026-07-10.md`:
+  Create Opportunity YA existe (Recobro impagos/Impago detectado), workflows
+  publicados, PERO los triggers **no tienen Mapping Reference** → la sub-cuenta
+  tiene **0 contactos** pese a 51+ disparos: el espejo está publicado pero
+  INOPERATIVO (el webhook no crea el contacto). Downstream verificado OK
+  (crear contacto+tag+oportunidad → 201). Falta decidir arreglo A (mapeo en UI,
+  lo hace Oliver — el entorno no llega a la app GHL) o B (plugin → API pública
+  con un PIT, lo implementa Claude). PENDIENTE de decisión del equipo.
+- Nota: los id_token de GHL caducan ~1 h; usar el helper de scratchpad que
+  reacuña por expiración (o el CLI). El PIT del entorno sigue siendo de otra
+  location (403 en API pública contra Academia Valenz).
 
 ## Estado en una línea
 Fase 1 validada en DRY-RUN en staging; falta ejecutar el CENSO completo de la

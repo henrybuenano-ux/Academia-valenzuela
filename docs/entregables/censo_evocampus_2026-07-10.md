@@ -9,26 +9,34 @@
 El discovery apuntaba ~267 alumnos activos (de ~386) frente a solo ~60
 suscripciones en WooCommerce → "¿cómo pagan los ~200 que no están en Woo?".
 
-## La respuesta: la brecha "~300 vs 60" NO se sostiene
+## La respuesta: el "~267" era el TOTAL histórico, no los activos
 
-Los números reales del propio campus:
+**Confirmado con el panel de EvoCampus** (captura del cliente, 10-jul-2026):
+
+| Alumnos (panel) | | Matrículas (panel) | |
+|---|---:|---|---:|
+| **Activos** | **57** | Activas | 344 |
+| No activos | 192 | Bajas | 161 |
+| Archivados | 4 | Archivadas | 9 |
+| **Ver todos** | **253** | **Ver todas** | **514** |
+
+**La clave: el campus tiene 57 alumnos ACTIVOS y 253 en TOTAL (histórico).** El
+"~267 activos / ~386 total" del discovery era en realidad el acumulado histórico
+de alumnos que han pasado por el campus, no la foto actual. **Paco confundió el
+total con los activos.** No hay ~200 alumnos fantasma pagando por fuera.
+
+Cruce de los 57 activos con WooCommerce:
 
 | Fuente | Alumnos |
 |---|---|
-| EvoCampus — alumnos únicos (todas las matrículas) | **104** |
-| EvoCampus — con al menos una matrícula **activa** | **57** |
-| WooCommerce — con suscripción | **59** |
-| **En ambos** (activo en campus + suscripción Woo) | **38** |
-| Activo en campus, **sin** suscripción Woo | **19** |
+| EvoCampus — con al menos una matrícula **activa** (panel-confirmado) | **57** |
+| WooCommerce — con suscripción | 59 |
+| **En ambos** (activo en campus + suscripción Woo) | 38 |
+| Activo en campus, **sin** suscripción Woo | 19 |
 | Con suscripción Woo, **no** activo en campus (ya cortados) | 21 |
 
-**El campus solo tiene 57 alumnos activos, no ~267.** Está muy cerca de los
-59-60 de Woo. No existen ~200 alumnos "fantasma" pagando por fuera: como mucho
-hay **19** alumnos activos que no tienen suscripción en WooCommerce (y uno de
-ellos es `info@academiavalenz.com`, la cuenta de la propia academia).
-
-Total de matrículas (enrollments) en el campus: **514** (~5 por alumno: temario,
-inglés, simulacros, promoción, a veces intensivo).
+Total de matrículas (enrollments) en el campus: **514** (coincide con el panel;
+~6 por alumno activo: temario, inglés, simulacros, promoción, a veces intensivo).
 
 ## Distribución de los 57 activos por grupo
 
@@ -100,13 +108,15 @@ entrar en real con la **133ª promoción** (nuevo ciclo en otoño), o bien
 respetar la fecha fin de matrícula de EvoCampus. A confirmar con Paco el
 calendario de la nueva promoción.
 
-## Preguntas para cerrar P1 del todo
+## Estado de P1 (RESUELTO)
 
-1. **A Paco/Fran:** ¿de dónde sale el número de ~267? ¿Cuenta el intensivo,
-   histórico, o alumnos de otra promoción/otro producto?
-2. ¿Hay **otra cuenta de EvolMind** además de la 83208? (Si no, 57 activos es
-   el número real y el negocio es más pequeño de lo que se creía.)
-3. De los 19 sin Woo: ¿cómo pagan? (Confirma si el intensivo va por otra vía.)
+- ✅ ¿De dónde sale el ~267? → Era el TOTAL histórico de alumnos (panel: 253),
+  no los activos. Los activos reales son **57** (panel-confirmado).
+- ✅ Tamaño real del negocio activo: **57 alumnos**, de los que **49 pagan por
+  Woo** (38 suscripción + 11 intensivo). El negocio recurrente es más pequeño
+  de lo que sugería el ~267.
+- ⏳ Queda menor: de los **7** sin pago en Woo, ¿cómo acceden? (2 intensivo,
+  5 promoción regular). Pregunta para Paco, pero no bloquea.
 
 ## Los 19 "sin Woo", desglosados por pedidos (consulta a WooCommerce)
 

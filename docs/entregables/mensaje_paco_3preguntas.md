@@ -8,19 +8,15 @@
 **Mensaje (corto, para WhatsApp):**
 
 Hola Paco 👋 Estamos afinando el sistema que corta y reactiva el acceso al
-campus según el pago, y antes de ponerlo en marcha de verdad queremos cuadrar
-tres cosas contigo:
+campus según el pago. Ya cuadramos los números (vemos **57 alumnos activos**
+ahora mismo, y 253 en total desde que existe la academia — el ~267 que
+comentabas era el histórico). Solo nos quedan dos cosas por confirmar contigo:
 
-1. En la plataforma vemos **57 alumnos con acceso activo** ahora mismo. ¿Te
-   cuadra ese número? Comentaste unos ~260-270 y queremos entender la
-   diferencia (¿el 267 es histórico, de varias promociones, o incluye otra
-   cosa?).
-
-2. Hay **7 alumnos con acceso al campus pero sin pago registrado** en la web.
+1. Hay **7 alumnos con acceso al campus pero sin pago registrado** en la web.
    ¿Son becados / cortesía / pagan por transferencia? Te paso la lista aparte
    para que los identifiques.
 
-3. La **132ª promoción termina con el examen (10-11 de julio)** y por eso ya no
+2. La **132ª promoción termina con el examen (10-11 de julio)** y por eso ya no
    hay cobros este mes. ¿Cuándo arranca la **133ª**? Lo ideal es activar el
    sistema en real con la nueva promoción, no al final de esta.
 

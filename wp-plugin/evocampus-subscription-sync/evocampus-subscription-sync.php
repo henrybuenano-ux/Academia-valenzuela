@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.4.1  (blindaje: guard de clase duplicada + tiempo ampliado en conciliación)
+ * Version:     0.4.2  (conciliación con log de progreso y captura de errores)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -283,46 +283,67 @@ class Omnia_EvoCampus_Sync {
 		// 1. Último pago por alumno (email), mirando TODAS sus suscripciones.
 		$students = array();
 		$page     = 1;
-		do {
-			$subs = wcs_get_subscriptions( array(
-				'subscriptions_per_page' => 50,
-				'paged'                  => $page,
-			) );
-			foreach ( $subs as $sub ) {
-				$email = $sub->get_billing_email();
-				if ( empty( $email ) ) { continue; }
-				$key  = strtolower( $email );
-				$last = self::last_paid_timestamp( $sub );
-				if ( ! isset( $students[ $key ] )
-					|| ( $last && $last > (int) $students[ $key ]['last_paid'] ) ) {
-					$students[ $key ] = array( 'email' => $email, 'last_paid' => $last, 'sub' => $sub );
+		try {
+			do {
+				$subs = wcs_get_subscriptions( array(
+					'subscriptions_per_page' => 50,
+					'paged'                  => $page,
+				) );
+				self::log( sprintf( 'Conciliación: página %d — %d suscripciones a examinar.', $page, count( $subs ) ) );
+				foreach ( $subs as $sub ) {
+					$email = $sub->get_billing_email();
+					if ( empty( $email ) ) { continue; }
+					$key  = strtolower( $email );
+					$last = self::last_paid_timestamp( $sub );
+					if ( ! isset( $students[ $key ] )
+						|| ( $last && $last > (int) $students[ $key ]['last_paid'] ) ) {
+						$students[ $key ] = array( 'email' => $email, 'last_paid' => $last, 'sub' => $sub );
+					}
 				}
-			}
-			$page++;
-		} while ( ! empty( $subs ) && count( $subs ) === 50 );
+				$page++;
+				if ( $page > 50 ) { // tope duro anti-bucle (50 páginas = 2.500 suscripciones)
+					self::log( 'Conciliación: tope de 50 páginas alcanzado; se corta la recolección.', 'error' );
+					break;
+				}
+			} while ( ! empty( $subs ) && count( $subs ) === 50 );
+		} catch ( \Throwable $e ) {
+			self::log( sprintf(
+				'Conciliación ABORTADA en recolección (página %d): %s en %s:%d',
+				$page, $e->getMessage(), basename( $e->getFile() ), $e->getLine()
+			), 'error' );
+			return;
+		}
+		self::log( sprintf( 'Conciliación: recolección completa — %d alumnos únicos.', count( $students ) ) );
 
 		// 2. Veredicto por alumno + acción idempotente + espejo GHL si cambió.
 		$verdicts = get_option( 'omnia_evo_verdicts', array() );
 		$now      = time();
 		foreach ( $students as $key => $info ) {
-			$days = $info['last_paid']
-				? (int) floor( ( $now - $info['last_paid'] ) / DAY_IN_SECONDS )
-				: null;
-			$ok      = ( null !== $days && $days <= $grace );
-			$verdict = $ok ? 'activo' : 'baja';
+			try {
+				$days = $info['last_paid']
+					? (int) floor( ( $now - $info['last_paid'] ) / DAY_IN_SECONDS )
+					: null;
+				$ok      = ( null !== $days && $days <= $grace );
+				$verdict = $ok ? 'activo' : 'baja';
 
-			self::log( sprintf(
-				'%s — último pago %s → %s',
-				$info['email'],
-				null === $days ? 'NUNCA' : "hace {$days} días",
-				$verdict
-			) );
+				self::log( sprintf(
+					'%s — último pago %s → %s',
+					$info['email'],
+					null === $days ? 'NUNCA' : "hace {$days} días",
+					$verdict
+				) );
 
-			self::set_status_for_email( $info['email'], $ok ? 0 : 2 );
+				self::set_status_for_email( $info['email'], $ok ? 0 : 2 );
 
-			if ( ( $verdicts[ $key ] ?? '' ) !== $verdict ) {
-				self::notify_ghl( $ok ? 'reactivacion' : 'baja', $info['email'], $info['sub'] );
-				$verdicts[ $key ] = $verdict;
+				if ( ( $verdicts[ $key ] ?? '' ) !== $verdict ) {
+					self::notify_ghl( $ok ? 'reactivacion' : 'baja', $info['email'], $info['sub'] );
+					$verdicts[ $key ] = $verdict;
+				}
+			} catch ( \Throwable $e ) {
+				self::log( sprintf(
+					'Error evaluando a %s: %s en %s:%d — se continúa con el siguiente.',
+					$info['email'], $e->getMessage(), basename( $e->getFile() ), $e->getLine()
+				), 'error' );
 			}
 		}
 

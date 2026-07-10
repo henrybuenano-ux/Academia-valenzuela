@@ -1,5 +1,12 @@
 # CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1)
 
+> **Act. sesión 2 (10-jul):** red verificada — academiavalenz.com/staging (200 OK)
+> y api.evolcampus.com (alcanzable) SÍ están permitidos; **fathom.video NO**
+> (bloqueado por la política de red y también vía WebFetch → 403). Para el
+> punto 4 aplica el plan B: el equipo exporta las transcripciones desde Fathom
+> y las pega en el chat. Los puntos 1–3 quedaron a la espera de que el equipo
+> pegue las credenciales (sección siguiente).
+
 > Para la nueva sesión de Claude Code: lee este archivo + `PLAN_MAESTRO.md`
 > (plan por bloques con registro de progreso) y retoma desde "Siguiente paso".
 

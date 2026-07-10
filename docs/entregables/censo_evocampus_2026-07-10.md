@@ -62,6 +62,44 @@ Pista: los del grupo **132 GC INTENSIVO** (13) probablemente son pago único
 (abril–julio), que NO crea una suscripción recurrente en WooCommerce → explica
 buena parte de estos 19.
 
+## Retrato de los 7 sin pago en Woo (detalle de matrícula EvoCampus)
+
+Panel de EvoCampus (`campus.academiavalenz.com`) NO accesible desde el entorno
+(bloqueado por la política de red, 403 al CONNECT). Datos vía API:
+
+| Alumno | Tipo | Inicio→Fin | Estado | Última conexión |
+|---|---|---|---|---|
+| danielsanchezluc55 | Intensivo | 13-abr → 10-jul | activa | 08-jul |
+| mirellacrespo29 | Intensivo | 13-abr → 10-jul | activa | 25-jun |
+| juanjolirio2003 | Regular | 01-oct-25 → 10-jul | activa | 01-jul |
+| juncaluam | Regular | 01-oct-25 → 10-jul | activa | 23-abr |
+| marioventapuer | Regular | 01-oct-25 → 10-jul | activa | 28-may |
+| santiml.89 | Regular (+PSICÓLOGO 2025 baja) | 01-oct-25 → 10-jul | activa | 05-jul |
+| sergiohuelma_123 | Regular | 01-oct-25 → 10-jul | activa | 01-jul |
+
+- 2 son intensivo con acceso pero sin pedido Woo (¿transferencia/alta manual?).
+- 5 son de la promoción regular (curso completo desde octubre) sin ningún
+  rastro de pago en Woo → los verdaderos casos a aclarar con Paco.
+
+## P2 (cobros de julio): hipótesis fuerte con los datos
+
+**TODAS las matrículas de la 132ª promoción terminan el 10-11 de julio de 2026**
+(fecha del examen). El curso regular va 01-oct-2025 → 10-jul-2026 (~10 meses de
+cuota mensual); el intensivo, 13-abr → 10-jul. Es decir, **el curso está
+acabando justo ahora**.
+
+Esto explica de forma natural **por qué no hay pedidos de julio**: no es que la
+facturación esté rota, es que la promoción anual se cierra y el último cargo
+mensual fue en junio. Los 22 "al corriente" del censo pagaron hace 20-35 días
+(su cuota de junio); en julio ya no hay nada que cobrar de esta promoción.
+
+**Implicación para el paso a producción (B6):** conviene NO activar el corte
+por impago justo al final del curso (todos caerían en "baja" por no haber cargo
+de julio, cuando en realidad han terminado el curso pagado). El plugin debería
+entrar en real con la **133ª promoción** (nuevo ciclo en otoño), o bien
+respetar la fecha fin de matrícula de EvoCampus. A confirmar con Paco el
+calendario de la nueva promoción.
+
 ## Preguntas para cerrar P1 del todo
 
 1. **A Paco/Fran:** ¿de dónde sale el número de ~267? ¿Cuenta el intensivo,

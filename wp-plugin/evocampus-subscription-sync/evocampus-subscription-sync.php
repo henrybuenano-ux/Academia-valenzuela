@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.5.0  (búsqueda de pagos por email — evita el timeout de related-orders)
+ * Version:     0.5.1  (página de administración con botón de conciliación + visor de log)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -82,6 +82,64 @@ class Omnia_EvoCampus_Sync {
 
 		// Disparador manual para pruebas: /wp-admin/?omnia_evo_reconcile_now=1
 		add_action( 'admin_init', array( __CLASS__, 'maybe_manual_reconcile' ) );
+
+		// Página de administración: WooCommerce → EvoCampus Sync
+		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
+	}
+
+	/** Submenú bajo WooCommerce con botón de conciliación y visor de log. */
+	public static function admin_menu() {
+		add_submenu_page(
+			'woocommerce',
+			'EvoCampus Sync',
+			'EvoCampus Sync',
+			'manage_options',
+			'omnia-evo-sync',
+			array( __CLASS__, 'render_admin_page' )
+		);
+	}
+
+	public static function render_admin_page() {
+		if ( ! current_user_can( 'manage_options' ) ) { return; }
+
+		$ran = false;
+		if ( isset( $_POST['omnia_evo_run'] ) && check_admin_referer( 'omnia_evo_run_now' ) ) {
+			self::log( 'Conciliación lanzada MANUALMENTE desde la página de administración.' );
+			self::reconcile();
+			$ran = true;
+		}
+
+		$grace  = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
+		$dryrun = OMNIA_EVO_DRYRUN;
+
+		echo '<div class="wrap"><h1>Omnia — EvoCampus Sync</h1>';
+		printf(
+			'<p>Modo: <strong>%s</strong> · Ventana de pago: <strong>%d días</strong> · Próxima conciliación automática: <strong>%s</strong></p>',
+			$dryrun ? 'DRY-RUN (simulación, no toca matrículas)' : '<span style="color:#b32d2e">REAL</span>',
+			$grace,
+			esc_html( wp_next_scheduled( self::CRON_HOOK ) ? date_i18n( 'd M Y H:i', wp_next_scheduled( self::CRON_HOOK ) ) : '—' )
+		);
+		if ( $ran ) {
+			echo '<div class="notice notice-success"><p>Conciliación ejecutada — resultado abajo.</p></div>';
+		}
+		echo '<form method="post">';
+		wp_nonce_field( 'omnia_evo_run_now' );
+		submit_button( 'Ejecutar conciliación ahora', 'primary', 'omnia_evo_run' );
+		echo '</form>';
+
+		// Visor: últimas líneas del log de hoy.
+		echo '<h2>Log (últimas 150 líneas)</h2>';
+		$files = glob( trailingslashit( WC_LOG_DIR ) . self::LOG_SOURCE . '*.log' );
+		if ( $files ) {
+			usort( $files, function ( $a, $b ) { return filemtime( $b ) - filemtime( $a ); } );
+			$lines = file( $files[0], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+			$tail  = implode( "\n", array_slice( $lines ?: array(), -150 ) );
+			echo '<pre style="background:#fff;border:1px solid #ccd0d4;padding:12px;max-height:480px;overflow:auto;white-space:pre-wrap">'
+				. esc_html( $tail ) . '</pre>';
+		} else {
+			echo '<p><em>Aún no hay archivo de log.</em></p>';
+		}
+		echo '</div>';
 	}
 
 	/** Ejecuta la conciliación bajo demanda (solo administradores). */

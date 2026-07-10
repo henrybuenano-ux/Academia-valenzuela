@@ -126,3 +126,11 @@ corte), y el rol de Horacio (asignación de tareas WP vs GHL).
     Observación: el filtro active=true/false parece ignorado por la API (mismas 6 matrículas en ambas consultas). Inofensivo (idempotente); verificar en la primera prueba real.
 - ⚠️ HALLAZGO ABIERTO: en el clon, WooCommerce Subscriptions muestra 60 suscripciones (39 en espera, 21 canceladas, 0 ACTIVAS). No cuadra con ~267 alumnos activos. Verificar contadores en PRODUCCIÓN y, si coincide, investigar cómo se refleja realmente el pago mensual antes de B6.
 - Pendientes Bloque A: A2 (red del entorno), A3 (WhatsApp Meta), A4 (VeriFactu/gestoría), A6 (política de corte con Paco). Oliver: Mapping Reference + guardar workflows + paso Create Opportunity.
+
+### Sesión 2 (10-jul-2026, tarde)
+- ✅ A2 CERRADA: la red del entorno ya permite academiavalenz.com y api.evolcampus.com; wp-admin staging operado por HTTP (Chromium no atraviesa el proxy MITM — usar requests).
+- ✅ B1 CERRADA: API EvoCampus validada en vivo por curl (token + getEnrollments; campos `person.enrollmentid` / `enroll.enrollmentstatus` confirmados; filtro `active` ignorado por la API — vigilar en primera prueba real).
+- ✅ Plugin v0.5.2 en staging: fix fatal `CRON_HOOK` (la página admin daba 500), fix paginación del censo (`paged` ignorado por WCS → faltaban 10 alumnos), y "arranque de rescate" en el guard (en staging una inclusión temprana ajena definía la clase sin arrancarla → plugin muerto; causa raíz pendiente, la v0.5.2 la neutraliza).
+- ✅ CENSO DRY-RUN COMPLETO (59/59 alumnos, 64 s, 0 errores, webhooks GHL 200): 22 al corriente · 37 en baja → cruce EvoCampus: **16 impagados con acceso activo, 3 morosos reales (63/68/144 días) usando el campus esta semana**. Detalle: `docs/entregables/censo_conciliacion_2026-07-10.md`.
+- ⚠️ Refuerzo P2 (bloquea B6): 0 pedidos en julio; 13 alumnos "frontera" (36-40 días) + activos en 33-35 → nadie ha lanzado los cobros de julio.
+- ⚠️ GHL pendiente de credenciales de la sub-cuenta (las del entorno remoto son de otra location: PIT 403 / Firebase 401).

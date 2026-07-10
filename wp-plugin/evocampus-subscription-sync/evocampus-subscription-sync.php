@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.5.1  (página de administración con botón de conciliación + visor de log)
+ * Version:     0.5.2  (arranque de rescate si otra inclusión definió la clase sin iniciarla; recolección sin paginación)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -48,10 +48,21 @@ if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 
 // Guard: si otra copia/versión del plugin sigue activa, no redeclarar la
 // clase (evita el error crítico de WordPress) y avisar en el admin.
+// Hallazgo staging 10-jul-2026: una inclusión temprana ajena define la clase
+// SIN llegar a arrancarla (init nunca se engancha) — en ese caso el guard
+// arranca la clase existente en vez de dejar el plugin muerto.
 if ( class_exists( 'Omnia_EvoCampus_Sync' ) ) {
-	add_action( 'admin_notices', function () {
-		echo '<div class="notice notice-error"><p><strong>Omnia EvoCampus Sync:</strong> hay DOS copias del plugin activas. Desactiva/borra la versión antigua en Plugins.</p></div>';
-	} );
+	if ( ! has_action( 'omnia_evo_reconcile', array( 'Omnia_EvoCampus_Sync', 'reconcile' ) ) ) {
+		if ( did_action( 'plugins_loaded' ) ) {
+			Omnia_EvoCampus_Sync::init();
+		} else {
+			add_action( 'plugins_loaded', array( 'Omnia_EvoCampus_Sync', 'init' ) );
+		}
+	} else {
+		add_action( 'admin_notices', function () {
+			echo '<div class="notice notice-error"><p><strong>Omnia EvoCampus Sync:</strong> hay DOS copias del plugin activas. Desactiva/borra la versión antigua en Plugins.</p></div>';
+		} );
+	}
 	return;
 }
 
@@ -60,6 +71,7 @@ class Omnia_EvoCampus_Sync {
 	const API_BASE        = 'https://api.evolcampus.com/api/v1';
 	const TOKEN_TRANSIENT = 'omnia_evo_token';
 	const LOG_SOURCE      = 'omnia-evocampus-sync';
+	const CRON_HOOK       = 'omnia_evo_reconcile';
 
 	/** Bootstrap */
 	public static function init() {
@@ -343,33 +355,27 @@ class Omnia_EvoCampus_Sync {
 		// 1. Censo de alumnos: emails únicos de las suscripciones (SIN tocar
 		//    sus pedidos relacionados — la caché de related-orders de WCS
 		//    tarda >180 s en este hosting y provoca el timeout).
+		//    Sin paginación: en esta tienda 'paged' devolvía siempre la misma
+		//    primera página (visto 10-jul-2026: 50 páginas idénticas → censo
+		//    incompleto). Con ~60 suscripciones, una sola consulta es trivial.
 		$students = array();
-		$page     = 1;
 		try {
-			do {
-				$subs = wcs_get_subscriptions( array(
-					'subscriptions_per_page' => 50,
-					'paged'                  => $page,
-				) );
-				self::log( sprintf( 'Conciliación: página %d — %d suscripciones a examinar.', $page, count( $subs ) ) );
-				foreach ( $subs as $sub ) {
-					$email = $sub->get_billing_email();
-					if ( empty( $email ) ) { continue; }
-					$key = strtolower( $email );
-					if ( ! isset( $students[ $key ] ) ) {
-						$students[ $key ] = array( 'email' => $email, 'sub' => $sub );
-					}
+			$subs = wcs_get_subscriptions( array(
+				'subscriptions_per_page' => -1,
+			) );
+			self::log( sprintf( 'Conciliación: %d suscripciones a examinar.', count( $subs ) ) );
+			foreach ( $subs as $sub ) {
+				$email = $sub->get_billing_email();
+				if ( empty( $email ) ) { continue; }
+				$key = strtolower( $email );
+				if ( ! isset( $students[ $key ] ) ) {
+					$students[ $key ] = array( 'email' => $email, 'sub' => $sub );
 				}
-				$page++;
-				if ( $page > 50 ) { // tope duro anti-bucle (50 páginas = 2.500 suscripciones)
-					self::log( 'Conciliación: tope de 50 páginas alcanzado; se corta la recolección.', 'error' );
-					break;
-				}
-			} while ( ! empty( $subs ) && count( $subs ) === 50 );
+			}
 		} catch ( \Throwable $e ) {
 			self::log( sprintf(
-				'Conciliación ABORTADA en recolección (página %d): %s en %s:%d',
-				$page, $e->getMessage(), basename( $e->getFile() ), $e->getLine()
+				'Conciliación ABORTADA en recolección: %s en %s:%d',
+				$e->getMessage(), basename( $e->getFile() ), $e->getLine()
 			), 'error' );
 			return;
 		}

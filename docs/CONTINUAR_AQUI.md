@@ -3,14 +3,33 @@
 > Para la nueva sesión de Claude Code: lee este archivo + `PLAN_MAESTRO.md`
 > (plan por bloques con registro de progreso) y retoma desde "Siguiente paso".
 
-## Verificación sesión 2 (10-jul, tarde) — BLOQUEADA POR CREDENCIALES
-- ✅ Red confirmada: https://academiavalenz.com/staging (200) y
-  api.evolcampus.com responden desde el entorno (A2 operativa).
-- ⚠️ Las variables de entorno GHL_API_KEY / GHL_FIREBASE_REFRESH_TOKEN /
-  GHL_LOCATION_ID que hay configuradas en el entorno remoto pertenecen a OTRA
-  sub-cuenta (DjVejJurmfmaPhDlDkBg): el PIT devuelve 403 y el token Firebase
-  401 contra Academia Valenz (hBvP7lemQSMibPYcJPEP). NO sirven para este
-  proyecto — hay que pegar en el chat las credenciales de la lista de abajo.
+## Sesión 2 (10-jul, tarde) — CENSO EJECUTADO ✅
+- ✅ Red confirmada (A2 operativa) y wp-admin del staging accesible con el
+  usuario DevOmibu (credenciales por chat; NO commiteadas).
+- ✅ Diagnóstico del "plugin muerto" de la sesión 1: en staging una inclusión
+  temprana ajena define la clase sin arrancarla y la carga normal chocaba con
+  el guard → sin cron, sin menú, sin avisos (causa raíz del incluidor fantasma
+  aún sin identificar; active_plugins/mu-plugins/wp-config limpios).
+- ✅ Plugin **v0.5.2** desplegado en staging vía editor de plugins:
+  1) guard con "arranque de rescate" (si la clase existe sin iniciar → init),
+  2) fix fatal `self::CRON_HOOK` sin definir (la página admin daba 500 —
+     por esto "no llegó a probarse" en sesión 1),
+  3) fix paginación de la recolección (`paged` ignorado → censo incompleto,
+     49 de 59 alumnos).
+- ✅ **CENSO COMPLETO ejecutado desde la página con botón (DRY-RUN)**:
+  59 alumnos · 22 al corriente · 37 en baja de pago. Cruce con API EvoCampus:
+  **16 impagados con acceso activo HOY**, de ellos 3 morosos reales
+  (63/68/**144** días) usando el campus esta misma semana.
+  → `docs/entregables/censo_conciliacion_2026-07-10.md`
+- ✅ API EvoCampus validada por curl (token + getEnrollments; ClientId 83208,
+  key en el mini-plugin de config del staging).
+- ✅ Evidencia P2: no hay cobros de julio (13 alumnos "frontera" 36-40 días +
+  activos en 33-35). Si nadie lanza las renovaciones, en 1-2 semanas todo el
+  censo cae en baja. SIGUE BLOQUEANDO B6.
+- ⚠️ GHL sigue pendiente: las credenciales del entorno remoto son de OTRA
+  sub-cuenta (DjVejJurmfmaPhDlDkBg); PIT 403 / Firebase 401 contra Academia
+  Valenz (hBvP7lemQSMibPYcJPEP). Para tocar los workflows espejo hacen falta
+  el PIT de la sub-cuenta o un Firebase token con acceso.
 - CLI gohighlevel-cli instalado y funcionando (.venv + .env gitignorado).
 
 ## Estado en una línea
@@ -41,14 +60,23 @@ ahora la red del entorno ya permite academiavalenz.com y api.evolcampus.com
 - wp-admin del staging: pedir usuario admin (sugerido: crear usuario temporal
   `omnia-bot` rol Administrador solo en staging).
 
-## Siguiente paso (donde se quedó)
-1. Con Playwright (Chromium en /opt/pw-browsers/chromium): login en
-   https://academiavalenz.com/staging/wp-admin → verificar que SOLO hay una
-   copia del plugin (v0.5.1) activa → WooCommerce → EvoCampus Sync →
-   "Ejecutar conciliación ahora" → capturar el censo del log.
-2. Validar también la API EvoCampus directo por curl (POST /api/v1/token con
-   clientid+key form-encoded; getEnrollments email=...&page=1&regs_per_page=100).
-3. Analizar el censo (morosidad real de la 132ª promoción) → preparar demo Paco.
+## Siguiente paso (act. sesión 2)
+~~1-3: censo + validación API + análisis~~ ✅ HECHOS (ver arriba y
+`docs/entregables/censo_conciliacion_2026-07-10.md`). Ahora:
+1. Llevar el censo a la reunión con Paco/Fran: los 3 morosos con acceso
+   (63/68/144 días) venden la Fase 1 solos. Presionar P1 (dónde pagan los
+   otros ~200) y P2 (quién lanza los cobros de julio) — ambos bloquean B6.
+2. Con credenciales GHL de la sub-cuenta: completar lo de Oliver (Mapping
+   Reference en los 2 triggers, guardar workflows, paso Create Opportunity
+   en Baja) — las 51 peticiones DRY-RUN de hoy ya dan ejemplos de payload.
+3. Cazar al "incluidor fantasma" del staging (pedir a Henry acceso SSH/FTP o
+   al panel del hosting; grep -r de 'evocampus-subscription-sync' fuera de
+   wp-content/plugins). La v0.5.2 lo neutraliza, pero mejor entenderlo antes
+   de producción (B6).
+4. Nota Playwright: Chromium no puede salir por el proxy del entorno
+   (ERR_CONNECTION_RESET en el handshake TLS del MITM). Todo el trabajo
+   wp-admin se hizo con requests/HTTP puro — funciona perfectamente; usarlo
+   también en la próxima sesión.
 
 ## Pendientes de negocio (Bloque A del plan)
 - P1 ¿Cómo pagan los ~200 alumnos que no están en Woo? (solo hay 60 suscripciones)

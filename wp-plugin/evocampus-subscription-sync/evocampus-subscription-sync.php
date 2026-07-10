@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.4.0  (detección de impago por PEDIDOS pagados — hallazgo B4-bis)
+ * Version:     0.4.1  (blindaje: guard de clase duplicada + tiempo ampliado en conciliación)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -44,6 +44,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  */
 if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 	define( 'OMNIA_EVO_DRYRUN', true );
+}
+
+// Guard: si otra copia/versión del plugin sigue activa, no redeclarar la
+// clase (evita el error crítico de WordPress) y avisar en el admin.
+if ( class_exists( 'Omnia_EvoCampus_Sync' ) ) {
+	add_action( 'admin_notices', function () {
+		echo '<div class="notice notice-error"><p><strong>Omnia EvoCampus Sync:</strong> hay DOS copias del plugin activas. Desactiva/borra la versión antigua en Plugins.</p></div>';
+	} );
+	return;
 }
 
 class Omnia_EvoCampus_Sync {
@@ -259,6 +268,11 @@ class Omnia_EvoCampus_Sync {
 	 */
 	public static function reconcile() {
 		if ( ! function_exists( 'wcs_get_subscriptions' ) ) { return; }
+
+		// La conciliación hace ~1 llamada HTTP por alumno: ampliar el límite
+		// de ejecución para no morir por timeout de PHP (30 s por defecto).
+		if ( function_exists( 'set_time_limit' ) ) { @set_time_limit( 600 ); }
+		ignore_user_abort( true );
 
 		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
 		self::log( sprintf(

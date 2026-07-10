@@ -111,3 +111,18 @@ soporte), y demo final.
 ## Decisiones abiertas embebidas (se resuelven en Bloque A)
 A2 (red del entorno), A4 (VeriFactu/gestoría), A5 (staging), A6 (política de
 corte), y el rol de Horacio (asignación de tareas WP vs GHL).
+
+
+---
+
+## REGISTRO DE PROGRESO (act. 10-jul-2026)
+
+- ✅ A1: URLs de los 2 webhooks recibidas y documentadas; peticiones de ejemplo enviadas (Mapping Reference disponible).
+- ✅ A5: staging creado con WP Staging → https://academiavalenz.com/staging (BD prefijo wpstg0_, correos/cron/Woo aislados; WCS y WooPayments en modo seguro).
+- ✅ B2: workflows espejo creados en borrador (Baja/Impago + Reactivación) con triggers Inbound Webhook.
+- ✅ B3: plugin v0.3.1 + config "00-omnia-evo-config" instalados y activos en staging (aviso DRY-RUN visible).
+- ✅ B4: PRUEBA DRY-RUN SUPERADA (10-jul 14:19 UTC, suscripción #1818, manuel.rodriguez16102007@gmail.com):
+    token OK · getEnrollments OK (6 matrículas: 2937/3045/3177/3315/4027/4285) · ambos flujos (status=0 y status=2) disparan.
+    Observación: el filtro active=true/false parece ignorado por la API (mismas 6 matrículas en ambas consultas). Inofensivo (idempotente); verificar en la primera prueba real.
+- ⚠️ HALLAZGO ABIERTO: en el clon, WooCommerce Subscriptions muestra 60 suscripciones (39 en espera, 21 canceladas, 0 ACTIVAS). No cuadra con ~267 alumnos activos. Verificar contadores en PRODUCCIÓN y, si coincide, investigar cómo se refleja realmente el pago mensual antes de B6.
+- Pendientes Bloque A: A2 (red del entorno), A3 (WhatsApp Meta), A4 (VeriFactu/gestoría), A6 (política de corte con Paco). Oliver: Mapping Reference + guardar workflows + paso Create Opportunity.

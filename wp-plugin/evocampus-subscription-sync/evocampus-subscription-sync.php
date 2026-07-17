@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.7.0  (informe mensual de "acceso sin pago": alumnos activos en EvoCampus sin registro en la tienda)
+ * Version:     0.8.0  (política A6 de Paco 14-jul: 7 días de cortesía — el impago avisa a GHL sin cortar; corta la conciliación al agotar la ventana. Becados etiquetados en el informe de acceso sin pago)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -27,7 +27,12 @@
  *    define( 'OMNIA_EVO_CLIENTID', '83208' );
  *    define( 'OMNIA_EVO_KEY',      '...' );
  *    define( 'OMNIA_EVO_DRYRUN',   true );            // empezar SIEMPRE en true
- *    define( 'OMNIA_EVO_GRACE_DAYS', 35 );            // ventana de pago (días)
+ *    define( 'OMNIA_EVO_GRACE_DAYS', 38 );            // ventana de pago: ciclo mensual (31) + 7 días de cortesía (A6, Paco 14-jul-2026)
+ *    // Becados (P1, Paco 14-jul-2026): alumnos autorizados sin pago en la web.
+ *    // La conciliación no los ve (no tienen suscripción); esta lista solo
+ *    // sirve para que el informe mensual los etiquete como autorizados en
+ *    // lugar de señalarlos como anomalía.
+ *    define( 'OMNIA_EVO_BECADOS_EMAILS', 'a@x.com,b@y.com' );
  *    // Espejo CRM — OPCIÓN A (recomendada): API pública de GHL directa.
  *    // El plugin hace upsert del contacto + tags de estado + oportunidad de
  *    // recobro. NO depende de configurar el Mapping Reference del webhook.
@@ -91,9 +96,13 @@ class Omnia_EvoCampus_Sync {
 	/** Bootstrap */
 	public static function init() {
 		// --- Hooks de estado de la suscripción --------------------------------
-		// Baja: impago (tras reintentos), cancelación y expiración.
-		// Nota de negocio: si se pacta periodo de gracia, quitar 'on-hold'.
-		add_action( 'woocommerce_subscription_status_on-hold',   array( __CLASS__, 'on_revoke' ), 10, 1 );
+		// Política A6 (Paco, 14-jul-2026): 7 días de cortesía en el impago.
+		// on-hold (impago) NO corta el acceso: solo espeja a GHL (tag
+		// alumno-impago + oportunidad de recobro → arranca el aviso/dunning).
+		// El corte real lo hace la conciliación diaria al agotar la ventana
+		// de pago (GRACE_DAYS = ciclo mensual + cortesía).
+		add_action( 'woocommerce_subscription_status_on-hold',   array( __CLASS__, 'on_impago' ), 10, 1 );
+		// Cancelación y expiración sí cortan de inmediato (el alumno se va).
 		add_action( 'woocommerce_subscription_status_cancelled', array( __CLASS__, 'on_revoke' ), 10, 1 );
 		add_action( 'woocommerce_subscription_status_expired',   array( __CLASS__, 'on_revoke' ), 10, 1 );
 		// Reactivación: vuelve a estar al corriente de pago.
@@ -150,7 +159,7 @@ class Omnia_EvoCampus_Sync {
 			$audited = true;
 		}
 
-		$grace  = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
+		$grace  = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
 		$dryrun = OMNIA_EVO_DRYRUN;
 
 		echo '<div class="wrap"><h1>Omnia — EvoCampus Sync</h1>';
@@ -182,13 +191,14 @@ class Omnia_EvoCampus_Sync {
 				esc_html( $audit['when'] ), count( $audit['list'] )
 			);
 			if ( $audit['list'] ) {
-				echo '<table class="widefat striped"><thead><tr><th>Email</th><th>Nombre</th><th>Grupos</th><th>Última conexión</th></tr></thead><tbody>';
+				echo '<table class="widefat striped"><thead><tr><th>Email</th><th>Nombre</th><th>Grupos</th><th>Última conexión</th><th>Situación</th></tr></thead><tbody>';
 				foreach ( $audit['list'] as $r ) {
 					printf(
-						'<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
+						'<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
 						esc_html( $r['email'] ), esc_html( $r['name'] ),
 						esc_html( implode( ', ', (array) $r['groups'] ) ),
-						esc_html( $r['lastconnect'] ?: '—' )
+						esc_html( $r['lastconnect'] ?: '—' ),
+						! empty( $r['becado'] ) ? 'Becado (autorizado)' : '<strong>Desconocido — revisar</strong>'
 					);
 				}
 				echo '</tbody></table>';
@@ -363,6 +373,26 @@ class Omnia_EvoCampus_Sync {
 		self::notify_ghl( 'baja', $email, $subscription, $ids );
 	}
 
+	/**
+	 * Handler de impago (on-hold) — política A6: cortesía sin corte.
+	 * No toca EvoCampus; solo espeja a GHL para que arranque el aviso de
+	 * recobro. Si el alumno paga dentro de la cortesía, on_activate lo
+	 * devuelve a activo en el CRM; si no, la conciliación lo dará de baja
+	 * al agotar la ventana de pago. (La oportunidad de recobro en GHL no se
+	 * duplica: notify_ghl_api comprueba si ya hay una abierta.)
+	 */
+	public static function on_impago( $subscription ) {
+		$subscription = self::normalize( $subscription );
+		$email        = self::email_from( $subscription );
+		if ( empty( $email ) ) { return; }
+		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
+		self::log( sprintf(
+			'%s — suscripción en impago (on-hold): cortesía activa, NO se corta el acceso; se avisa a GHL. El corte llegará por conciliación si no paga dentro de la ventana de %d días.',
+			$email, $grace
+		) );
+		self::notify_ghl( 'baja', $email, $subscription );
+	}
+
 	/** Handler de reactivación. */
 	public static function on_activate( $subscription ) {
 		$subscription = self::normalize( $subscription );
@@ -402,7 +432,7 @@ class Omnia_EvoCampus_Sync {
 		if ( function_exists( 'set_time_limit' ) ) { @set_time_limit( 600 ); }
 		ignore_user_abort( true );
 
-		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 35;
+		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
 		self::log( sprintf(
 			'Conciliación diaria: inicio (ventana de pago: %d días)%s',
 			$grace, OMNIA_EVO_DRYRUN ? ' [DRY-RUN]' : ''
@@ -562,6 +592,12 @@ class Omnia_EvoCampus_Sync {
 		} while ( $page <= $pages && $page <= 60 );
 
 		// 2. De los activos, quedarse con los que NO tienen registro en la tienda.
+		//    Los emails de OMNIA_EVO_BECADOS_EMAILS (P1: becados confirmados por
+		//    Paco) se etiquetan como autorizados en vez de señalarse como anomalía.
+		$becados = array();
+		if ( defined( 'OMNIA_EVO_BECADOS_EMAILS' ) && OMNIA_EVO_BECADOS_EMAILS ) {
+			$becados = array_filter( array_map( 'strtolower', array_map( 'trim', explode( ',', OMNIA_EVO_BECADOS_EMAILS ) ) ) );
+		}
 		$active  = 0;
 		$flagged = array();
 		foreach ( $students as $info ) {
@@ -573,16 +609,19 @@ class Omnia_EvoCampus_Sync {
 				'name'        => $info['name'],
 				'groups'      => array_keys( $info['groups'] ),
 				'lastconnect' => $info['lastconnect'],
+				'becado'      => in_array( strtolower( $info['email'] ), $becados, true ),
 			);
 		}
 
+		$desconocidos = count( array_filter( $flagged, function ( $f ) { return empty( $f['becado'] ); } ) );
 		self::log( sprintf(
-			'Auditoría: %d alumnos activos en EvoCampus · %d SIN registro en la tienda (matriculación manual).',
-			$active, count( $flagged )
+			'Auditoría: %d alumnos activos en EvoCampus · %d sin registro en la tienda (%d becados autorizados, %d desconocidos).',
+			$active, count( $flagged ), count( $flagged ) - $desconocidos, $desconocidos
 		) );
 		foreach ( $flagged as $f ) {
 			self::log( sprintf(
-				'ACCESO SIN PAGO: %s (%s) · grupos: %s · últ. conexión %s',
+				'%s: %s (%s) · grupos: %s · últ. conexión %s',
+				$f['becado'] ? 'BECADO (autorizado)' : 'ACCESO SIN PAGO',
 				$f['email'], $f['name'], implode( ', ', $f['groups'] ), $f['lastconnect'] ? $f['lastconnect'] : '—'
 			) );
 		}

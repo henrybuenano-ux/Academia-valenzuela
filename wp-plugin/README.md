@@ -51,8 +51,9 @@ define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.
       donde hay comentarios "confirmar contra la doc".
 - [ ] Lanzar la conciliación manualmente (`wp cron event run
       omnia_evo_daily_reconciliation` con WP-CLI) y revisar desajustes.
-- [ ] Decisión de negocio: ¿cortar en `on-hold` o dar días de gracia?
-      (si hay gracia: quitar `on-hold` de la lista de estados de corte).
+- [x] Decisión de negocio (A6, Paco 14-jul-2026): **7 días de cortesía**.
+      Aplicada en v0.8.0: `on-hold` ya NO corta (solo avisa a GHL);
+      `GRACE_DAYS = 38` (ciclo mensual 31 + 7 de cortesía).
 - [ ] Pasar `OMNIA_EVO_DRYRUN` a `false` en staging → probar baja y
       reactivación reales con UN alumno de prueba → verificar en el campus.
 - [ ] Desplegar a producción (de nuevo con DRY-RUN=true 24–48 h, revisar
@@ -65,7 +66,7 @@ en esta tienda el estado de la suscripción no refleja el pago):
 
 | Situación del alumno | Acción EvoCampus |
 |---|---|
-| Último pedido PAGADO hace ≤ `OMNIA_EVO_GRACE_DAYS` (35) | `status=0` (activo) |
+| Último pedido PAGADO hace ≤ `OMNIA_EVO_GRACE_DAYS` (38 = ciclo 31 + 7 cortesía) | `status=0` (activo) |
 | Último pedido pagado hace más de la ventana (o nunca) | `status=2` (baja) |
 
 La conciliación corre a diario (cron 04:30) y loguea el censo completo
@@ -78,7 +79,8 @@ corrige en el futuro):
 
 | Evento WooCommerce Subscriptions | Acción EvoCampus |
 |---|---|
-| `on-hold` / `cancelled` / `expired` | `updateEnrollment status=2` (baja) |
+| `on-hold` (impago) | **No corta** (v0.8.0, política A6): solo espeja a GHL (tag impago + oportunidad recobro → arranca el aviso). El corte llega por conciliación al agotar la ventana. |
+| `cancelled` / `expired` | `updateEnrollment status=2` (baja inmediata) |
 | `active` (reactivación) | `updateEnrollment status=0` (activa) |
 
 Modelo: 1 suscripción = acceso a todo → se opera por email sobre todas las

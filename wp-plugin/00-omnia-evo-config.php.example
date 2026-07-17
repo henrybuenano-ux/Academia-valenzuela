@@ -18,6 +18,17 @@ if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 	// true = modo prueba (solo log). Cambiar a false SOLO tras validar en staging.
 	define( 'OMNIA_EVO_DRYRUN', true );
 }
+if ( ! defined( 'OMNIA_EVO_GRACE_DAYS' ) ) {
+	// Ventana de pago = ciclo mensual (31) + 7 días de cortesía (política A6,
+	// confirmada por Paco el 14-jul-2026).
+	define( 'OMNIA_EVO_GRACE_DAYS', 38 );
+}
+if ( ! defined( 'OMNIA_EVO_BECADOS_EMAILS' ) ) {
+	// Becados confirmados por Paco (14-jul-2026): matriculación manual autorizada.
+	// El informe mensual los etiqueta como autorizados; no se les corta nada
+	// (tampoco los ve la conciliación al no tener suscripción en Woo).
+	define( 'OMNIA_EVO_BECADOS_EMAILS', 'danielsanchezluc55@gmail.com,mirellacrespo29@gmail.com,juanjolirio2003@gmail.com,juncaluam@gmail.com,marioventapuer@hotmail.com,santiml.89@hotmail.com,sergiohuelma_123@hotmail.com' );
+}
 if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL_BAJA' ) ) {
 	define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/vJkOtiVDBtx0TChtWl9U' );
 }

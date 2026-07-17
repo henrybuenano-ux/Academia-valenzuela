@@ -151,8 +151,21 @@ corte), y el rol de Horacio (asignación de tareas WP vs GHL).
 - ⚠️ En producción está subido nuestro plugin v0.3.1 INACTIVO (regla respetada). Antes de B6: sustituirlo por la v0.7.0 de staging, no activar el v0.3.1.
 - Nota operativa: login de producción oculto con WPS Hide Login → slug `av-login` (solo lectura desde el entorno; producción NO se toca).
 
-### Sesión 4 (14-jul-2026) — verificación de estado tras el examen
+### Sesión 4 (17-jul-2026) — verificación de estado tras el examen
+> (Fecha corregida: estas comprobaciones se hicieron el 17-jul; el cron del
+> staging no corrió el 15-17 porque WP-Cron solo dispara con visitas.)
 - ✅ **Criterio de estabilidad de F1 CUMPLIDO**: conciliación nocturna automática (cron) ejecutada sin fallos 3 días seguidos (12/13/14-jul: 59/59 alumnos, 11-13 s, 0 errores, DRY-RUN).
 - ✅ **EvoCampus se auto-vació al terminar el curso**: al pasar la fecha fin (10-11 jul, examen), las matrículas de la 132ª pasaron de status 0 → 1 automáticamente. Hoy solo quedan **3 matrículas activas** (fin 27-ago) de las 344 del 10-jul. Implicación: ya no hay morosos con acceso que cortar en la 132ª; el modo real del plugin debe arrancar con la 133ª (refuerza la decisión de la sesión 2).
 - ⚠️ Producción SIN CAMBIOS: suscripciones siguen 39 en espera / 0 activas; ningún pedido desde el 19-jun. Nadie ha actuado sobre la pausa del 24-jun. Con el curso ya terminado, cobrar julio probablemente sea discutible — pero hay que decidir qué hacer con las 39 suscripciones pausadas ANTES de la 133ª (¿cancelarlas formalmente? ¿reactivar a quienes sigan? — afecta al dunning y a la importación a GHL).
 - Efecto esperado y confirmado del congelamiento en el censo DRY-RUN: "al corriente" cayendo en cascada al cruzar la ventana de 35 días: 20 (10-jul) → 9 (12-jul) → 7 (13/14-jul). Hacia el 24-jul todo el censo estará en "baja" (último cobro real: 19-jun).
+
+### Sesión 5 (17-jul-2026) — RESPUESTAS DE PACO RECIBIDAS Y APLICADAS ✅
+- ✅ **A6 CERRADA**: Paco acepta la recomendación → **7 días de cortesía** en el impago.
+- ✅ **P1 CERRADO DEL TODO**: los 7 alumnos manuales son **BECADOS**. Paco pregunta cómo tratarlos el próximo curso → propuesta enviada (ver `docs/entregables/respuesta_paco_becados_2026-07-17.md`).
+- ✅ **Fecha 133ª promoción: 1 de septiembre de 2026** → calendario de B6: deploy a producción con DRY-RUN en agosto, activación real con la 133ª. Las campañas de captación (F4) deben arrancar YA (julio-agosto según el propio cliente).
+- ✅ **Plugin v0.8.0 implementado y DESPLEGADO en staging** (validado en vivo):
+  · `on-hold` (impago) ya NO corta el acceso: solo espeja a GHL (tag alumno-impago + oportunidad de recobro → dispara el aviso/dunning). El corte lo hace la conciliación al agotar la ventana.
+  · `GRACE_DAYS` por defecto y en config del staging: **38** (ciclo mensual 31 + 7 de cortesía). Verificado en la página admin: "Ventana de pago: 38 días".
+  · Becados: nueva constante `OMNIA_EVO_BECADOS_EMAILS` (7 emails en la config del staging). El informe de acceso sin pago los etiqueta "Becado (autorizado)" vs "Desconocido — revisar". Verificado en vivo: con el campus ya vaciado quedan 2 sin registro → mirella (becada ✓) e info@academiavalenz.com (cuenta interna, correctamente marcada para revisar).
+  · Cancelación/expiración siguen cortando de inmediato. `php -l` OK; desplegado vía editor de plugins (AJAX) como la v0.5.2.
+- QUEDA PENDIENTE para B6: respuesta gestoría (A4, ya no urgente — VeriFactu 2027), decisión sobre las 39 suscripciones pausadas (cancelar vs reactivar antes de la 133ª), y el "incluidor fantasma" del staging (neutralizado, causa raíz sin identificar).

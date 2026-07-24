@@ -1,0 +1,272 @@
+<title>Mapa del sistema — Academia Valenzuela</title>
+<style>
+  :root{
+    --bg:#f4f6f3; --surface:#ffffff; --ink:#1c231e; --muted:#5b665e; --border:#dbe2dc;
+    --accent:#24523b; --accent-soft:#e6efe9; --chip-mono:#f0f3ef;
+    --live:#2f7d46; --live-bg:#e2f1e6; --draft:#96700a; --draft-bg:#f6ecce;
+    --spec:#5b6675; --spec-bg:#e9edf1; --blocked:#ad3d2b; --blocked-bg:#f6e1db;
+    --paper:#fbfcfa;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#131713; --surface:#1b201c; --ink:#e6ece7; --muted:#9aa79d; --border:#2b332c;
+      --accent:#8cc3a6; --accent-soft:#22352a; --chip-mono:#242b25;
+      --live:#7ecf98; --live-bg:#1e3325; --draft:#e0b94f; --draft-bg:#383014;
+      --spec:#a8b2bf; --spec-bg:#252b33; --blocked:#e08a77; --blocked-bg:#3c221c; }
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6f3; --surface:#ffffff; --ink:#1c231e; --muted:#5b665e; --border:#dbe2dc;
+    --accent:#24523b; --accent-soft:#e6efe9; --chip-mono:#f0f3ef;
+    --live:#2f7d46; --live-bg:#e2f1e6; --draft:#96700a; --draft-bg:#f6ecce;
+    --spec:#5b6675; --spec-bg:#e9edf1; --blocked:#ad3d2b; --blocked-bg:#f6e1db; --paper:#fbfcfa;
+  }
+  :root[data-theme="dark"]{
+    --bg:#131713; --surface:#1b201c; --ink:#e6ece7; --muted:#9aa79d; --border:#2b332c;
+    --accent:#8cc3a6; --accent-soft:#22352a; --chip-mono:#242b25;
+    --live:#7ecf98; --live-bg:#1e3325; --draft:#e0b94f; --draft-bg:#383014;
+    --spec:#a8b2bf; --spec-bg:#252b33; --blocked:#e08a77; --blocked-bg:#3c221c; --paper:#fbfcfa;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0 0 4rem}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:1.4rem 1.2rem 0}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 .2rem}
+  h1{font-size:1.45rem;margin:0 0 .2rem;letter-spacing:-.015em}
+  .sub{color:var(--muted);font-size:.92rem;margin:0 0 1rem}
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
+  .lg{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;padding:.22rem .6rem;border-radius:999px;border:1px solid var(--border)}
+  .dot{width:.6rem;height:.6rem;border-radius:50%}
+  .tabs{display:flex;gap:.25rem;flex-wrap:wrap}
+  .tab{appearance:none;border:1px solid var(--border);border-bottom:none;background:var(--bg);color:var(--muted);
+    font:600 .88rem/1 system-ui,sans-serif;padding:.65rem .95rem;border-radius:.55rem .55rem 0 0;cursor:pointer}
+  .tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .tab[aria-selected="true"]{background:var(--surface);color:var(--ink);border-color:var(--accent);border-bottom:2px solid var(--surface);margin-bottom:-1px}
+  main{max-width:1080px;margin:1.3rem auto;padding:0 1.2rem}
+  .view{display:none}
+  .view.active{display:block}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:.7rem;padding:1.1rem 1.2rem;margin:0 0 1.1rem}
+  .card h2{font-size:1.05rem;margin:.1rem 0 .35rem;color:var(--accent)}
+  .card p{margin:.35rem 0;max-width:70ch;color:var(--muted);font-size:.93rem}
+  .diagram{background:var(--paper);border:1px solid var(--border);border-radius:.55rem;padding:.6rem;overflow-x:auto;margin:.8rem 0 .2rem}
+  .diagram pre.mermaid{margin:0;min-width:640px;color:#1c231e}
+  code, .tag{font:.82rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--chip-mono);border:1px solid var(--border);border-radius:.35rem;padding:.06rem .38rem;white-space:nowrap}
+  table{border-collapse:collapse;width:100%;font-size:.9rem}
+  th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);padding:.5rem .6rem}
+  td{border-bottom:1px solid var(--border);padding:.55rem .6rem;vertical-align:top}
+  td:first-child{font-weight:600}
+  .pill{display:inline-block;font-size:.74rem;font-weight:700;padding:.14rem .55rem;border-radius:999px;white-space:nowrap}
+  .p-live{background:var(--live-bg);color:var(--live)} .p-draft{background:var(--draft-bg);color:var(--draft)}
+  .p-spec{background:var(--spec-bg);color:var(--spec)} .p-blocked{background:var(--blocked-bg);color:var(--blocked)}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 .5rem .5rem 0;padding:.6rem .9rem;font-size:.9rem;margin:.8rem 0}
+  ul{margin:.4rem 0;padding-left:1.2rem} li{margin:.25rem 0;font-size:.92rem}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  @media (prefers-reduced-motion: no-preference){ .view.active{animation:fade .18s ease} @keyframes fade{from{opacity:.4}to{opacity:1}} }
+</style>
+
+<header><div class="wrap">
+  <h1>🗺️ Mapa del sistema — Academia Valenzuela</h1>
+  <p class="sub">Interno Ómibu · act. 24-jul-2026 · go-live real: <strong>1 de septiembre</strong> (133ª promoción)</p>
+  <div class="legend">
+    <span class="lg"><span class="dot" style="background:var(--live)"></span> Funcionando hoy</span>
+    <span class="lg"><span class="dot" style="background:var(--draft)"></span> Construido, en borrador / simulación</span>
+    <span class="lg"><span class="dot" style="background:var(--spec)"></span> Especificado, pendiente de montar</span>
+    <span class="lg"><span class="dot" style="background:var(--blocked)"></span> Esperando a un tercero</span>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-v="v1">1 · Viaje del lead</button>
+    <button class="tab" role="tab" aria-selected="false" data-v="v2">2 · Ciclo del alumno</button>
+    <button class="tab" role="tab" aria-selected="false" data-v="v3">3 · Arquitectura</button>
+    <button class="tab" role="tab" aria-selected="false" data-v="v4">4 · Estado y fechas</button>
+  </nav>
+</div></header>
+
+<main>
+
+<!-- ============ VISTA 1 ============ -->
+<section class="view active" id="v1">
+  <div class="card">
+    <h2>Qué pasa cuando entra un lead</h2>
+    <p>Tres puertas de entrada. Cada una aplica <strong>un tag</strong>, y ese tag lo enciende todo: secuencia de emails y tarjeta en el pipeline Captación, en paralelo. Un solo mecanismo para las tres puertas.</p>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  classDef live fill:#dff0e4,stroke:#2f7d46,color:#173822,stroke-width:2px
+  classDef draft fill:#f8eecb,stroke:#b08415,color:#4a3a08,stroke-width:2px
+  classDef spec fill:#e9edf1,stroke:#5b6675,color:#2b3440,stroke-width:1.5px,stroke-dasharray:5 3
+  classDef blocked fill:#f8e3dc,stroke:#ad3d2b,color:#5c1f14,stroke-width:2px
+
+  F["📝 Formulario landing<br/>al enviar aplica tag lead-landing-133<br/>+ UTMs a campos ocultos"]:::spec
+  W["💬 Chat widget con bot IA<br/>cualifica y aplica tag lead-bot"]:::spec
+  R["📣 Campaña re-enganche ex-132ª<br/>39 contactos con tag reenganche-133"]:::draft
+  WA["📱 WhatsApp post-formulario<br/>plantilla + bot conversa"]:::blocked
+
+  F --> T1(["tag lead-landing-133"]):::draft
+  W --> T2(["tag lead-bot"]):::draft
+  R --> T3(["tag reenganche-133"]):::draft
+  WA -. "cuando Meta apruebe" .-> W
+
+  T1 --> WF1["WF Lead de landing → Captación<br/>oportunidad en NUEVO LEAD · fuente Landing 133"]:::draft
+  T1 --> N["WF Nurturing lead nuevo<br/>4 emails · días 0 / 2 / 4 / 7"]:::draft
+  T2 --> WF2["WF Lead del bot → Captación<br/>oportunidad en CUALIFICADO · fuente Bot web"]:::draft
+  T3 --> RB["WF Re-enganche ex-132ª<br/>3 emails · días 0 / 4 / 8"]:::draft
+
+  N --> FR(["sin respuesta → tag lead-frio-133<br/>audiencia de remarketing"]):::draft
+  RB --> NO(["responde NO → tag no-133<br/>no se le insiste"]):::draft
+    </pre></div>
+  </div>
+
+  <div class="card">
+    <h2>Movimientos en el pipeline Captación</h2>
+    <p>Seis etapas reales de la sub-cuenta. Lo automático mueve las entradas y la agenda; el cierre es humano.</p>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  classDef stage fill:#e6efe9,stroke:#24523b,color:#16281e,stroke-width:2px
+  classDef lost fill:#f8e3dc,stroke:#ad3d2b,color:#5c1f14
+  classDef auto fill:#f8eecb,stroke:#b08415,color:#4a3a08
+
+  NL["Nuevo lead"]:::stage --> CO["Contactado"]:::stage --> CU["Cualificado"]:::stage --> AG["Agendado"]:::stage --> AA["🏆 Alta alumno"]:::stage
+  CO -.-> PE["Perdido"]:::lost
+  CU -.-> PE
+  AG -.-> PE
+
+  A1(["entra AUTO: formulario<br/>fuente Landing 133"]):::auto --> NL
+  A2(["entra AUTO: bot ya cualificó<br/>fuente Bot web"]):::auto --> CU
+  A3(["AUTO: reserva en el calendario<br/>tag asesoria-agendada"]):::auto --> AG
+  A4(["MANUAL: equipo tras primera respuesta"]) --> CO
+  A5(["MANUAL: se matricula → alta Woo<br/>tag matriculado-133"]) --> AA
+    </pre></div>
+    <div class="note">Los tags <code>asesoria-agendada</code> y <code>matriculado-133</code> son además los <strong>Goal Events</strong>: al llegar, cortan las secuencias de email automáticamente (remate de UI pendiente en cada workflow).</div>
+  </div>
+</section>
+
+<!-- ============ VISTA 2 ============ -->
+<section class="view" id="v2">
+  <div class="card">
+    <h2>Ciclo de vida del alumno — pagos y acceso al campus</h2>
+    <p>La Fase 1 completa: alta automática (ya existía), y lo nuevo — impago con 7 días de cortesía, avisos automáticos, corte por conciliación y reactivación sola al pagar.</p>
+    <div class="diagram"><pre class="mermaid">
+flowchart TD
+  classDef live fill:#dff0e4,stroke:#2f7d46,color:#173822,stroke-width:2px
+  classDef draft fill:#f8eecb,stroke:#b08415,color:#4a3a08,stroke-width:2px
+  classDef blocked fill:#f8e3dc,stroke:#ad3d2b,color:#5c1f14,stroke-width:2px
+
+  P["💳 Alumno paga suscripción 80 €/mes<br/>WooPayments · infraestructura Stripe"]:::live
+  P --> ALTA["Conector oficial Evolmind<br/>ALTA automática en EvoCampus + credenciales"]:::live
+  ALTA --> OK["Alumno activo<br/>renovación mensual automática"]:::live
+
+  OK --> FALLA{"❌ Falla el cobro<br/>suscripción pasa a on-hold"}
+  FALLA --> D0["Plugin v0.8.0: tag alumno-impago<br/>SIN cortar el acceso — 7 días de cortesía<br/>+ oportunidad en Recobro"]:::draft
+  D0 --> AV["WF Dunning: avisos automáticos<br/>día 0 amable · día 3 recordatorio · día 6 último aviso"]:::draft
+  AV --> PAGA1{"¿Paga durante la cortesía?"}
+  PAGA1 -- "Sí" --> REC["tag alumno-recuperado<br/>Goal Event corta los avisos<br/>+ WF Bienvenida de vuelta"]:::draft
+  REC --> OK
+  PAGA1 -- "No" --> CORTE["Conciliación nocturna corta el acceso<br/>al agotar la ventana de 38 días<br/>= ciclo mensual 31 + 7 de cortesía"]:::draft
+  CORTE --> PC["Email post-corte día 8:<br/>progreso guardado, reactivar es fácil"]:::draft
+  PC --> PAGA2{"¿Paga después?"}
+  PAGA2 -- "Sí" --> REAC["Plugin reactiva la matrícula solo<br/>status=0 en EvoCampus"]:::draft
+  REAC --> OK
+  PAGA2 -- "No" --> BAJA["Baja definitiva en Recobro"]:::blocked
+
+  OK --> CANC{"Cancela él mismo<br/>o expira el curso"}
+  CANC --> CORTE2["Corte INMEDIATO<br/>sin cortesía — el alumno se va"]:::draft
+    </pre></div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>Pipeline Recobro impagos</h2>
+      <div class="diagram"><pre class="mermaid">
+flowchart LR
+  classDef stage fill:#e6efe9,stroke:#24523b,color:#16281e,stroke-width:2px
+  I["Impago detectado<br/>AUTO: plugin crea la oportunidad"]:::stage --> A["Avisado<br/>dunning en marcha"]:::stage
+  A --> R["✅ Recuperado<br/>pagó"]:::stage
+  A --> B["Baja definitiva<br/>no volvió"]:::stage
+      </pre></div>
+    </div>
+    <div class="card">
+      <h2>Casos especiales</h2>
+      <ul>
+        <li><strong>Becados (7):</strong> whitelist <code>OMNIA_EVO_BECADOS_EMAILS</code> — la conciliación no los toca y el informe mensual los marca como autorizados. Cualquier desconocido con acceso sin pago salta como alerta.</li>
+        <li><strong>Fin de curso:</strong> las matrículas de EvoCampus caducan solas por fecha (verificado con la 132ª: el campus se auto-vació tras el examen).</li>
+        <li><strong>Intensivo:</strong> pago único, sin suscripción — su acceso se rige solo por la fecha fin del campus.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISTA 3 ============ -->
+<section class="view" id="v3">
+  <div class="card">
+    <h2>Arquitectura — quién habla con quién</h2>
+    <p>Cuatro sistemas. WordPress es el terreno propio; EvoCampus y GHL se operan por API; la facturación es la pieza que falta por diseñar.</p>
+    <div class="diagram"><pre class="mermaid">
+flowchart TB
+  classDef live fill:#dff0e4,stroke:#2f7d46,color:#173822,stroke-width:2px
+  classDef draft fill:#f8eecb,stroke:#b08415,color:#4a3a08,stroke-width:2px
+  classDef spec fill:#e9edf1,stroke:#5b6675,color:#2b3440,stroke-dasharray:5 3
+  classDef blocked fill:#f8e3dc,stroke:#ad3d2b,color:#5c1f14,stroke-width:2px
+
+  subgraph WP["🌐 academiavalenz.com — WordPress"]
+    WOO["WooCommerce + Subscriptions<br/>cobros por WooPayments · Stripe"]:::live
+    CON["Conector oficial Evolmind<br/>solo hace el ALTA"]:::live
+    PL["Plugin Omnia v0.8.0<br/>baja · reactivación · conciliación diaria<br/>espejo GHL · informe becados<br/>DRY-RUN en staging · prod 24-ago"]:::draft
+    LAND["Landing 133ª + formulario<br/>copy y receta listos"]:::spec
+  end
+
+  subgraph EVO["🎓 EvoCampus — campus SaaS"]
+    API["API ClientId 83208<br/>token · getEnrollments · updateEnrollment"]:::live
+  end
+
+  subgraph GHL["📊 GoHighLevel — sub-cuenta Academia Valenz"]
+    WFS["8 workflows · 6 nuestros en borrador<br/>secuencias + pegamento a pipelines"]:::draft
+    BOT["Bot setter Conversation AI<br/>14 subtareas especificadas"]:::spec
+    PIPES["Pipelines Captación y Recobro<br/>22 tags · 11 custom fields · 103 contactos"]:::live
+    CAN["Canales de envío<br/>email: DNS lunes 27 · WhatsApp: Meta"]:::blocked
+  end
+
+  subgraph FACT["🧾 Facturación — Fase 2"]
+    SIF["Emisor certificado VeriFactu<br/>gestoría o Holded/Quipu — sin diseñar<br/>plazo legal: 2027"]:::blocked
+  end
+
+  CON -- "alta al comprar" --> API
+  PL -- "baja / reactivación<br/>conciliación por pedidos" --> API
+  PL -- "tags + oportunidades<br/>por API pública" --> PIPES
+  LAND -- "tag lead-landing-133" --> WFS
+  BOT -- "tag lead-bot" --> WFS
+  WFS --> CAN
+  WOO -. "webhook cobro confirmado<br/>(futuro)" .-> SIF
+    </pre></div>
+    <div class="note">Dato clave descubierto en la auditoría: <strong>el 100% de los cobros reales va por WooPayments (Stripe)</strong>; el plugin de Redsys está instalado pero jamás procesó un pago — candidato a retirarse.</div>
+  </div>
+</section>
+
+<!-- ============ VISTA 4 ============ -->
+<section class="view" id="v4">
+  <div class="card">
+    <h2>Estado de cada pieza y calendario</h2>
+    <table>
+      <thead><tr><th>Pieza</th><th>Estado</th><th>Fecha clave</th><th>Dueño</th></tr></thead>
+      <tbody>
+        <tr><td>Plugin v0.8.0 (accesos)</td><td><span class="pill p-draft">DRY-RUN staging</span></td><td>Prod 24-ago · real 1-sep</td><td>Henry (runbook listo)</td></tr>
+        <tr><td>6 workflows AV (secuencias + pegamento)</td><td><span class="pill p-draft">Borrador en GHL</span></td><td>Remates UI ~20 min · activar con landing</td><td>Oliver</td></tr>
+        <tr><td>Dunning</td><td><span class="pill p-draft">Borrador</span></td><td><strong>NO activar hasta 1-sep</strong></td><td>Oliver</td></tr>
+        <tr><td>Canal email (DNS) + calendario Asesorías</td><td><span class="pill p-blocked">Pendiente</span></td><td>Lunes 27-jul — abre todo</td><td>Oliver</td></tr>
+        <tr><td>Landing + formulario</td><td><span class="pill p-spec">Receta lista</span></td><td>28-jul</td><td>Oliver</td></tr>
+        <tr><td>Bot setter (14 subtareas)</td><td><span class="pill p-spec">Especificado</span></td><td>28-jul → QA 3-ago → hito 4-ago</td><td>Oliver</td></tr>
+        <tr><td>Primera campaña 133ª</td><td><span class="pill p-spec">Copy listo</span></td><td>4-ago</td><td>Oliver + Paco</td></tr>
+        <tr><td>WhatsApp (canal + plantilla post-form)</td><td><span class="pill p-blocked">Esperando Meta</span></td><td>Solicitar 27-jul</td><td>Oliver</td></tr>
+        <tr><td>39 suscripciones pausadas (24-jun)</td><td><span class="pill p-blocked">Esperando Paco/Fran</span></td><td>Perseguir YA — email del 17-jul</td><td>Henry/Germán</td></tr>
+        <tr><td>Facturación (Fase 2)</td><td><span class="pill p-blocked">Esperando gestoría</span></td><td>Diseño al contestar · VeriFactu 2027</td><td>Henry/Germán</td></tr>
+        <tr><td>Alta EvoCampus · pipelines · contactos · API</td><td><span class="pill p-live">Funcionando</span></td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><strong>Los 3 bloqueos externos vivos:</strong> ① respuesta de Paco/Fran al email de las 3 confirmaciones (suscripciones + becados + gestoría) · ② la gestoría (diseño de Fase 2) · ③ Meta (WhatsApp). Todo lo demás depende solo del equipo.</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  const tabs=document.querySelectorAll('.tab'), views=document.querySelectorAll('.view');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.setAttribute('aria-selected', x===t ? 'true':'false'));
+    views.forEach(v=>v.classList.toggle('active', v.id===t.dataset.v));
+  }));
+</script>

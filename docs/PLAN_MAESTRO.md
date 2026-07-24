@@ -95,7 +95,7 @@ soporte), y demo final.
 ## Reglas de dependencia (lo que NO se puede saltar
 - Nada pasa a real sin pasar por DRY-RUN/staging primero (B3→B4→B6).
 - Fase 2 no se diseña hasta la respuesta de la gestoría (A4).
-- El dunning de F1 no se activa hasta tener canal de envío (D1 puede adelantarse si urge).
+- El dunning de F1 (avisos de impago al alumno) sigue esta secuencia: los textos ya están escritos (`docs/entregables/secuencias_dunning_2026-07-17.md`) → D1 configura el canal de email en GHL (27-jul) → el workflow se monta EN BORRADOR (3-ago) → se ENCIENDE el 1-sep junto con el modo real del plugin, porque hasta entonces no existe ningún impago real que avisar. [Act. 24-jul: la versión anterior de esta regla mencionaba "los workflows espejo" — descartados; el espejo lo hace el plugin por API directa desde v0.6.]
 - A3 (WhatsApp) se lanza YA aunque sea de Fase 3, por el lead time de Meta.
 
 ## Verificación end-to-end (criterio de "hecho" por fase)

@@ -3,6 +3,7 @@
 > Re-mapeo del sistema construido a la nomenclatura de casa: LS (Lead Sources),
 > SP (Sales Pipeline), AP (Alumno activo — gestión de acceso), RP (Recovery /
 > Recobro de impagos). PS (reviews) no aplica en este alcance.
+> ✔ Nombres YA aplicados en la sub-cuenta GHL y en ClickUp (24-jul).
 > Estado: ✅ funcionando · 🟡 construido en borrador · ⚪ especificado · 🔴 espera externa
 
 ## MAPA VISUAL (pegar en Miro/Canva — bloques por color)
@@ -75,15 +76,15 @@
 
 | Código | Nombre en GHL | Trigger | Objetivo | Estado |
 |---|---|---|---|---|
-| LS01 | AV · Lead de landing → Captación (v1) | tag `lead-landing-133` | Oportunidad en Nuevo lead, fuente Landing 133 | 🟡 borrador |
-| LS02 | AV · Lead del bot → Captación (v1) | tag `lead-bot` | Oportunidad en Cualificado, fuente Bot web | 🟡 borrador |
-| LS03 | AV · Re-enganche ex-alumnos 132ª (v1) | tag `reenganche-133` | 3 emails de re-matrícula → `no-133` | 🟡 borrador |
+| LS01 | LS01 · Lead de landing → Captación | tag `lead-landing-133` | Oportunidad en Nuevo lead, fuente Landing 133 | 🟡 borrador |
+| LS02 | LS02 · Lead del bot → Captación | tag `lead-bot` | Oportunidad en Cualificado, fuente Bot web | 🟡 borrador |
+| LS03 | LS03 · Re-enganche ex-alumnos 132ª | tag `reenganche-133` | 3 emails de re-matrícula → `no-133` | 🟡 borrador |
 | LS04 | (futuro) WhatsApp post-form | envío de LS01 | Conversación IA con lead identificado | 🔴 Meta |
-| SP01 | AV · Nurturing lead nuevo 133ª (v1) | tag `lead-landing-133` | 4 emails → asesoría/matrícula → `lead-frio-133` | 🟡 borrador |
+| SP01 | SP01 · Nurturing lead nuevo 133ª | tag `lead-landing-133` | 4 emails → asesoría/matrícula → `lead-frio-133` | 🟡 borrador |
 | SP02 | (por crear con el calendario) | booking Asesorías | tag `asesoria-agendada` + mover a Agendado | ⚪ |
-| RP02 | AV · Dunning impago — NO ACTIVAR HASTA 1-SEP (v1) | tag `alumno-impago` | Avisos 0/3/6 + post-corte 8 | 🟡 borrador |
-| RP03 | AV · Bienvenida al recuperar el pago (v1) | tag `alumno-recuperado` | Confirmación + corta RP02 | 🟡 borrador |
-| — | Espejo EvoCampus Baja/Impago + Reactivación | Inbound Webhook | LEGADO: despublicar (sustituidos por API del plugin) | ✅ publicados |
+| RP02 | RP02 · Dunning impago — NO ACTIVAR HASTA 1-SEP | tag `alumno-impago` | Avisos 0/3/6 + post-corte 8 | 🟡 borrador |
+| RP03 | RP03 · Bienvenida al recuperar el pago | tag `alumno-recuperado` | Confirmación + corta RP02 | 🟡 borrador |
+| — | LEGADO · Espejo Baja/Impago + Reactivación | Inbound Webhook | Renombrados como LEGADO (24-jul); pendiente despublicar | ✅ publicados |
 
 ## TAB 3 — CUSTOM FIELDS (11)
 

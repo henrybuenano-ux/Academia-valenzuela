@@ -169,3 +169,9 @@ corte), y el rol de Horacio (asignación de tareas WP vs GHL).
   · Becados: nueva constante `OMNIA_EVO_BECADOS_EMAILS` (7 emails en la config del staging). El informe de acceso sin pago los etiqueta "Becado (autorizado)" vs "Desconocido — revisar". Verificado en vivo: con el campus ya vaciado quedan 2 sin registro → mirella (becada ✓) e info@academiavalenz.com (cuenta interna, correctamente marcada para revisar).
   · Cancelación/expiración siguen cortando de inmediato. `php -l` OK; desplegado vía editor de plugins (AJAX) como la v0.5.2.
 - QUEDA PENDIENTE para B6: respuesta gestoría (A4, ya no urgente — VeriFactu 2027), decisión sobre las 39 suscripciones pausadas (cancelar vs reactivar antes de la 133ª), y el "incluidor fantasma" del staging (neutralizado, causa raíz sin identificar).
+### Sesión 6 (24-jul-2026) — workflows GHL construidos por API interna
+- ✅ Firebase refresh token recibido por chat → CLI operativo (.env gitignorado). PIT del staging validado también por API pública.
+- ✅ **4 workflows creados EN BORRADOR** en la sub-cuenta vía builder propio (`gohighlevel-cli/builders/av-secuencias-builder.py`, 23 pasos, 0 errores, carpeta "AV Secuencias 133"): Nurturing lead nuevo 133ª (tag `lead-landing-133`) · Re-enganche ex-132ª (tag `reenganche-133`) · Dunning impago día 0/3/6/post-corte (tag `alumno-impago`, NO activar hasta 1-sep) · Bienvenida al recuperar (tag `alumno-recuperado`).
+- Remates de UI pendientes (~15 min, anotados en ClickUp): goal events de salida, enlace real del calendario (D1), ventana de envío 10-20 h, email B2 con novedades de Paco.
+- Estado a 24-jul: sprint de Oliver aún sin arrancar (re-baselineado a 27-jul→3-ago, días laborables); producción sin cambios (39 subs en espera); sin respuesta aún al email de las 3 confirmaciones (enviado 17-jul — perseguir).
+

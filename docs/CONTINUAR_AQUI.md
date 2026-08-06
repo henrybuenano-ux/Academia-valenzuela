@@ -4,13 +4,19 @@
 
 ---
 
-# 🟠 SESIÓN 7 (6-ago-2026) — DIAGNÓSTICO: SIGUE BLOQUEADO POR CREDENCIALES Y RED
+# 🟠 SESIÓN 7 (6-ago-2026) — AUDITORÍA REAL DE LOS WORKFLOWS
 
 ## Estado en una línea
-Han pasado 13 días desde la sesión 6 y **no se ha podido tocar nada**: la red
-del entorno NO se amplió (pese a lo que se creía) y no hay credenciales en el
-entorno. Todo el trabajo pendiente sigue igual, pero ahora **con el calendario
-encima**: el tablero está vencido casi entero y el 1-sep no se mueve.
+Con el token de Firebase se ha auditado **la definición guardada de los 7
+workflows** (no el plan: lo que hay en la sub-cuenta) y han salido **dos
+fallos reales que nadie había detectado**: SP02 tiene el trigger equivocado y
+los avisos internos no tienen destinatario. Informe completo en
+`docs/entregables/auditoria_workflows_ghl_2026-08-06.md`.
+
+> ⚠️ **Corrección de fechas**: la sesión 6 **no** terminó el 24-jul. El 24-jul
+> es cuando se crearon los workflows en GHL; las ediciones de la sesión 6
+> están selladas el 6-ago 22:05–22:12 y su commit a las 22:33, cinco minutos
+> antes del primer commit de esta sesión. No hubo parón de 13 días.
 
 ## Verificado hoy (esto es lo nuevo)
 
@@ -35,9 +41,29 @@ se dibuja en LS01/LS02 (el mismo problema que tuvo `workflow_goal`).
 del entorno. Los cambios **no aplican a sesiones ya abiertas** — hay que abrir
 sesión nueva después.
 
-### ❌ No hay credenciales
-`gohighlevel-cli/.env` no existe (no sobrevive entre sesiones). Sin
-`GHL_FIREBASE_REFRESH_TOKEN` no se puede tocar ningún workflow por API.
+### ✅ Credenciales recibidas — API interna operativa
+El equipo pegó el `GHL_FIREBASE_REFRESH_TOKEN` en el chat (guardado en
+`gohighlevel-cli/.env`, gitignorado). Confirmado que `securetoken.googleapis.com`
+(refresco) y `backend.leadconnectorhq.com` (API interna) **sí** son
+alcanzables: se puede trabajar por API aunque la UI siga vetada.
+Falta el PIT (`GHL_API_KEY`) para lecturas por API pública.
+
+### 🔴 Hallazgos de la auditoría (lo importante de esta sesión)
+1. **SP02 tiene el trigger equivocado**: dispara con el `form_submission` del
+   formulario de la **landing** (el mismo que LS01), no con una cita agendada.
+   Está en draft con el trigger inactivo, así que hoy no hace daño — pero
+   **publicarlo tal cual etiquetaría como "asesoría agendada" a todo lead de
+   la landing**. NO PUBLICAR SP02 hasta rehacer el trigger.
+2. **Los avisos internos no llegan a nadie**: el nodo `internal_notification`
+   sí está guardado en LS01/LS02 (pregunta de la sesión 6 respondida), pero
+   con `recipients: []` + `assigned_user: true` y ningún paso que asigne
+   usuario → destinatario vacío. Falta decidir quién debe recibirlos.
+3. **Cero salidas IF en los 7 workflows**: los remates de UI nunca se
+   hicieron. Crítico en **SP01, que está publicado y corriendo**: un lead que
+   ya agendó sigue recibiendo "A4 Última llamada".
+4. **Los 2 workflows LEGADO siguen publicados** (despublicar antes del 1-sep).
+5. LS01 arrastra un trigger redundante y autorreferente (riesgo bajo:
+   `allowMultiple=false` lo neutraliza).
 
 ### ✅ Verificación pre-deploy del plugin (hecha en frío, sin credenciales)
 Contrastado el runbook contra el código de `evocampus-subscription-sync.php`

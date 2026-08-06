@@ -118,6 +118,62 @@ Lo que **sí** se confirma es que la red del entorno nunca se amplió:
 `app.gohighlevel.com`, `api.omniainbusiness.com` e `info.academiavalenz.com`
 siguen devolviendo 403 en el CONNECT del proxy.
 
+---
+
+## Cambios aplicados en esta sesión (tras aprobación)
+
+### ✅ Los 2 LEGADO despublicados
+`LEGADO · Espejo Baja/Impago` y `LEGADO · Espejo Reactivación` pasados a
+`draft`. Sus pasos siguen intactos (4 y 3 respectivamente), así que son
+recuperables publicándolos de nuevo. Ya no hay dos caminos vivos hacia el
+pipeline de Recobro de cara al 1-sep.
+
+> ⚠️ **AVISO IMPORTANTE SOBRE LA API — leer antes de tocar nada**
+> `PUT /workflow/{loc}/{id}` **reemplaza la definición completa**. Un PUT que
+> solo lleve `{name, version, status}` **borra todos los pasos del workflow**.
+> Pasó en esta sesión con el LEGADO Baja/Impago: se quedó en 0 pasos y hubo
+> que restaurarlo desde el `fileUrl` de la versión anterior (que sigue siendo
+> descargable — de ahí que merezca la pena hacer backup del meta antes de
+> escribir). **Todo PUT debe incluir `workflowData: {"templates": [...]}`
+> con los pasos actuales.**
+
+### ✅ Trigger redundante de LS01: ya no está
+Desapareció durante la sesión (LS01 `updatedAt 22:43:09`, `updatedBy` = la
+cuenta de German Borrello). **No se emitió ninguna escritura contra LS01
+desde aquí**, así que lo hizo alguien del equipo en paralelo. Merece la pena
+saberlo: **hay edición concurrente sobre la cuenta**, y conviene coordinarse
+antes de escribir por API para no pisarse.
+LS01 queda con 1 solo trigger (`form_submission` del formulario de la landing),
+sus 3 pasos y `published`. Que es exactamente el estado que se buscaba.
+
+### ⏸️ Salida IF en SP01: NO aplicada (a propósito)
+Se pidió construirla por API y **se paró antes de escribir**, por dos
+precedentes del propio repositorio que apuntan al mismo sitio:
+
+1. `builders/wf6-post-call-sales-builder.py` lo dice explícitamente:
+   *"Branch wiring (if_else multipath) via the internal API is fragile and
+   cannot be verified outside the GHL UI"* → aquel proyecto envió como
+   fallback tres workflows lineales con trigger por tag.
+2. La sesión 6 ya revirtió `workflow_goal` por lo mismo: se guardaba por API
+   y la UI no lo dibujaba.
+
+Escribir un `if_else` de forma no verificable en **SP01, que está publicado y
+enviando emails a leads reales**, es el escenario de mayor riesgo posible: si
+el nodo se guarda pero no se dibuja, la secuencia queda peor que ahora y nadie
+lo ve hasta que un lead se queja. Sin acceso a la UI no hay forma de
+comprobarlo. Queda pendiente de decisión (ver opciones en el handoff).
+
+Los tags que serviría de condición de salida ya existen en la sub-cuenta:
+`asesoria-agendada`, `matriculado-133`, `no-133`.
+
+### ⏸️ Destinatario de los avisos internos: pendiente de elegir
+La sub-cuenta solo tiene 3 usuarios, todos de la agencia:
+German Borrello (`4qHwfdoNLFUm25LVHAEG`), Henry Buenaño
+(`8It2bmHeNZhFifa5e7dj`) y Oliver Guerrero (`8QrIxCm1EIlYSPKDyEJy`).
+No hay ningún usuario de la academia (Paco) dado de alta — dato relevante:
+si el aviso de lead nuevo debe llegarle a él, hay que crearle usuario o usar
+un email externo en `recipients`.
+
 ## Cómo reproducir esta auditoría
 
 ```bash

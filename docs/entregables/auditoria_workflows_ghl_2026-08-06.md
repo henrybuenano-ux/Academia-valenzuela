@@ -146,7 +146,31 @@ antes de escribir por API para no pisarse.
 LS01 queda con 1 solo trigger (`form_submission` del formulario de la landing),
 sus 3 pasos y `published`. Que es exactamente el estado que se buscaba.
 
-### ⏸️ Salida IF en SP01: NO aplicada (a propósito)
+### ✅ SP03 · Salida de secuencias — creado en DRAFT (la solución de-riesgada)
+`SP03 · Salida de secuencias (lead convertido)`
+(`da930cd6-cb80-4a73-8675-2ce56b55a112`), en la misma carpeta que los demás.
+
+- **Triggers** (3, uno por tag, cada uno con la forma ya probada del builder):
+  `asesoria-agendada`, `matriculado-133`, `no-133`.
+- **Pasos** (2): `remove_from_workflow` → SP01, y `remove_from_workflow` → LS03.
+
+Resuelve el problema real —que un lead ya convertido siga recibiendo
+"A4 Última llamada"— **sin tocar SP01 ni una sola vez**. Es el mismo patrón
+de-riesgado que ya aplicó `wf6-post-call-sales-builder.py`: en vez de cablear
+ramas dentro del workflow vivo, se resuelve desde fuera con triggers por tag
+y pasos lineales.
+
+**Queda en `draft` a propósito.** Antes de publicarlo hay que verificar en la
+UI dos cosas que desde aquí no se pueden ver:
+1. Que los 2 pasos `remove_from_workflow` se **dibujan** y apuntan a los
+   workflows correctos (la forma de `attributes` se guardó bien, pero eso no
+   garantiza que la UI la pinte — es justo lo que pasó con `workflow_goal`).
+2. Que los 3 triggers aparecen y se activan al publicar (ahora salen
+   `active: false` porque el workflow está en borrador).
+
+Si al publicarlo funciona, SP01 deja de necesitar el `if_else` interno.
+
+### ⏸️ Salida IF dentro de SP01: NO aplicada (a propósito)
 Se pidió construirla por API y **se paró antes de escribir**, por dos
 precedentes del propio repositorio que apuntan al mismo sitio:
 

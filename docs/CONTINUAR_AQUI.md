@@ -85,6 +85,37 @@ tiene huecos; se puede ejecutar tal cual.
 - Lo que sí queda con margen real: AP02 modo real (28-ago), demo a Paco
   (31-ago/4-sep), cierre (7-sep).
 
+### ✅ Aplicado en esta sesión
+- **Los 2 LEGADO despublicados** (pasados a `draft`, pasos intactos).
+- **SP03 · Salida de secuencias creado en DRAFT**
+  (`da930cd6-cb80-4a73-8675-2ce56b55a112`): triggers por `asesoria-agendada`
+  / `matriculado-133` / `no-133` → saca al contacto de SP01 y LS03. Resuelve
+  el problema de "A4 Última llamada" **sin tocar SP01**.
+- **Trigger redundante de LS01**: ya no está (lo quitó el equipo en paralelo).
+- Integridad verificada: los 9 workflows conservan todos sus pasos.
+
+### ⚠️ Trampa de la API descubierta (apuntar antes de tocar nada)
+`PUT /workflow/{loc}/{id}` **reemplaza la definición entera**: un PUT con solo
+`{name, version, status}` **borra todos los pasos**. Pasó con el LEGADO
+Baja/Impago (0 pasos; restaurado desde el `fileUrl` de la versión anterior,
+que sigue siendo descargable). **Todo PUT debe llevar
+`workflowData: {"templates": [...]}`.**
+
+### 🔴 Pendiente de decisión (2 cosas)
+1. **Publicar SP03** — antes hay que verificar EN LA UI que los pasos
+   `remove_from_workflow` se dibujan y que los 3 triggers se activan.
+   Mientras no se publique, SP01 sigue mandando "A4 Última llamada" a leads
+   que ya convirtieron.
+2. **Destinatario de los avisos internos**. La sub-cuenta solo tiene 3
+   usuarios, todos de la agencia: German Borrello, Henry Buenaño y Oliver
+   Guerrero. **Paco no tiene usuario** — si el aviso debe llegarle, hay que
+   crearle uno o poner su email en `recipients`.
+
+### ⚠️ Edición concurrente
+Durante la sesión alguien del equipo estaba editando la cuenta a la vez
+(LS01 cambió a las 22:43 bajo la cuenta de German Borrello). Coordinarse
+antes de escribir por API para no pisarse.
+
 ## ⏭️ SIGUIENTE PASO — 3 desbloqueos, por orden de impacto
 
 1. **Token de Firebase fresco** (extensión Chrome del CLI, 10 s) + PIT →

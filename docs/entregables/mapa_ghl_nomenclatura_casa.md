@@ -116,8 +116,8 @@
 
 - [x] ✅ DNS email verificado (24-jul) — canal operativo, desbloquea SP01/LS03
 - [ ] Crear calendario Asesorías → pegar enlace en SP01/LS03/bot → y montar SP02
-- [ ] Goal Events en SP01, LS03, RP02 (UI, 2 min c/u) — crítico en RP02
-- [ ] Internal Notification en LS01 y LS02 (UI)
+- [x] ✅ Goal Events añadidos POR API (24-jul) en SP01, LS03 y RP02 — `workflow_goal` con action=exit; equivale al patrón de casa "IF tiene tag X → no siga" pero se evalúa en continuo. Verificar en UI que se ven bien.
+- [x] ✅ Notificación interna añadida POR API en LS01 y LS02 (email al usuario asignado con nombre, teléfono, email, momento del lead y campaña). Verificar destinatarios en UI.
 - [x] ✅ LS01 COMPLETO (24-jul): landing publicada en https://info.academiavalenz.com/landing + form + tag + oportunidad + UTMs. Validado end-to-end con datos reales en el CRM.
 - [ ] Bot LS02: 14 subtareas + QA (incluye modo identificado) → Auto-Pilot
 - [ ] LS03: completar email B2 con novedades de Paco → lanzar campaña

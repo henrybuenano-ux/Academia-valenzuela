@@ -99,7 +99,7 @@
 | EvoCampus Enrollment IDs | TEXT | Plugin F1 |
 | Producto | DROPDOWN | Plugin F1 |
 | UTM Source / Medium / Campaign | TEXT ×3 | Form LS01 (ocultos) |
-| Situación oposición | DROPDOWN (4 opc.) | Form LS01 + captura bot LS02 |
+| Situación oposición | DROPDOWN (4 opc., etiquetas neutras 24-jul: "Empezar con la 133ª / Ya preparándola / Planteándomelo / Solo información") | Form LS01 + captura bot LS02 |
 
 ## TAB 4 — FORMS | TAB 5 — CALENDARS | TAB 6 — CUSTOM VALUES
 

@@ -19,7 +19,7 @@
 │  └─ Encadena: SP01 (nurturing) en paralelo
 ├─ LS02: Chat widget — Bot IA Setter ⚪ (14 subtareas especificadas)
 │  ├─ Trigger: Chat Initiated (widget web)
-│  ├─ Bot: responde con KB → cualifica (Situación oposición) → captura datos
+│  ├─ Bot: responde con KB → cualifica (Momento del lead) → captura datos
 │  ├─ Decision: ¿cualificado? → aplica tag lead-bot
 │  ├─ Action: Crear oportunidad → Captación / Cualificado (fuente "Bot web")
 │  └─ Action: Book Appointment → calendario Asesorías (pendiente D1)
@@ -99,7 +99,7 @@
 | EvoCampus Enrollment IDs | TEXT | Plugin F1 |
 | Producto | DROPDOWN | Plugin F1 |
 | UTM Source / Medium / Campaign | TEXT ×3 | Form LS01 (ocultos) |
-| Situación oposición | DROPDOWN (4 opc., etiquetas neutras 24-jul: "Empezar con la 133ª / Ya preparándola / Planteándomelo / Solo información") | Form LS01 + captura bot LS02 |
+| **Momento del lead** (antes "Situación oposición"; fieldKey sigue siendo `contact.situacin_oposicin`) | DROPDOWN: Empezar con la 133ª / Ya preparándola / Planteándomelo / Solo información | Form LS01 + captura bot LS02 |
 
 ## TAB 4 — FORMS | TAB 5 — CALENDARS | TAB 6 — CUSTOM VALUES
 

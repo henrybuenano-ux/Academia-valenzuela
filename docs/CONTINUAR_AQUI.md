@@ -1,6 +1,79 @@
-# CONTINUAR AQUÍ — estado al 24-jul-2026 (fin de sesión 6)
+# CONTINUAR AQUÍ — estado al 6-ago-2026 (sesión 7)
 
 > **EMPIEZA POR AQUÍ ⬇️ — lo de abajo es histórico de sesiones anteriores.**
+
+---
+
+# 🟠 SESIÓN 7 (6-ago-2026) — DIAGNÓSTICO: SIGUE BLOQUEADO POR CREDENCIALES Y RED
+
+## Estado en una línea
+Han pasado 13 días desde la sesión 6 y **no se ha podido tocar nada**: la red
+del entorno NO se amplió (pese a lo que se creía) y no hay credenciales en el
+entorno. Todo el trabajo pendiente sigue igual, pero ahora **con el calendario
+encima**: el tablero está vencido casi entero y el 1-sep no se mueve.
+
+## Verificado hoy (esto es lo nuevo)
+
+### ❌ La red NO se amplió — corrige el punto 5 de la sesión 6
+Se dio por hecho que el equipo había añadido los dominios el 24-jul. **No es
+así.** Comprobado con `curl` y con el estado del proxy (`403 al CONNECT`):
+
+| Dominio | Estado |
+|---|---|
+| `app.gohighlevel.com` | ❌ 403 (bloqueado por política) |
+| `api.omniainbusiness.com` (whitelabel) | ❌ 403 |
+| `info.academiavalenz.com` (landing publicada) | ❌ 403 |
+| `sites.ludicrous.cloud` | ❌ no resuelve/alcanza |
+| `services/backend.leadconnectorhq.com` | ✅ alcanzables |
+| `academiavalenz.com` + `/staging` | ✅ 200 |
+| `api.evolcampus.com` | ✅ alcanzable |
+
+→ **Consecuencia**: no se puede auditar visualmente la UI de GHL ni ver la
+landing publicada. Sigue pendiente confirmar si el nodo `internal_notification`
+se dibuja en LS01/LS02 (el mismo problema que tuvo `workflow_goal`).
+→ **Acción**: pedir al equipo que añada esos 3 dominios a la política de red
+del entorno. Los cambios **no aplican a sesiones ya abiertas** — hay que abrir
+sesión nueva después.
+
+### ❌ No hay credenciales
+`gohighlevel-cli/.env` no existe (no sobrevive entre sesiones). Sin
+`GHL_FIREBASE_REFRESH_TOKEN` no se puede tocar ningún workflow por API.
+
+### ✅ Verificación pre-deploy del plugin (hecha en frío, sin credenciales)
+Contrastado el runbook contra el código de `evocampus-subscription-sync.php`
+v0.8.0: **concuerdan**. `OMNIA_EVO_GRACE_DAYS = 38` (ciclo 31 + 7 días de
+cortesía, política A6 de Paco). Detalle tranquilizador: si no se define
+`OMNIA_GHL_DRYRUN`, **hereda** `OMNIA_EVO_DRYRUN` — o sea, un olvido en el
+paso 4 del runbook no dispara escrituras reales en el CRM. El runbook no
+tiene huecos; se puede ejecutar tal cual.
+
+### ⚠️ El tablero de ClickUp está desincronizado y vencido
+- **Fechas vencidas** (hoy 6-ago): LS01 landing (-9d), SP02 (-9d), Setup
+  email+calendario (-7d), remates SP01/LS03 (-7d), gestoría (-6d), bot LS02
+  (-3d), RP02-RP03 (-3d), campaña LS03 (-2d).
+- **Descuadre de fechas**: ClickUp fecha el deploy a producción **hoy 6-ago**,
+  pero el runbook y el plan dicen **24-ago**. Hay que unificar.
+- **Tarea mal marcada**: "01 · LS01 · Montar landing + formulario" sigue en
+  *to do* cuando LS01 está VIVO y validado desde el 24-jul. En cambio SP02
+  figura *complete* cuando está en borrador esperando el calendario.
+- Lo que sí queda con margen real: AP02 modo real (28-ago), demo a Paco
+  (31-ago/4-sep), cierre (7-sep).
+
+## ⏭️ SIGUIENTE PASO — 3 desbloqueos, por orden de impacto
+
+1. **Token de Firebase fresco** (extensión Chrome del CLI, 10 s) + PIT →
+   `gohighlevel-cli/.env`. Sin esto no hay trabajo de GHL posible.
+2. **Ampliar la política de red** con `app.gohighlevel.com`,
+   `api.omniainbusiness.com` e `info.academiavalenz.com`, y **abrir sesión
+   nueva** después.
+3. **Perseguir a Paco** — el mensaje lleva 13 días listo y sin respuesta en
+   `docs/entregables/mensaje_paco_pendientes_2026-07-24.md`: su horario de
+   asesorías es lo que desbloquea calendario → SP02 → cierre de Setup. Es
+   ahora la ruta crítica más larga.
+
+Con esos tres, el orden de ataque es: calendario+SP02 → remates de UI
+(salidas IF, mensaje de gracias, despublicar los 2 LEGADO) → deploy del
+plugin en producción → 1-sep modo real + RP02/RP03 con la 133ª.
 
 ---
 

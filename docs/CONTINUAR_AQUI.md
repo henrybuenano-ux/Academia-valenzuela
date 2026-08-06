@@ -1,4 +1,98 @@
-# CONTINUAR AQUÍ — estado al 10-jul-2026 (fin de sesión 1; verificación sesión 2)
+# CONTINUAR AQUÍ — estado al 24-jul-2026 (fin de sesión 6)
+
+> **EMPIEZA POR AQUÍ ⬇️ — lo de abajo es histórico de sesiones anteriores.**
+
+---
+
+# 🟢 SESIÓN 6 (24-jul-2026) — LS01 EN PRODUCCIÓN
+
+## Estado en una línea
+**El primer carril del embudo está VIVO**: landing publicada → formulario →
+contacto etiquetado con atribución UTM → oportunidad en Captación → secuencia
+de 4 emails. Validado end-to-end con datos reales. Todo lo demás está
+construido en borrador esperando 3 cosas: el calendario (falta horario de
+Paco), los remates de UI de Oliver, y el 1-sep para el modo real del plugin.
+
+## Lo que se hizo hoy
+
+### ✅ LS01 completo y funcionando en producción
+- **Landing viva**: https://info.academiavalenz.com/landing (HTML en
+  `docs/entregables/landing_133.html`, con el embed real del formulario).
+- **Formulario** "Form Landing 133" (id `EIa3gz2I8ndWcPA2we6v`) creado por el
+  equipo con Ask AI y depurado en 3 iteraciones.
+- **Prueba end-to-end superada**: contacto creado + tag `lead-landing-133` +
+  campo "Momento del lead" + los 3 UTM + oportunidad en Captación/Nuevo lead
+  con fuente "Landing 133". (Contacto de prueba: germanborrello@gmail.com —
+  decidir si se borra.)
+- **LS01 y SP01 PUBLICADOS**.
+
+### ✅ Dominios verificados
+- **Email**: `mail.academiavalenz.com` con SPF + DKIM (`mx._domainkey`) +
+  CNAME + MX de Mailgun. ⚠️ El SPF del dominio raíz (Google Workspace +
+  MailChannels) quedó INTACTO — nunca tocarlo. DNS en el panel de Conversalia,
+  que bloquea SPF por formulario TXT: hay que usar su botón "SPF" con el
+  campo Hostname = `mail`.
+- **Funnels**: `info.academiavalenz.com` → `sites.ludicrous.cloud`.
+
+### ✅ Construido por API (7 workflows + infraestructura)
+LS01, LS02, LS03, SP01, SP02, RP02, RP03 · 22 tags · 15 custom fields.
+Builders reutilizables en `gohighlevel-cli/builders/av-*.py`.
+Nomenclatura de casa (LS/SP/AP/RP) aplicada en GHL, ClickUp y el mapa.
+
+### 📌 Aprendizajes técnicos (IMPORTANTES para la próxima sesión)
+1. **Editar un workflow por API lo DESPUBLICA** sin avisar. Tras cualquier
+   cambio: verificar `status` y republicar (`PUT` con `status: published`).
+   Ojo el 1-sep con RP02.
+2. **`workflow_goal` se guarda por API pero la UI NO lo dibuja** → se retiró.
+   Las salidas (exits) se hacen A MANO con el patrón de casa:
+   IF "tiene tag X" → End workflow.
+3. **La API interna sí acepta triggers** de `form_submitted` y
+   `customer_booked_appointment` (creados con éxito).
+4. **No se puede crear formularios ni funnels por API** (probadas 8 rutas).
+5. **Red del entorno**: solo `services/backend.leadconnectorhq.com` están
+   permitidos. La UI (`app.gohighlevel.com`), el whitelabel
+   (`api.omniainbusiness.com`) y la landing publicada estaban bloqueados —
+   **el equipo ya los añadió a la política de red el 24-jul, así que en una
+   SESIÓN NUEVA deberían funcionar** (los cambios no aplican a sesiones ya
+   iniciadas). Verificarlo al empezar: `curl -I https://app.gohighlevel.com/`.
+   Aun así, el login de GHL usa reCAPTCHA: no está garantizado que se pueda
+   conducir la interfaz por navegador.
+
+## ⏭️ SIGUIENTE PASO al abrir sesión nueva
+
+1. **Pedir token de Firebase fresco** (extensión Chrome del CLI, 10 s) →
+   guardarlo en `gohighlevel-cli/.env` (gitignorado) como
+   `GHL_FIREBASE_REFRESH_TOKEN`. El PIT y el location ID van en el mismo .env.
+2. **Verificar si la red ya permite la UI** (ver punto 5 de arriba). Si sí:
+   intentar auditar visualmente los workflows y la landing.
+3. **Pendiente de confirmar visualmente**: ¿se dibuja el nodo
+   `internal_notification` en LS01 y LS02? Si no aparece (como pasó con el
+   goal), quitarlo por API y añadirlo a mano.
+4. **Remates de UI pendientes** (Oliver): salidas IF en SP01/LS03/RP02,
+   mensaje de gracias del formulario en castellano, y despublicar los 2
+   workflows LEGADO.
+5. **Perseguir a Paco** — `docs/entregables/mensaje_paco_pendientes_2026-07-24.md`
+   tiene el mensaje listo con las 4 preguntas: su email personal + horario de
+   asesorías (desbloquea calendario → SP02 → cierra Setup), las 39
+   suscripciones pausadas, y la gestoría.
+
+## Estado de cada pieza (24-jul)
+| Pieza | Estado |
+|---|---|
+| LS01 landing+form+workflow | ✅ VIVO y validado |
+| SP01 nurturing | ✅ publicado (falta su salida IF) |
+| SP02 asesoría agendada | 🟡 borrador (espera calendario) |
+| LS03 re-enganche 39 ex-alumnos | 🟡 borrador (falta email B2 de Paco) |
+| RP02/RP03 dunning | 🟡 borrador — **NO ACTIVAR HASTA 1-SEP** |
+| LS02 bot | ⚪ 14 subtareas especificadas en ClickUp |
+| Calendario Asesorías | 🔴 espera horario de Paco |
+| Plugin v0.8.0 (AP02) | 🟡 staging DRY-RUN · prod 24-ago · real 1-sep |
+| Facturación (Fase 2) | 🔴 espera gestoría (VeriFactu → 2027, sin urgencia legal) |
+| WhatsApp (LS04) | 🔴 espera Meta |
+
+---
+
+# Histórico de sesiones anteriores
 
 > **Act. sesión 2 (10-jul):** red verificada — academiavalenz.com/staging (200 OK)
 > y api.evolcampus.com (alcanzable) SÍ están permitidos; **fathom.video NO**

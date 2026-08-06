@@ -116,8 +116,10 @@
 
 - [x] ✅ DNS email verificado (24-jul) — canal operativo, desbloquea SP01/LS03
 - [ ] Crear calendario Asesorías → pegar enlace en SP01/LS03/bot → y montar SP02
-- [x] ✅ Goal Events añadidos POR API (24-jul) en SP01, LS03 y RP02 — `workflow_goal` con action=exit; equivale al patrón de casa "IF tiene tag X → no siga" pero se evalúa en continuo. Verificar en UI que se ven bien.
-- [x] ✅ Notificación interna añadida POR API en LS01 y LS02 (email al usuario asignado con nombre, teléfono, email, momento del lead y campaña). Verificar destinatarios en UI.
+- [ ] ⚠️ SALIDAS (exits) — HACER EN LA UI, no por API. Intento del 24-jul: el nodo `workflow_goal` se guarda por API pero **la interfaz NO lo dibuja** → no verificable, se retiró. Patrón de casa a aplicar a mano: **IF "tiene tag X" → End workflow**, antes de cada email:
+      · SP01 y LS03 → tags `asesoria-agendada` / `matriculado-133`
+      · RP02 → tags `alumno-recuperado` / `alumno-activo` (CRÍTICO: evita avisar de corte a quien ya pagó)
+- [x] ✅ Notificación interna añadida POR API en LS01 y LS02 — ⚠️ VERIFICAR en la UI que el nodo se dibuja (el goal no se dibujaba) y que el destinatario es el correcto.
 - [x] ✅ LS01 COMPLETO (24-jul): landing publicada en https://info.academiavalenz.com/landing + form + tag + oportunidad + UTMs. Validado end-to-end con datos reales en el CRM.
 - [ ] Bot LS02: 14 subtareas + QA (incluye modo identificado) → Auto-Pilot
 - [ ] LS03: completar email B2 con novedades de Paco → lanzar campaña
@@ -127,3 +129,8 @@
 ## Resumen de alcance
 
 **Workflows**: 4 LS · 3 SP · 3 AP (plugin, fuera de GHL) · 3 RP → 8 ya construidos/funcionando, 2 por crear (SP02, LS04), resto config/manual. **Pendiente de construir en GHL**: form, landing, bot, calendario. **Horas estimadas restantes lado GHL**: ~12-16 h (Oliver, sprint 28-jul → 3-ago).
+
+
+## ⚠️ Nota operativa aprendida (24-jul)
+Editar un workflow por API **lo devuelve a borrador**: LS01 y SP01 quedaron despublicados tras añadirles pasos, sin aviso. Tras cualquier cambio por API hay que **re-publicar y verificar el estado**. Se puede republicar por API (`PUT` con `status: published`).
+Y no todo lo que la API acepta se renderiza en la UI: `workflow_goal` se guarda pero no se dibuja — las salidas se hacen a mano.

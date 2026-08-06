@@ -49,8 +49,9 @@
   .paso p{color:var(--gris);font-size:.94rem}
 
   /* Formulario */
-  .form-box{background:var(--blanco);border:2px solid var(--verde);border-radius:1rem;padding:2rem;max-width:520px;margin:0 auto;
+  .form-box{background:var(--blanco);border:2px solid var(--verde);border-radius:1rem;padding:2rem 1.6rem;max-width:560px;margin:0 auto;
     box-shadow:0 10px 34px rgba(20,83,45,.13)}
+  @media (max-width:520px){.form-box{padding:1.4rem 1rem}}
   .form-box h2{font-size:1.35rem;margin-bottom:.3rem}
   .campo{margin-bottom:1rem}
   label{display:block;font-size:.86rem;font-weight:700;margin-bottom:.3rem}
@@ -120,41 +121,30 @@
   <div class="wrap">
     <div class="form-box">
       <h2>Reserva tu plaza en la 133ª</h2>
-      <p class="lead" style="margin-bottom:1.5rem">Déjanos tus datos y te contamos todo sin compromiso.</p>
+      <p class="lead" style="margin-bottom:1.2rem">Déjanos tus datos y te contamos todo sin compromiso.</p>
 
-      <!-- ===================================================================
-           SUSTITUIR ESTE <form> POR EL EMBED DEL FORMULARIO DE GHL
-           (Sites → Forms → "Form Landing 133" → Integrate → Embed code)
-           El form de GHL debe llevar: On Submit → Add Tag lead-landing-133
-           + campos ocultos UTM Source / Medium / Campaign
-           =================================================================== -->
-      <form onsubmit="event.preventDefault();alert('Sustituir por el embed del formulario de GHL');">
-        <div class="campo">
-          <label for="nombre">Nombre</label>
-          <input id="nombre" name="nombre" type="text" required autocomplete="given-name" placeholder="Tu nombre">
-        </div>
-        <div class="campo">
-          <label for="tel">Teléfono (WhatsApp)</label>
-          <input id="tel" name="telefono" type="tel" required autocomplete="tel" placeholder="600 000 000">
-        </div>
-        <div class="campo">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required autocomplete="email" placeholder="tucorreo@email.com">
-        </div>
-        <div class="campo">
-          <label for="situacion">¿Cuándo quieres empezar?</label>
-          <select id="situacion" name="situacion" required>
-            <option value="">Selecciona una opción</option>
-            <option>Quiero empezar con la 133ª (1 de septiembre)</option>
-            <option>Ya estoy preparando la oposición</option>
-            <option>Me lo estoy planteando</option>
-            <option>Solo quiero información</option>
-          </select>
-        </div>
-        <!-- Campos ocultos UTM: en GHL marcar "Populate from URL parameter" -->
-        <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign">
-        <button class="btn" type="submit">QUIERO INFORMARME</button>
-      </form>
+      <!-- Formulario real de GHL "Form Landing 133" (id EIa3gz2I8ndWcPA2we6v).
+           Aplica el tag lead-landing-133 al enviar → dispara LS01 y SP01.
+           Altura fija (no 100%): dentro de un contenedor sin altura definida,
+           height:100% colapsa a 0 y el iframe no se ve. -->
+      <iframe
+        src="https://api.omniainbusiness.com/widget/form/EIa3gz2I8ndWcPA2we6v"
+        style="width:100%;height:858px;border:none;border-radius:8px;display:block"
+        id="inline-EIa3gz2I8ndWcPA2we6v"
+        data-layout="{'id':'INLINE'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="Form Landing 133"
+        data-height="858"
+        data-layout-iframe-id="inline-EIa3gz2I8ndWcPA2we6v"
+        data-form-id="EIa3gz2I8ndWcPA2we6v"
+        title="Form Landing 133"
+        loading="lazy">
+      </iframe>
 
       <p class="legal">Al enviar aceptas que Academia Valenzuela te contacte sobre la 133ª promoción.<br>Nunca compartimos tus datos con terceros.</p>
     </div>
@@ -186,6 +176,9 @@
   Academia Valenzuela · Preparación del acceso a la Guardia Civil<br>
   <a href="https://academiavalenz.com">academiavalenz.com</a>
 </footer>
+
+<!-- Script del formulario de GHL: ajusta la altura del iframe automáticamente -->
+<script src="https://api.omniainbusiness.com/js/form_embed.js"></script>
 
 </body>
 </html>

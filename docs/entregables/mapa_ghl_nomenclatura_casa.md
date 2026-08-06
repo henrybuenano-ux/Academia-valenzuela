@@ -10,8 +10,10 @@
 
 ```
 [LEAD SOURCES — AZUL]
-├─ LS01: Formulario Landing 133ª ⚪ (form especificado · workflows 🟡)
-│  ├─ Trigger: Form submitted → aplica tag lead-landing-133
+├─ LS01: Formulario Landing 133ª 🟡 (form CREADO en GHL · id EIa3gz2I8ndWcPA2we6v)
+│  ├─ Trigger: **Form Submitted** (Form Landing 133) ← creado por API 24-jul
+│  │           Diseño robusto: NO depende de que el form ponga el tag
+│  ├─ Action 1: Add Tag lead-landing-133 (lo pone el WORKFLOW) → encadena SP01
 │  ├─ Campos ocultos: UTM Source/Medium/Campaign → custom fields
 │  ├─ Action: Crear oportunidad → Captación / Nuevo lead (fuente "Landing 133")
 │  └─ Encadena: SP01 (nurturing) en paralelo
@@ -76,7 +78,7 @@
 
 | Código | Nombre en GHL | Trigger | Objetivo | Estado |
 |---|---|---|---|---|
-| LS01 | LS01 · Lead de landing → Captación | tag `lead-landing-133` | Oportunidad en Nuevo lead, fuente Landing 133 | 🟡 borrador |
+| LS01 | LS01 · Lead de landing → Captación | **Form Submitted** (Landing 133) | Oportunidad en Nuevo lead, fuente Landing 133 | 🟡 borrador |
 | LS02 | LS02 · Lead del bot → Captación | tag `lead-bot` | Oportunidad en Cualificado, fuente Bot web | 🟡 borrador |
 | LS03 | LS03 · Re-enganche ex-alumnos 132ª | tag `reenganche-133` | 3 emails de re-matrícula → `no-133` | 🟡 borrador |
 | LS04 | (futuro) WhatsApp post-form | envío de LS01 | Conversación IA con lead identificado | 🔴 Meta |
@@ -103,7 +105,7 @@
 
 | Elemento | Detalle | Estado |
 |---|---|---|
-| Form "Landing 133" | 4 campos visibles + 3 UTM ocultos · On Submit: tag `lead-landing-133` (receta clic a clic en ClickUp) | ⚪ |
+| Form "Landing 133" | CREADO (id EIa3gz2I8ndWcPA2we6v). Captura nombre/apellidos/email/teléfono ✅. ⚠️ Pendiente: custom fields (Situación oposición + 3 UTM) sin rellenar y mensaje de gracias en inglés | 🟡 |
 | Calendario "Asesorías" | 10-15 min · decidir quién atiende y horario · su enlace sustituye `{{CALENDARIO_ASESORIAS}}` en SP01/LS03 y el Book del bot | ⚪ **único pendiente de Setup** |
 | Dominio de email `mail.academiavalenz.com` | SPF + DKIM (mx._domainkey) + CNAME email.mail + MX mailgun · raíz Google intacta | ✅ **verificado 24-jul** |
 | Dominio de funnels `info.academiavalenz.com` | CNAME → sites.ludicrous.cloud | ✅ creado |

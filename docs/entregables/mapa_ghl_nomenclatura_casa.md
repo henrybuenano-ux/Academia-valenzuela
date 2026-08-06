@@ -10,7 +10,7 @@
 
 ```
 [LEAD SOURCES — AZUL]
-├─ LS01: Formulario Landing 133ª 🟡 (form CREADO en GHL · id EIa3gz2I8ndWcPA2we6v)
+├─ LS01: Landing 133ª ✅ VIVA en https://info.academiavalenz.com/landing (form id EIa3gz2I8ndWcPA2we6v)
 │  ├─ Trigger: **Form Submitted** (Form Landing 133) ← creado por API 24-jul
 │  │           Diseño robusto: NO depende de que el form ponga el tag
 │  ├─ Action 1: Add Tag lead-landing-133 (lo pone el WORKFLOW) → encadena SP01
@@ -105,7 +105,7 @@
 
 | Elemento | Detalle | Estado |
 |---|---|---|
-| Form "Landing 133" | ✅ VALIDADO (id EIa3gz2I8ndWcPA2we6v): captura nombre/apellidos/email/teléfono + "Momento del lead". Prueba end-to-end OK (tag + oportunidad). ⚠️ Único pendiente: los 3 UTM llegan vacíos — revisar "populate from URL parameter" | ✅ |
+| Form "Landing 133" | ✅ VALIDADO (id EIa3gz2I8ndWcPA2we6v): captura nombre/apellidos/email/teléfono + "Momento del lead". Prueba end-to-end OK (tag + oportunidad). UTMs validados con `?utm_source=…&utm_medium=…&utm_campaign=…` ✅ | ✅ |
 | Calendario "Asesorías" | 10-15 min · decidir quién atiende y horario · su enlace sustituye `{{CALENDARIO_ASESORIAS}}` en SP01/LS03 y el Book del bot | ⚪ **único pendiente de Setup** |
 | Dominio de email `mail.academiavalenz.com` | SPF + DKIM (mx._domainkey) + CNAME email.mail + MX mailgun · raíz Google intacta | ✅ **verificado 24-jul** |
 | Dominio de funnels `info.academiavalenz.com` | CNAME → sites.ludicrous.cloud | ✅ creado |
@@ -118,7 +118,7 @@
 - [ ] Crear calendario Asesorías → pegar enlace en SP01/LS03/bot → y montar SP02
 - [ ] Goal Events en SP01, LS03, RP02 (UI, 2 min c/u) — crítico en RP02
 - [ ] Internal Notification en LS01 y LS02 (UI)
-- [x] ✅ Form LS01 creado y VALIDADO end-to-end + LS01/SP01 publicados (24-jul). Pendiente menor: UTMs vacíos.
+- [x] ✅ LS01 COMPLETO (24-jul): landing publicada en https://info.academiavalenz.com/landing + form + tag + oportunidad + UTMs. Validado end-to-end con datos reales en el CRM.
 - [ ] Bot LS02: 14 subtareas + QA (incluye modo identificado) → Auto-Pilot
 - [ ] LS03: completar email B2 con novedades de Paco → lanzar campaña
 - [ ] Despublicar los 2 workflows espejo legado

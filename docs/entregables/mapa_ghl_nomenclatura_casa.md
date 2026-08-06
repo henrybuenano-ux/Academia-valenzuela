@@ -104,13 +104,16 @@
 | Elemento | Detalle | Estado |
 |---|---|---|
 | Form "Landing 133" | 4 campos visibles + 3 UTM ocultos · On Submit: tag `lead-landing-133` (receta clic a clic en ClickUp) | ⚪ |
-| Calendario "Asesorías" | 10-15 min · decidir quién atiende y horario · su enlace sustituye `{{CALENDARIO_ASESORIAS}}` en SP01/LS03 y el Book del bot | ⚪ D1 lunes |
+| Calendario "Asesorías" | 10-15 min · decidir quién atiende y horario · su enlace sustituye `{{CALENDARIO_ASESORIAS}}` en SP01/LS03 y el Book del bot | ⚪ **único pendiente de Setup** |
+| Dominio de email `mail.academiavalenz.com` | SPF + DKIM (mx._domainkey) + CNAME email.mail + MX mailgun · raíz Google intacta | ✅ **verificado 24-jul** |
+| Dominio de funnels `info.academiavalenz.com` | CNAME → sites.ludicrous.cloud | ✅ creado |
 | Custom value enlace matrícula | https://academiavalenz.com/ | ✅ |
 | Custom value Mi cuenta (pagos) | https://academiavalenz.com/mi-cuenta/ | ✅ |
 
 ## TAB 7 — ACTION ITEMS (remates para activar)
 
-- [ ] D1 (lun 28-jul): DNS email + crear calendario Asesorías → pegar enlace en SP01/LS03/bot
+- [x] ✅ DNS email verificado (24-jul) — canal operativo, desbloquea SP01/LS03
+- [ ] Crear calendario Asesorías → pegar enlace en SP01/LS03/bot → y montar SP02
 - [ ] Goal Events en SP01, LS03, RP02 (UI, 2 min c/u) — crítico en RP02
 - [ ] Internal Notification en LS01 y LS02 (UI)
 - [ ] Form LS01 (receta en ClickUp) + landing (copy listo) → activar LS01+SP01

@@ -107,6 +107,16 @@ triggers activos. Aprendizaje API: la UI lee `workflow_id` (array), no
 `workflows` — los pasos `remove_from_workflow` de futuros builders deben
 llevar **ambos** campos para no salir con aviso naranja.
 
+### ✅ SP02 ARREGLADO Y PUBLICADO (7-ago, por el equipo en la UI)
+El trigger equivocado (`form_submission` del formulario de la landing) fue
+sustituido por `customer_appointment` (*Customer Booked Appointment*),
+activo. SP02 quedó **publicado**: hoy no puede dispararse (no existe el
+calendario), y cuando exista la cadena queda cableada sola:
+cita → SP02 etiqueta `asesoria-agendada` → SP03 saca al lead de SP01/LS03.
+Matiz apuntado: el trigger no filtra por calendario — con un solo calendario
+es correcto; si se añade otro (p. ej. tutorías), añadirle el filtro
+*In calendar = Asesorías*.
+
 ### 🔴 Pendiente de decisión (1 cosa)
 - **Destinatario de los avisos internos** (LS01/LS02 → `recipients: []`,
   hoy no llegan a nadie). La sub-cuenta solo tiene 3 usuarios, todos de la

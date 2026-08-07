@@ -32,7 +32,15 @@ el 6-ago.
 
 ## Hallazgos
 
-### 🔴 1. SP02 tiene el trigger equivocado — y es una mina
+> **Act. 7-ago — RESUELTO**: el equipo sustituyó el trigger en la UI por
+> `customer_appointment` (*Customer Booked Appointment*, activo) y publicó
+> SP02. Sin calendario aún no puede dispararse; cuando exista, la cadena
+> completa queda cableada (cita → `asesoria-agendada` → SP03 saca al lead
+> de SP01/LS03). Matiz: el trigger no filtra por calendario — correcto
+> mientras solo exista el de Asesorías; si se añade otro, ponerle el filtro
+> *In calendar*.
+
+### 🔴 1. SP02 tenía el trigger equivocado — y era una mina
 `SP02 · Asesoría agendada` **no** dispara con una cita agendada. Su único
 trigger es:
 

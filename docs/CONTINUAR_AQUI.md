@@ -94,13 +94,57 @@ contactos y oportunidades (search/delete) — ver sesión 8 del historial.
 > y smoke test final ✅ (oportunidad "Alba Serrat" a los 5 min exactos).
 > **LS02 queda CERRADO y validado de conversación a CRM.**
 
+### ✅ AGENDAMIENTO POR EL BOT PROBADO (7-ago, 22:00) — ¡la subtarea 8 ya estaba cableada!
+En la conversación de prueba el bot **ofreció huecos reales** del calendario
+`Asesorías 133ª` ("lunes 10-ago 8:00/8:15/8:30/8:45" — sirve el horario por
+defecto: el quirk de las franjas sigue pendiente) y al aceptar **creó la
+cita de verdad** (verificada por API, autoconfirmada, asignada a German) →
+**SP02 disparó solo**: tag `asesoria-agendada` + oportunidad en Agendado.
+Bonus validado: el candado *Allow multiple opportunities OFF* hizo que el
+Create de LS02 (que vencía después) NO duplicara — el lead quedó con UNA
+oportunidad, la de Agendado. **El embudo del bot funciona de conversación a
+cita.** Cita y contacto de prueba borrados por API.
+
+### ✅ BT 01 · Momento del Lead ARREGLADO Y VALIDADO (7-ago, 22:30)
+El workflow del equipo (lee el CF texto "Momento Lead bot" que escribe el
+bot → pone la opción del select "Momento del lead") mandaba TODO por la
+rama None. Tres causas, las tres corregidas por API:
+1. **Mapeo descuadrado**: 3 de 4 ramas ponían la opción equivocada.
+2. **Frases exactas vs texto libre**: el bot a veces escribe el valor
+   canónico ("quiero empezar") y a veces el texto del lead ("estoy
+   empezando de cero"). Ahora cada rama matchea por raíces de palabra
+   (empez/cero/pensando/informaci/plante…).
+3. **Carrera**: con escrituras del bot, el IF se evaluaba antes de poder
+   leer el valor → **Wait 2 min** insertado entre trigger e IF (con el
+   trigger repuntado al Wait, lección targetActionId).
+Validación final: texto libre por API → 2 min → "Empezar con la 133ª" ✓.
+**Hueco conocido**: la opción "Ya preparándola" no tiene rama (quien diga
+"ya me estoy preparando" va a None) — añadirla es 1 rama nueva en la UI.
+
+### 📌 Más lecciones de API (para el manual de trampas)
+- **Condiciones de if_else**: los `segments` de una rama se combinan con
+  **AND**; el OR va DENTRO de un segmento (`operator: "or"` + N
+  conditions). Meter keywords como segmentos separados = AND accidental.
+- **Un paso Wait creado por API SÍ ejecuta** (probado en BT 01 y LS02).
+- Escribir custom fields: `PUT /contacts/{id}` con
+  `{"customFields": [{"id": ..., "field_value": ...}]}` (otros formatos → 422).
+- El GET de contacto devuelve los CF a veces en `customField` y a veces en
+  `customFields` — leer AMBAS claves.
+- Borrar citas: `DELETE /calendars/events/appointments/{id}`.
+
 ## ⏭️ SIGUIENTE PASO
-1. **Subtarea 8 del bot**: cablear Book Appointment al calendario
-   `Asesorías 133ª` y quitar el texto puente del prompt Objetivo — lo
-   único que falta para que el bot cierre en cita.
-2. **Textos del widget en castellano** (config del Chat Widget: "Have a
+1. **Rama "Ya preparándola" en BT 01** (UI, 2 min): condición OR con
+   "prepar", "por mi cuenta", "otra academia", "me presenté" → update a
+   "Ya preparándola".
+2. **Horario real del calendario** `Asesorías 133ª`: sigue sirviendo el
+   default 08:00-16:45 (el bot ofreció las 8:00 de la mañana) — meter las
+   franjas reales de Paco en Availability cuando las dé.
+3. **Textos del widget en castellano** (config del Chat Widget: "Have a
    question?", mensajes de sistema).
-3. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+4. **Quitar el texto puente** del prompt Objetivo del bot ("el equipo te
+   escribe hoy") ahora que Book Appointment funciona — que ofrezca cita
+   siempre.
+5. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
    sesiones) para trabajo de GHL por API en la próxima sesión.
 4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
    y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot

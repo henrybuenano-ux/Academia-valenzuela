@@ -154,6 +154,30 @@ la landing — deben llegar 3 emails de aviso.
    marcados, y notas para las subtareas 7, 8, 11, 13 y 14. De las 14
    subtareas del bot, solo la 8 (Book Appointment) espera el calendario.
 
+### ✅ CALENDARIO DE ASESORÍAS CREADO (7-ago, provisional)
+**"Asesorías 133ª"** (`HV3DnVxagoNduXbNx0UG`), activo, creado por API con
+horario provisional a petición del equipo ("cualquier horario, luego lo
+corregimos"):
+- Citas de **15 min**, solo **L-V**, autoconfirmación, reagendar/cancelar
+  permitido, reservas hasta 30 días vista.
+- Dueño provisional: **German** (cambiar a Paco cuando tenga usuario).
+- Slug del widget: `asesorias-133` (URL patrón:
+  `https://api.omniainbusiness.com/widget/booking/HV3DnVxagoNduXbNx0UG`).
+- ⚠️ **Las franjas horarias no se aplicaron**: los bloques 10-14/16-20 se
+  guardaron en `openHours` pero el motor de huecos sirve el horario por
+  defecto (08:00-16:45). Corregirlo en la UI al meter el horario real de
+  Paco (Availability → editar → guardar reescribe el formato bien).
+
+**Lo que desbloquea**:
+- **SP02 ya puede dispararse de verdad** (su trigger `customer_appointment`
+  no filtra por calendario, y este es el único). Prueba real posible:
+  agendar una cita de test → SP02 etiqueta `asesoria-agendada` + oportunidad
+  en Agendado → SP03 saca de SP01.
+- **Subtarea 8 del bot (Book Appointment)** ya tiene calendario que apuntar
+  → las 14 subtareas del bot quedan desbloqueadas.
+- La landing puede enlazar "RESERVAR ASESORÍA GRATUITA" al widget.
+- Del Setup solo queda WhatsApp (Meta) — email ✓, calendario ✓ (provisional).
+
 ### ⚠️ Edición concurrente
 Durante la sesión alguien del equipo estaba editando la cuenta a la vez
 (LS01 cambió a las 22:43 bajo la cuenta de German Borrello). Coordinarse

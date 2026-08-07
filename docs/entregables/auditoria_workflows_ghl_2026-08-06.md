@@ -146,6 +146,16 @@ antes de escribir por API para no pisarse.
 LS01 queda con 1 solo trigger (`form_submission` del formulario de la landing),
 sus 3 pasos y `published`. Que es exactamente el estado que se buscaba.
 
+> **Act. 7-ago**: SP03 verificado en la UI (se dibuja entero: 3 triggers +
+> 2 pasos) y **PUBLICADO por el equipo**. Los 3 triggers activos. El aviso
+> naranja que mostraban los pasos era porque la UI lee el campo
+> **`workflow_id`** (array), no `workflows`: al guardar desde la UI añadió
+> `workflow_id: [id]` junto al `workflows: [id]` del builder. **Apuntado
+> para futuros builders: `remove_from_workflow` debe llevar ambos campos.**
+> Con esto, un lead que reciba `asesoria-agendada`, `matriculado-133` o
+> `no-133` sale de SP01 y LS03 al momento: resuelto el problema de
+> "A4 Última llamada".
+
 ### ✅ SP03 · Salida de secuencias — creado en DRAFT (la solución de-riesgada)
 `SP03 · Salida de secuencias (lead convertido)`
 (`da930cd6-cb80-4a73-8675-2ce56b55a112`), en la misma carpeta que los demás.

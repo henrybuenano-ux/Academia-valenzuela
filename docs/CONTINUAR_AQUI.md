@@ -101,15 +101,18 @@ Baja/Impago (0 pasos; restaurado desde el `fileUrl` de la versión anterior,
 que sigue siendo descargable). **Todo PUT debe llevar
 `workflowData: {"templates": [...]}`.**
 
-### 🔴 Pendiente de decisión (2 cosas)
-1. **Publicar SP03** — antes hay que verificar EN LA UI que los pasos
-   `remove_from_workflow` se dibujan y que los 3 triggers se activan.
-   Mientras no se publique, SP01 sigue mandando "A4 Última llamada" a leads
-   que ya convirtieron.
-2. **Destinatario de los avisos internos**. La sub-cuenta solo tiene 3
-   usuarios, todos de la agencia: German Borrello, Henry Buenaño y Oliver
-   Guerrero. **Paco no tiene usuario** — si el aviso debe llegarle, hay que
-   crearle uno o poner su email en `recipients`.
+### ✅ SP03 PUBLICADO (7-ago) — problema de "A4 Última llamada" resuelto
+Verificado en la UI (se dibuja entero) y publicado por el equipo, con los 3
+triggers activos. Aprendizaje API: la UI lee `workflow_id` (array), no
+`workflows` — los pasos `remove_from_workflow` de futuros builders deben
+llevar **ambos** campos para no salir con aviso naranja.
+
+### 🔴 Pendiente de decisión (1 cosa)
+- **Destinatario de los avisos internos** (LS01/LS02 → `recipients: []`,
+  hoy no llegan a nadie). La sub-cuenta solo tiene 3 usuarios, todos de la
+  agencia: German Borrello, Henry Buenaño y Oliver Guerrero. **Paco no tiene
+  usuario** — si el aviso debe llegarle, hay que crearle uno o poner su
+  email en `recipients`.
 
 ### ⚠️ Edición concurrente
 Durante la sesión alguien del equipo estaba editando la cuenta a la vez

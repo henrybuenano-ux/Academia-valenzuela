@@ -4,6 +4,16 @@
 
 ---
 
+### ✅ BOT CREADO POR EL EQUIPO + LS02 PUBLICADO Y PROBADO (7-ago)
+El equipo montó el bot en Conversation AI (con los prompts de
+`bot_ls02_prompts_2026-08-07.md`). A continuación se publicó **LS02** por
+API (receta segura; trigger `lead-bot` activo) y se probó con contacto de
+prueba: tag `lead-bot` → oportunidad en **Captación/Cualificado** con
+fuente "Bot web" + aviso interno a los 3 ✓. Prueba limpiada al momento.
+**Los 7 carriles del embudo quedan operativos.** Restan del bot: widget en
+WordPress (subtarea 12) y la batería de QA conversacional (subtarea 14) —
+la parte de conversación solo se puede probar chateando.
+
 # 🟠 SESIÓN 7 (6-ago-2026) — AUDITORÍA REAL DE LOS WORKFLOWS
 
 ## Estado en una línea

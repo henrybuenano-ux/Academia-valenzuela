@@ -71,11 +71,29 @@ Agendado). Con eso el embudo del bot queda probado de conversación a cita.
 **🔴 FALLO CRÍTICO (prueba 7): el bot NO aplica el tag `lead-bot`.**
 Verificado por API: el chat creó el contacto (`pdGcwnrSHJ2J0nwAQKOf`,
 nombre/teléfono/email correctos) pero con `tags: []` → LS02 no disparó →
-**cero oportunidad en Cualificado y cero aviso al equipo**. Tal como está,
-un lead cualificado por el bot se queda huérfano en el CRM.
-**Arreglo (bot builder)**: en el final del flujo de AI Capture (o en las
-acciones del bot), añadir **"Add Contact Tag: `lead-bot`"** al completar la
-captura. Todo lo de después ya está probado y corre solo.
+**cero oportunidad en Cualificado y cero aviso al equipo**.
+
+> **✅ ARREGLADO (7-ago) sin tocar el bot** — el equipo confirmó que el
+> builder del Conversation AI clásico no tiene acción de tags (y Agent
+> Studio está vacío: el bot no es de ahí). Solución por el lado del
+> workflow: **segundo trigger en LS02, "Customer Replied" filtrado a Live
+> Chat** (`NbzKRKfk5gkyYB5LtORQ`, activo; el trigger por tag `lead-bot` se
+> mantiene como vía alternativa/manual). Ahora el primer mensaje de chat de
+> un contacto lo mete en LS02: oportunidad en Cualificado + aviso a los 3.
+>
+> **Verificar en la UI (10 s)**: abrir LS02 → trigger "Customer Replied
+> (Live Chat)" → confirmar que el filtro *Reply Channel* muestra **Live
+> Chat** (el valor se escribió por API con formato a ciegas; si el
+> desplegable sale vacío, seleccionarlo y guardar).
+>
+> **Matiz asumido**: dispara con el PRIMER mensaje, antes de cualificar.
+> Con el widget solo en la landing y volumen bajo, un curioso que diga
+> "hola" y se vaya generará una oportunidad en Cualificado de más — coste
+> aceptado a cambio de no perder ningún lead. Si molesta, se cambia la
+> etapa del paso de LS02 a "Contactado".
+>
+> **Reprueba inmediata**: mandar UN mensaje más en el chat de German (o un
+> chat nuevo de incógnito) → deben aparecer la oportunidad y los 3 avisos.
 
 **🟡 Fallo menor: el bot no contestó a los 2 primeros mensajes**
 ("¿cuánto cuesta?" 11:10 y "?" 11:11) — solo despertó con "hola" (11:11).

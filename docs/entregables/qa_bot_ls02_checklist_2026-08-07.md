@@ -191,11 +191,14 @@ ningún cambio del grafo — por API ni por UI — cambiaba nada, y de paso el
 IF de guarda no se ejecutaba). Arreglo: repuntar `targetActionId` de los
 2 triggers al IF raíz. Desde entonces el flujo entra por la puerta.
 
-**⚠️ Pendiente al hilo de esto:** al arreglar el trigger en la UI, el
-filtro *Reply Channel* quedó **vacío** (`filters: []`) — HOY cualquier
-respuesta de cualquier canal inscribe en LS02 (p. ej. la respuesta a un
-email de SP01 crearía una oportunidad "Bot web"). Re-añadir el filtro
-**Reply Channel = Live Chat** en la UI del trigger "Customer Replied".
+**✅ Filtro Reply Channel repuesto y validado (7-ago, 21:49):** el equipo
+re-añadió *Reply Channel = Live Chat* desde la UI (queda como condición
+canónica `message.type == 29`), el save respetó el `targetActionId`
+corregido, y el smoke test final pasó: mensaje 21:44:39 → oportunidad
+21:49:42 con nombre real. **El bot queda validado de conversación a CRM
+al completo**: trigger filtrado + guarda + aviso inmediato + oportunidad
+a los 5 min con nombre + tag. Pendientes del bot: solo subtarea 8 (Book
+Appointment) y textos del widget en castellano.
 
 **🟡 Comportamiento a vigilar — el bot calla tras despedirse:** en una
 conversación reabierta tras la despedida/cierre por inactividad, el bot

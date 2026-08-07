@@ -90,12 +90,17 @@ Las env vars `GHL_*` que trae el entorno (location `DjVejJurmfmaPhDlDkBg`)
 Con cabecera **`Version: 2021-07-28`** la API interna también sirve
 contactos y oportunidades (search/delete) — ver sesión 8 del historial.
 
+> **Act. 21:49:** filtro *Reply Channel = Live Chat* repuesto por el equipo
+> y smoke test final ✅ (oportunidad "Alba Serrat" a los 5 min exactos).
+> **LS02 queda CERRADO y validado de conversación a CRM.**
+
 ## ⏭️ SIGUIENTE PASO
-1. **Re-poner el filtro del trigger** "Customer Replied" de LS02: quedó
-   con `filters: []` (cualquier canal inscribe — una respuesta a un email
-   de SP01 crearía oportunidad "Bot web"). UI → trigger → *Reply Channel =
-   Live Chat* y guardar.
-2. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+1. **Subtarea 8 del bot**: cablear Book Appointment al calendario
+   `Asesorías 133ª` y quitar el texto puente del prompt Objetivo — lo
+   único que falta para que el bot cierre en cita.
+2. **Textos del widget en castellano** (config del Chat Widget: "Have a
+   question?", mensajes de sistema).
+3. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
    sesiones) para trabajo de GHL por API en la próxima sesión.
 4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
    y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot

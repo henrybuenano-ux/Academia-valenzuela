@@ -1,6 +1,81 @@
-# CONTINUAR AQUÍ — estado al 6-ago-2026 (sesión 7)
+# CONTINUAR AQUÍ — estado al 7-ago-2026 (sesión 8)
 
 > **EMPIEZA POR AQUÍ ⬇️ — lo de abajo es histórico de sesiones anteriores.**
+
+---
+
+# 🟢 SESIÓN 8 (7-ago, tarde) — RED DESBLOQUEADA + QA DEL BOT EJECUTADA POR NAVEGADOR
+
+## Estado en una línea
+La política de red por fin se amplió y, tras cazar un bug de TLS que llevaba
+desde julio disfrazado de "Chromium no sale por el proxy", **se ejecutó la
+batería de QA conversacional completa contra el bot real desde Chromium**:
+pruebas 4, 5, 6 y 7 → **todas PASAN** (resultados con textos reales en
+`entregables/qa_bot_ls02_checklist_2026-08-07.md`). La subtarea 14 del bot
+queda hecha en su parte conversacional; solo falta la verificación CRM.
+
+## 🔑 Aprendizaje clave: cómo usar el navegador en este entorno
+El MITM del proxy **no completa el handshake TLS 1.3 de Chromium** (todo
+ClientHello → 6 s de silencio → reset; curl sí pasa). El histórico
+"ERR_CONNECTION_RESET en el handshake del MITM" de julio era esto. Arreglo:
+**lanzar Chromium con `--ssl-version-max=tls1.2`**. Receta que funciona
+(Playwright + navegador del entorno):
+
+```python
+p.chromium.launch(
+    headless=True,
+    executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+    proxy={"server": "http://127.0.0.1:37203"},   # $HTTPS_PROXY
+    args=["--ssl-version-max=tls1.2"],
+)
+```
+
+Trampas anotadas mientras se depuraba: el `--dump-dom` "con éxito" de antes
+era en realidad **la página de error de Chromium** (~186 KB por el CSS
+inline — verificar contenido, no tamaño); y `--disable-features=UseMLKEM`
+ya no existe en Chrome 141 (para quitar el post-cuántico: política
+`PostQuantumKeyAgreementEnabled: false` en
+`/etc/chromium/policies/managed/` — con el fix TLS 1.2 no hace falta).
+
+## Red (verificada 7-ago tarde) — actualiza la tabla de la sesión 7
+| Dominio | Estado |
+|---|---|
+| `app.gohighlevel.com` | ✅ 200 (¡por fin! — login con reCAPTCHA, ojo) |
+| `api.omniainbusiness.com` | ✅ 200 (el form embed del funnel carga) |
+| `info.academiavalenz.com` | ✅ carga entera con el fix TLS |
+| `widgets.leadconnectorhq.com` | ✅ (loader del chat OK) |
+| `stcdn.leadconnectorhq.com` | ❌ **sigue vetado** — es el CDN estático: el bundle del funnel no carga y por eso el chat no se auto-inyecta; pedir añadirlo para rematar |
+| `backend/services.leadconnectorhq.com` | ✅ (como siempre) |
+
+Consecuencia del veto de `stcdn`: para la QA el widget se inyectó **a mano**
+con el embed real (script en el checklist de QA; sirve tal cual para la
+subtarea 12 de WordPress). El widget en sí funciona perfecto una vez cargado.
+
+## Lo hecho hoy
+1. **QA conversacional del bot (subtarea 14): 4/4 PASAN** — detalle y
+   transcripciones en el checklist. Hallazgos menores: los textos de sistema
+   del widget están en inglés ("Have a question?"…, se cambia en la config
+   del widget), y el cierre sigue con el puente "te escribimos hoy" porque
+   la subtarea 8 (Book Appointment) sigue pendiente.
+2. **El fallo del despertar de la 1ª pasada NO se reproduce**: el bot
+   contestó al primer mensaje en ambas conversaciones.
+3. **Retest del trigger nuevo de LS02 disparado dos veces** (dos contactos
+   nuevos por Live Chat). Verificación CRM pendiente de token.
+
+## ⏭️ SIGUIENTE PASO
+1. **Equipo (10 min)**: comprobar en Captación/Cualificado las oportunidades
+   de **Andrés Ferrer** y **Lucía Prado** + los 3+3 avisos en los buzones
+   (= trigger *Customer Replied·Live Chat* de LS02 validado end-to-end).
+   Después **borrar los 3 contactos de prueba** (esos 2 +
+   `pdGcwnrSHJ2J0nwAQKOf` de la 1ª pasada) con sus oportunidades.
+2. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+   sesiones) para poder verificar el CRM por API en la próxima.
+3. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
+   y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot
+   queda de conversación a cita.
+4. Poner en castellano los textos del widget (config del Chat Widget).
+5. (Opcional) pedir `stcdn.leadconnectorhq.com` en la allowlist para que las
+   páginas del funnel carguen enteras sin inyección manual.
 
 ---
 

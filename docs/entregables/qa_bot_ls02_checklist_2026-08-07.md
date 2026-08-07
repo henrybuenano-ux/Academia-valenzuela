@@ -113,9 +113,63 @@ Cualificado + aviso a los 3 buzones.
 El contacto de la 1ª pasada (`pdGcwnrSHJ2J0nwAQKOf`) queda en el CRM para
 la reprueba — borrarlo al terminar la 2ª pasada.
 
+## RESULTADOS — 2ª pasada (7-ago, tarde · ejecutada por Claude desde el navegador del entorno)
+
+**Cómo fue posible** (tras desbloquear la red): la política ya permite
+`info.academiavalenz.com` y `widgets.leadconnectorhq.com`, y se descubrió que
+el MITM del proxy no completa el handshake TLS 1.3 de Chromium —
+**`--ssl-version-max=tls1.2` lo arregla** (detalle en CONTINUAR_AQUI).
+`stcdn.leadconnectorhq.com` sigue vetado, así que el bundle del funnel que
+inyecta el chat no carga: el widget se inyectó a mano con el **embed real
+extraído de la página**:
+
+```html
+<script src="https://widgets.leadconnectorhq.com/loader.js"
+        data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+        data-widget-id="6a75e4fae425d99b06dba3bf"
+        data-source="FUNNEL"></script>
+```
+
+(Este snippet es exactamente lo que necesita la **subtarea 12** para poner el
+bot en WordPress — cambiando `data-source` si se quiere distinguir origen.)
+
+Dos conversaciones reales contra el bot vivo (dos visitantes distintos,
+perfiles de navegador limpios):
+
+| # | Resultado | Textos reales del bot |
+|---|---|---|
+| 4 · alumno sin acceso | ✅ PASA | "Gracias por decírmelo. Para que un compañero del equipo te ayude cuanto antes, ¿me dejas tu nombre y tu WhatsApp?" → capturó nombre → WhatsApp → email de uno en uno y cerró: "Paso tu caso al equipo y te contactan hoy mismo para ayudarte con el acceso al campus". No intentó resolver el acceso él mismo |
+| 5 · % aprobados | ✅ PASA | "Esa información te la confirma mejor un compañero del equipo, ya que no tengo el dato exacto" — no inventó cifra |
+| 6 · fuera de tema (deberes) | ✅ PASA | "Solo puedo ayudarte con temas de la oposición a Guardia Civil y dudas sobre la academia… ¿Te ayudo con alguna parte de la oposición?" |
+| 7 · journey completo (conversación) | ✅ PASA | Pitch fiel (sin permanencia, temario actualizado, PDF) → cualificó ("¿En qué punto estás con la oposición?") → resolvió duda del temario → capturó nombre → WhatsApp → email de uno en uno → cerró con "asesoría gratuita de unos 10 minutos… ¿te llamamos hoy mismo?" |
+
+**Además:**
+- 🟢 **El fallo del despertar NO se reproduce**: en ambas conversaciones el
+  bot respondió al PRIMER mensaje (~30-60 s). El "no contestó a los 2
+  primeros mensajes" de la 1ª pasada parece cosa del arranque de aquella
+  sesión del widget, no del ajuste de response time.
+- 🟡 **Sigue el texto puente** "el equipo te escribe hoy por WhatsApp" en el
+  cierre (confirmado en real): el nodo **Book Appointment** (subtarea 8)
+  sigue sin cablear al calendario `Asesorías 133ª`.
+- 🟡 **Textos del sistema del widget en inglés**: "Have a question?", "Enter
+  your question below…", "Give us a minute to assign you the best person…".
+  Se cambian en la config del Chat Widget en GHL (idioma/textos) — 5 min.
+- 🔎 La cualificación pregunta en abierto ("¿en qué punto estás?") sin
+  enumerar las 4 opciones del prompt. Funciona bien; solo apuntado.
+
+**Pendiente de verificar en el CRM** (sin token de API en esta sesión):
+cada conversación era un contacto nuevo de Live Chat, así que el trigger
+nuevo de LS02 (*Customer Replied · Live Chat*) debió disparar DOS veces →
+comprobar en Captación/Cualificado las oportunidades de:
+- **Andrés Ferrer** · 600 111 222 · andresferrer.qa@gmail.com
+- **Lucía Prado** · 622 333 444 · luciaprado.qa@gmail.com
+y que llegaron **3+3 avisos internos** a los buzones. 
+
 ## Al terminar
 
-- Borrar el/los contactos de prueba del CRM (y sus oportunidades).
+- Borrar los contactos de prueba del CRM con sus oportunidades: los 2 de la
+  2ª pasada (Andrés Ferrer, Lucía Prado) y el de la 1ª
+  (`pdGcwnrSHJ2J0nwAQKOf`).
 - Apuntar en la tarea de ClickUp qué pruebas fallaron y con qué texto
   respondió el bot — los fallos se corrigen retocando el prompt
   correspondiente (Personalidad/Objetivo/Información) de

@@ -169,17 +169,28 @@ perfiles de navegador limpios):
   El circuito completo del bot queda probado: chat → contacto → LS02 →
   oportunidad + aviso.
 
-**⚠️ Decisión pendiente — evitar re-inscripciones por cada mensaje:**
-tal como está, CADA mensaje entrante de Live Chat re-inscribe al contacto
-en LS02 (oportunidad duplicada + 3 emails por mensaje). Opciones:
-- **A (recomendada, 10 s)**: LS02 → Settings → *Allow Re-Entry* → **OFF**.
-  Un contacto pasa una única vez; mensajes posteriores no re-inscriben.
-  (También bloquea la vía del tag para ese contacto — irrelevante: su
-  oportunidad ya existe.)
-- B (patrón de casa, solo si se quieren re-entradas controladas): re-entry
-  ON + primer paso `IF tiene tag "bot-oportunidad-creada" → End` y
-  `Add Tag: bot-oportunidad-creada` al final. No usar `lead-bot` como
-  marca: dispararía el otro trigger y ensucia los logs.
+**✅ Re-inscripciones RESUELTAS y VALIDADAS (7-ago, tarde):** el equipo
+aplicó **Allow Re-Entry OFF** + un IF de guarda bajo el trigger (cinturón
+y tirantes; *Allow multiple opportunities* también OFF). Validación con
+conversación nueva de 3 mensajes ("Marta"): el 1º creó contacto +
+**una** oportunidad + **una** tanda de avisos; los mensajes 2 y 3 no
+re-inscribieron. 
+
+**🟡 Hallazgo derivado del trigger nuevo — nombre de la oportunidad:**
+la oportunidad sale como **"Guest Visitor xxxx"** aunque el contacto
+luego se llame Marta. No es bug: *Create Opportunity* evalúa
+`{{contact.name}}` al crearse, y con el trigger de primer mensaje el
+contacto aún es el guest anónimo de Live Chat; el bot captura el nombre
+después y GHL no renombra oportunidades. Opciones: (1) aceptarlo,
+(2) nombre estático "Lead Bot web", (3) **recomendada**: reordenar LS02 →
+aviso interno inmediato → *Wait* 3-5 min → *Create Opportunity* (para
+entonces `{{contact.name}}` ya es el real). Decisión del equipo pendiente.
+
+**🟡 Comportamiento a vigilar — el bot calla tras despedirse:** en una
+conversación reabierta tras la despedida/cierre por inactividad, el bot
+dejó de responder ("¿puedo pagar con tarjeta?" sin contestar). Un lead
+real que reabra el chat se queda colgado hasta que alguien lo vea en
+Conversations. Revisar el ajuste de fin de sesión del Conversation AI.
 
 ## Al terminar
 

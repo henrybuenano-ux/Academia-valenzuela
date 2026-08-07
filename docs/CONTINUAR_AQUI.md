@@ -67,13 +67,17 @@ subtarea 12 de WordPress). El widget en sí funciona perfecto una vez cargado.
    **Captación/Cualificado** y entregó **los 3 avisos**. El circuito del
    bot (chat → contacto → oportunidad → aviso) queda probado entero.
 
+> **Act. 7-ago noche:** re-entry OFF + IF de guarda aplicados por el equipo
+> y **validados** (3 mensajes → 1 sola oportunidad y 1 tanda de avisos).
+> Contactos de prueba de la tarde ya borrados por el equipo.
+
 ## ⏭️ SIGUIENTE PASO
-1. **LS02 → Settings → *Allow Re-Entry* → OFF** (10 s, decidido con el
-   equipo el 7-ago): sin esto, CADA mensaje de Live Chat re-inscribe al
-   contacto → oportunidad duplicada + 3 emails por mensaje. Detalle y
-   alternativa (patrón IF-tag) en el checklist de QA.
-2. **Borrar los 3 contactos de prueba** con sus oportunidades: Andrés
-   Ferrer, Lucía Prado y `pdGcwnrSHJ2J0nwAQKOf` (1ª pasada).
+1. **Borrar el último contacto de prueba**: "Marta" / oportunidad
+   "Guest Visitor arwsm" (validación del re-entry, 7-ago noche).
+2. **Decidir el nombre de las oportunidades del bot** (salen "Guest
+   Visitor xxxx" con el trigger de primer mensaje — ver hallazgo y 3
+   opciones en el checklist de QA; la buena: aviso → Wait 3-5 min →
+   Create Opportunity).
 3. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
    sesiones) para trabajo de GHL por API en la próxima sesión.
 4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`

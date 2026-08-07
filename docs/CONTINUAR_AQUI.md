@@ -59,22 +59,28 @@ subtarea 12 de WordPress). El widget en sí funciona perfecto una vez cargado.
    la subtarea 8 (Book Appointment) sigue pendiente.
 2. **El fallo del despertar de la 1ª pasada NO se reproduce**: el bot
    contestó al primer mensaje en ambas conversaciones.
-3. **Retest del trigger nuevo de LS02 disparado dos veces** (dos contactos
-   nuevos por Live Chat). Verificación CRM pendiente de token.
+3. **Trigger de LS02 arreglado y VALIDADO end-to-end** (misma tarde): los
+   contactos del QA se crearon pero el filtro del trigger *Customer
+   Replied·Live Chat* estaba mal guardado (el formato a ciegas del API —
+   riesgo que ya estaba apuntado). El equipo lo corrigió en la UI y el
+   retest desde el chat de Lucía metió la oportunidad en
+   **Captación/Cualificado** y entregó **los 3 avisos**. El circuito del
+   bot (chat → contacto → oportunidad → aviso) queda probado entero.
 
 ## ⏭️ SIGUIENTE PASO
-1. **Equipo (10 min)**: comprobar en Captación/Cualificado las oportunidades
-   de **Andrés Ferrer** y **Lucía Prado** + los 3+3 avisos en los buzones
-   (= trigger *Customer Replied·Live Chat* de LS02 validado end-to-end).
-   Después **borrar los 3 contactos de prueba** (esos 2 +
-   `pdGcwnrSHJ2J0nwAQKOf` de la 1ª pasada) con sus oportunidades.
-2. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
-   sesiones) para poder verificar el CRM por API en la próxima.
-3. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
+1. **LS02 → Settings → *Allow Re-Entry* → OFF** (10 s, decidido con el
+   equipo el 7-ago): sin esto, CADA mensaje de Live Chat re-inscribe al
+   contacto → oportunidad duplicada + 3 emails por mensaje. Detalle y
+   alternativa (patrón IF-tag) en el checklist de QA.
+2. **Borrar los 3 contactos de prueba** con sus oportunidades: Andrés
+   Ferrer, Lucía Prado y `pdGcwnrSHJ2J0nwAQKOf` (1ª pasada).
+3. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+   sesiones) para trabajo de GHL por API en la próxima sesión.
+4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
    y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot
    queda de conversación a cita.
-4. Poner en castellano los textos del widget (config del Chat Widget).
-5. (Opcional) pedir `stcdn.leadconnectorhq.com` en la allowlist para que las
+5. Poner en castellano los textos del widget (config del Chat Widget).
+6. (Opcional) pedir `stcdn.leadconnectorhq.com` en la allowlist para que las
    páginas del funnel carguen enteras sin inyección manual.
 
 ---

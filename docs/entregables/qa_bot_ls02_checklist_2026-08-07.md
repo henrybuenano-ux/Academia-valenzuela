@@ -157,13 +157,29 @@ perfiles de navegador limpios):
 - 🔎 La cualificación pregunta en abierto ("¿en qué punto estás?") sin
   enumerar las 4 opciones del prompt. Funciona bien; solo apuntado.
 
-**Pendiente de verificar en el CRM** (sin token de API en esta sesión):
-cada conversación era un contacto nuevo de Live Chat, así que el trigger
-nuevo de LS02 (*Customer Replied · Live Chat*) debió disparar DOS veces →
-comprobar en Captación/Cualificado las oportunidades de:
-- **Andrés Ferrer** · 600 111 222 · andresferrer.qa@gmail.com
-- **Lucía Prado** · 622 333 444 · luciaprado.qa@gmail.com
-y que llegaron **3+3 avisos internos** a los buzones. 
+**Verificación CRM (7-ago, tarde) — resuelta con el equipo:**
+- Los 2 contactos SÍ se crearon (Andrés Ferrer, Lucía Prado), pero **el
+  trigger *Customer Replied · Live Chat* estaba mal guardado** (el filtro
+  escrito por API a ciegas — el riesgo que quedó apuntado arriba). El
+  equipo lo corrigió en la UI.
+- **Retest tras el arreglo: ✅ VALIDADO end-to-end.** Un mensaje más en el
+  chat de Lucía (el widget conserva la identidad del visitante; el chat
+  caducado se reabre con su botón "Click here") → oportunidad en
+  **Captación/Cualificado** + **los 3 avisos internos** llegados.
+  El circuito completo del bot queda probado: chat → contacto → LS02 →
+  oportunidad + aviso.
+
+**⚠️ Decisión pendiente — evitar re-inscripciones por cada mensaje:**
+tal como está, CADA mensaje entrante de Live Chat re-inscribe al contacto
+en LS02 (oportunidad duplicada + 3 emails por mensaje). Opciones:
+- **A (recomendada, 10 s)**: LS02 → Settings → *Allow Re-Entry* → **OFF**.
+  Un contacto pasa una única vez; mensajes posteriores no re-inscriben.
+  (También bloquea la vía del tag para ese contacto — irrelevante: su
+  oportunidad ya existe.)
+- B (patrón de casa, solo si se quieren re-entradas controladas): re-entry
+  ON + primer paso `IF tiene tag "bot-oportunidad-creada" → End` y
+  `Add Tag: bot-oportunidad-creada` al final. No usar `lead-bot` como
+  marca: dispararía el otro trigger y ensucia los logs.
 
 ## Al terminar
 

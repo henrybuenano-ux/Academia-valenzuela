@@ -143,9 +143,11 @@ la landing — deben llegar 3 emails de aviso.
    **Nota**: el envío del formulario público no se pudo simular (Cloudflare
    bloquea el endpoint desde este entorno); el disparo por formulario quedó
    validado con datos reales el 24-jul y no se ha tocado.
-   **Limpieza pendiente**: borrar el contacto de prueba y su oportunidad
-   cuando el equipo confirme los emails (y el de la sesión 6:
-   germanborrello@gmail.com).
+   **✅ PRUEBA CONFIRMADA por el equipo**: llegaron los 3 avisos internos y
+   el email A1 de SP01 — el arreglo de destinatarios funciona y el tag
+   inscribe en SP01. **Limpieza hecha**: borrados los 2 contactos de prueba
+   con sus oportunidades (el de hoy y el de la sesión 6,
+   germanborrello@gmail.com). El CRM queda sin datos de prueba.
 3. **Prompts del bot LS02 escritos** (subtareas 4-6 de ClickUp listas para
    pegar): `docs/entregables/bot_ls02_prompts_2026-08-07.md`. Incluye
    ajustes del bot, reglas de handoff, datos reales con los `[PENDIENTE]`

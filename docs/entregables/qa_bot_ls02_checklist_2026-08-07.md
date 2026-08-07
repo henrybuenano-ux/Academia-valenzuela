@@ -56,6 +56,45 @@ por widget). Anotar PASA/FALLA y el texto real de la respuesta si falla.
 comprobar que dispara SP02 (tag `asesoria-agendada` + oportunidad pasa a
 Agendado). Con eso el embudo del bot queda probado de conversación a cita.
 
+## RESULTADOS — 1ª pasada (7-ago, chat real de German por el widget)
+
+**Conversación: NOTABLE.** De la transcripción quedan cubiertas las pruebas
+1, 2, 3 y la mitad conversacional de la 7:
+
+| # | Resultado | Detalle |
+|---|---|---|
+| 1 · precio | ✅ PASA | "80 €/mes, sin matrícula ni permanencia, cancelas cuando quieras" + remató cualificando ("¿En qué punto estás?") |
+| 2 · lead caliente | ✅ PASA | Capturó nombre → WhatsApp → email, de uno en uno, y cerró con el texto puente ("el equipo te escribe hoy") |
+| 3 · pago en 2 veces | ✅ PASA (suave) | No inventó condiciones y lo derivó al equipo ("te lo confirma un compañero en la llamada"). Los datos ya estaban capturados |
+| 7 · CRM | 🔴 **FALLA** | Ver abajo |
+
+**🔴 FALLO CRÍTICO (prueba 7): el bot NO aplica el tag `lead-bot`.**
+Verificado por API: el chat creó el contacto (`pdGcwnrSHJ2J0nwAQKOf`,
+nombre/teléfono/email correctos) pero con `tags: []` → LS02 no disparó →
+**cero oportunidad en Cualificado y cero aviso al equipo**. Tal como está,
+un lead cualificado por el bot se queda huérfano en el CRM.
+**Arreglo (bot builder)**: en el final del flujo de AI Capture (o en las
+acciones del bot), añadir **"Add Contact Tag: `lead-bot`"** al completar la
+captura. Todo lo de después ya está probado y corre solo.
+
+**🟡 Fallo menor: el bot no contestó a los 2 primeros mensajes**
+("¿cuánto cuesta?" 11:10 y "?" 11:11) — solo despertó con "hola" (11:11).
+Puede ser el arranque de sesión del widget o el tiempo de respuesta
+configurado del bot. Revisar el ajuste de *response time* y reprobar: un
+lead real que pregunta precio y no recibe respuesta se va.
+
+**🟡 Mejora ya desbloqueada**: el bot usa el texto puente "el equipo te
+escribe hoy" porque se redactó cuando no había calendario. **El calendario
+ya existe** (`Asesorías 133ª`) → cablear el nodo Book Appointment
+(subtarea 8) y quitar la frase puente del prompt Objetivo.
+
+**Pendientes de probar en la 2ª pasada** (tras el arreglo del tag):
+4 (alumno con problema → handoff), 5 (aprobados → no inventa), 6 (fuera de
+tema), y repetir la 7 completa verificando: tag `lead-bot` + oportunidad
+Cualificado + aviso a los 3 buzones.
+El contacto de la 1ª pasada (`pdGcwnrSHJ2J0nwAQKOf`) queda en el CRM para
+la reprueba — borrarlo al terminar la 2ª pasada.
+
 ## Al terminar
 
 - Borrar el/los contactos de prueba del CRM (y sus oportunidades).

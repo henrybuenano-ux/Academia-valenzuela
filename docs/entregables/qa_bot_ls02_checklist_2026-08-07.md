@@ -7,23 +7,24 @@
 > por el widget o por el "Test bot" del builder. Lo que SÍ está verificado
 > por API ya está marcado abajo.
 
-## ⚠️ Hallazgo previo nº 0 — EL WIDGET NO ESTÁ EN LA WEB PRINCIPAL
+## ⚠️ Hallazgo nº 0 (RESUELTO a medias) — dónde está el widget
 
-Comprobado el 7-ago (HTML con caché rota + contenedor GTM-W4VN9FVG):
-**academiavalenz.com no carga ningún script de chat de GHL** (ni
-`widgets.leadconnectorhq.com` ni el whitelabel). El único `loader.js` de la
-web es el de Trustindex (reseñas).
+**Confirmado por el equipo**: el widget está en la página del funnel
+**`info.academiavalenz.com/formacion`** (el chat de GHL se inyecta al servir
+las páginas del funnel; no aparece en el código de la página y este entorno
+no puede cargar la página servida — verificar la burbuja en el navegador).
 
-Posibles explicaciones — verificar cuál es:
-1. El widget se instaló **solo en la landing** (`info.academiavalenz.com` —
-   no comprobable desde este entorno, la red la bloquea). Si es así, decidir
-   si también va en la web principal (el plan original decía WordPress).
-2. Se instaló en WordPress pero **una caché/optimizador lo está quitando**
-   (Elementor + caché de página). Purga la caché y reprueba.
-3. Quedó configurado en GHL pero **el embed no llegó a pegarse** en WP.
-
-**Sin widget visible no hay bot que probar en la web** — resolver esto antes
-de la batería.
+Lo comprobado por API el 7-ago:
+- La página `/formacion` del funnel lleva el **formulario** embebido
+  (`EIa3gz2I8ndWcPA2we6v` vía whitelabel) ✓.
+- **El step `/landing` ya no existe** — el funnel tiene un único step,
+  `/formacion`. Sin impacto: ningún email de las secuencias enlaza a
+  `/landing` (van a academiavalenz.com y mi-cuenta) y las campañas de pago
+  no han arrancado. Referencias viejas solo en docs.
+- **academiavalenz.com (WordPress) NO tiene el widget** (HTML sin caché +
+  GTM revisados). Decisión pendiente: ¿se quiere el bot también en la web
+  principal, como decía el plan original (subtarea 12 hablaba de
+  WordPress)? Si sí: pegar el embed del chat en WP (o vía GTM).
 
 ## Lo ya verificado por API (no repetir)
 

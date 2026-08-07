@@ -227,7 +227,7 @@ Paco), los remates de UI de Oliver, y el 1-sep para el modo real del plugin.
 ## Lo que se hizo hoy
 
 ### ✅ LS01 completo y funcionando en producción
-- **Landing viva**: https://info.academiavalenz.com/landing (HTML en
+- **Landing viva**: https://info.academiavalenz.com/formacion — ⚠️ URL cambiada el 7-ago: el step /landing ya no existe (HTML en
   `docs/entregables/landing_133.html`, con el embed real del formulario).
 - **Formulario** "Form Landing 133" (id `EIa3gz2I8ndWcPA2we6v`) creado por el
   equipo con Ask AI y depurado en 3 iteraciones.

@@ -118,8 +118,16 @@ rama None. Tres causas, las tres corregidas por API:
    leer el valor → **Wait 2 min** insertado entre trigger e IF (con el
    trigger repuntado al Wait, lección targetActionId).
 Validación final: texto libre por API → 2 min → "Empezar con la 133ª" ✓.
-**Hueco conocido**: la opción "Ya preparándola" no tiene rama (quien diga
-"ya me estoy preparando" va a None) — añadirla es 1 rama nueva en la UI.
+
+**✅ Remate (23:13): reestructurado a 4 ramas = 4 opciones del select**
+(propuesta del equipo). La rama redundante "lo estoy pensando" se
+reconvirtió en **"ya preparandola"** (prepar / por mi cuenta / otra
+academia / me presenté…) y sus keywords de duda se fusionaron en
+"planteandomelo". Todo por atributos (sin tocar el grafo). Doble
+validación quirúrgica en verde: "ya me estoy preparando por mi cuenta" →
+**Ya preparándola** ✓ y "me lo estoy pensando todavía" →
+**Planteándomelo** ✓, ambos a los 2 min exactos. BT 01 cerrado: las 4
+respuestas del bot caen cada una en su opción.
 
 ### 📌 Más lecciones de API (para el manual de trampas)
 - **Condiciones de if_else**: los `segments` de una rama se combinan con
@@ -133,24 +141,17 @@ Validación final: texto libre por API → 2 min → "Empezar con la 133ª" ✓.
 - Borrar citas: `DELETE /calendars/events/appointments/{id}`.
 
 ## ⏭️ SIGUIENTE PASO
-1. **Rama "Ya preparándola" en BT 01** (UI, 2 min): condición OR con
-   "prepar", "por mi cuenta", "otra academia", "me presenté" → update a
-   "Ya preparándola".
-2. **Horario real del calendario** `Asesorías 133ª`: sigue sirviendo el
+1. **Horario real del calendario** `Asesorías 133ª`: sigue sirviendo el
    default 08:00-16:45 (el bot ofreció las 8:00 de la mañana) — meter las
    franjas reales de Paco en Availability cuando las dé.
-3. **Textos del widget en castellano** (config del Chat Widget: "Have a
+2. **Textos del widget en castellano** (config del Chat Widget: "Have a
    question?", mensajes de sistema).
-4. **Quitar el texto puente** del prompt Objetivo del bot ("el equipo te
+3. **Quitar el texto puente** del prompt Objetivo del bot ("el equipo te
    escribe hoy") ahora que Book Appointment funciona — que ofrezca cita
    siempre.
-5. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+4. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
    sesiones) para trabajo de GHL por API en la próxima sesión.
-4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
-   y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot
-   queda de conversación a cita.
-5. Poner en castellano los textos del widget (config del Chat Widget).
-6. (Opcional) pedir `stcdn.leadconnectorhq.com` en la allowlist para que las
+5. (Opcional) pedir `stcdn.leadconnectorhq.com` en la allowlist para que las
    páginas del funnel carguen enteras sin inyección manual.
 
 ---

@@ -40,6 +40,7 @@ así.** Comprobado con `curl` y con el estado del proxy (`403 al CONNECT`):
 | `api.omniainbusiness.com` (whitelabel) | ❌ 403 |
 | `info.academiavalenz.com` (landing publicada) | ❌ 403 |
 | `sites.ludicrous.cloud` | ❌ no resuelve/alcanza |
+| `widgets.leadconnectorhq.com` (scripts del chat) | ❌ vetado (confirmado 7-ago) |
 | `services/backend.leadconnectorhq.com` | ✅ alcanzables |
 | `academiavalenz.com` + `/staging` | ✅ 200 |
 | `api.evolcampus.com` | ✅ alcanzable |
@@ -47,9 +48,15 @@ así.** Comprobado con `curl` y con el estado del proxy (`403 al CONNECT`):
 → **Consecuencia**: no se puede auditar visualmente la UI de GHL ni ver la
 landing publicada. Sigue pendiente confirmar si el nodo `internal_notification`
 se dibuja en LS01/LS02 (el mismo problema que tuvo `workflow_goal`).
-→ **Acción**: pedir al equipo que añada esos 3 dominios a la política de red
+→ **Acción**: pedir al equipo que añada esos dominios a la política de red
 del entorno. Los cambios **no aplican a sesiones ya abiertas** — hay que abrir
 sesión nueva después.
+→ **Para poder probar el bot desde el navegador del entorno** (Chromium +
+Playwright ya instalados), la lista mínima es:
+`info.academiavalenz.com` + `widgets.leadconnectorhq.com` (y opcionalmente
+`app.gohighlevel.com` para conducir la UI, aunque su login lleva reCAPTCHA).
+Con esas dos primeras, Claude puede abrir /formacion, chatear la batería de
+QA completa contra el bot real y verificar el CRM en el mismo turno.
 
 ### ✅ Credenciales recibidas — API interna operativa
 El equipo pegó el `GHL_FIREBASE_REFRESH_TOKEN` en el chat (guardado en

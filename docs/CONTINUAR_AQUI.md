@@ -127,6 +127,31 @@ SP03 con `workflow_id`), reseleccionar los 3 usuarios en el panel y guardar.
 Con la lección aprendida: la prueba definitiva será el próximo lead real de
 la landing — deben llegar 3 emails de aviso.
 
+### ✅ Avances del 7-ago (tarde)
+1. **RP04 · Salida de dunning creado en draft**
+   (`bdbe63e2-1186-4377-8307-fc65dfb550ce`): triggers `alumno-recuperado` +
+   `alumno-activo` → saca de RP02. Mismo patrón que SP03, ya con
+   `workflow_id` incluido (sin aviso naranja). **Publicar el 1-sep junto a
+   RP02** — sin esto, un alumno que paga seguiría recibiendo el dunning.
+2. **Prueba end-to-end ejecutada** con contacto real de prueba
+   (german.borrello@omibu.com, id `XQn1u2fdsGX5KKSM9YbQ`): inscrito en LS01
+   por API → tag `lead-landing-133` ✓, oportunidad "Prueba Claude E2E" en
+   Captación/Nuevo lead con fuente "Landing 133" ✓, aviso interno disparado
+   hacia los 3 ✓ (verificar buzones), y el tag debió inscribirlo en SP01
+   (verificable: email A1 en el buzón). Después se aplicó `asesoria-agendada`
+   → SP03 debió sacarlo de SP01 (verificar en Execution logs de SP03/SP01).
+   **Nota**: el envío del formulario público no se pudo simular (Cloudflare
+   bloquea el endpoint desde este entorno); el disparo por formulario quedó
+   validado con datos reales el 24-jul y no se ha tocado.
+   **Limpieza pendiente**: borrar el contacto de prueba y su oportunidad
+   cuando el equipo confirme los emails (y el de la sesión 6:
+   germanborrello@gmail.com).
+3. **Prompts del bot LS02 escritos** (subtareas 4-6 de ClickUp listas para
+   pegar): `docs/entregables/bot_ls02_prompts_2026-08-07.md`. Incluye
+   ajustes del bot, reglas de handoff, datos reales con los `[PENDIENTE]`
+   marcados, y notas para las subtareas 7, 8, 11, 13 y 14. De las 14
+   subtareas del bot, solo la 8 (Book Appointment) espera el calendario.
+
 ### ⚠️ Edición concurrente
 Durante la sesión alguien del equipo estaba editando la cuenta a la vez
 (LS01 cambió a las 22:43 bajo la cuenta de German Borrello). Coordinarse

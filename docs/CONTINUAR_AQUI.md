@@ -169,10 +169,14 @@ corregimos"):
   Paco (Availability → editar → guardar reescribe el formato bien).
 
 **Lo que desbloquea**:
-- **SP02 ya puede dispararse de verdad** (su trigger `customer_appointment`
-  no filtra por calendario, y este es el único). Prueba real posible:
-  agendar una cita de test → SP02 etiqueta `asesoria-agendada` + oportunidad
-  en Agendado → SP03 saca de SP01.
+- **SP02 PROBADO EN REAL (7-ago)** ✅: cita de prueba agendada por API
+  (lunes 10-ago 10:00, id `bwrsdSziKmnoaq2XWCip`, contacto
+  `mCvZ8vuUIQ5KdzbOJ65M` / german.borrello@omibu.com). SP02 disparó solo:
+  tag `asesoria-agendada` + oportunidad en **Captación/Agendado** con
+  fuente "Asesoría agendada"; el tag encadenó SP03. Todo el circuito de
+  conversión validado. **Limpieza pendiente**: borrar cita + contacto +
+  oportunidad cuando el equipo lo vea (la cita se ve en el calendario de
+  la UI; German debió recibir la confirmación por email).
 - **Subtarea 8 del bot (Book Appointment)** ya tiene calendario que apuntar
   → las 14 subtareas del bot quedan desbloqueadas.
 - La landing puede enlazar "RESERVAR ASESORÍA GRATUITA" al widget.

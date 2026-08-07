@@ -117,12 +117,15 @@ Matiz apuntado: el trigger no filtra por calendario — con un solo calendario
 es correcto; si se añade otro (p. ej. tutorías), añadirle el filtro
 *In calendar = Asesorías*.
 
-### 🔴 Pendiente de decisión (1 cosa)
-- **Destinatario de los avisos internos** (LS01/LS02 → `recipients: []`,
-  hoy no llegan a nadie). La sub-cuenta solo tiene 3 usuarios, todos de la
-  agencia: German Borrello, Henry Buenaño y Oliver Guerrero. **Paco no tiene
-  usuario** — si el aviso debe llegarle, hay que crearle uno o poner su
-  email en `recipients`.
+### ✅ Avisos internos con destinatario (7-ago)
+`recipients` de los pasos `internal_notification` de LS01 y LS02 relleno con
+los 3 del equipo (german.borrello@, henry.buenano@, oliver.guerrero@omibu.com)
+y `assigned_user` desactivado. LS01 siguió `published` tras el PUT (llevaba
+`status: published` explícito + `workflowData` completo — la receta segura).
+**Vistazo de UI recomendado**: si el paso muestra aviso naranja (como pasó en
+SP03 con `workflow_id`), reseleccionar los 3 usuarios en el panel y guardar.
+Con la lección aprendida: la prueba definitiva será el próximo lead real de
+la landing — deben llegar 3 emails de aviso.
 
 ### ⚠️ Edición concurrente
 Durante la sesión alguien del equipo estaba editando la cuenta a la vez

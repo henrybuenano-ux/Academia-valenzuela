@@ -63,7 +63,14 @@ trigger `customer_booked_appointment`. En la definición guardada no existe.
 exista el calendario de asesorías (que sigue bloqueado por el horario de
 Paco). Hasta entonces, **no publicar SP02**.
 
-### 🔴 2. Los avisos internos no llegan a nadie
+> **Act. 7-ago — RESUELTO (pendiente de vistazo UI)**: `recipients` relleno
+> por API con los 3 emails del equipo y `assigned_user` desactivado, en LS01
+> y LS02. LS01 conservó `published` (PUT con `status` explícito y
+> `workflowData` completo). Si la UI muestra aviso naranja en el paso,
+> reseleccionar los usuarios en el panel — mismo patrón que `workflow_id`
+> en SP03. Prueba definitiva: el próximo lead real debe generar 3 emails.
+
+### 🔴 2. Los avisos internos no llegaban a nadie
 El nodo `internal_notification` **sí está guardado** en LS01 y LS02 — eso
 responde la pregunta que quedó abierta en la sesión 6. Pero está mal
 configurado:

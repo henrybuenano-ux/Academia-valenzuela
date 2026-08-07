@@ -68,17 +68,34 @@ subtarea 12 de WordPress). El widget en sí funciona perfecto una vez cargado.
    bot (chat → contacto → oportunidad → aviso) queda probado entero.
 
 > **Act. 7-ago noche:** re-entry OFF + IF de guarda aplicados por el equipo
-> y **validados** (3 mensajes → 1 sola oportunidad y 1 tanda de avisos).
-> Contactos de prueba de la tarde ya borrados por el equipo.
+> y **validados**. Y aplicada la **opción 3 del nombre de oportunidad**:
+> LS02 = IF → aviso inmediato → **Wait 5 min** → Create Opportunity (ya con
+> el nombre real) → Add Tag. Validado en real ("Diego Fuentes" a los 5 min).
+> Todos los contactos de prueba borrados por ID.
+
+### 📌 Trampa GORDA de la API descubierta (7-ago noche) — apuntar junto a la del PUT
+**Los triggers tienen `targetActionId`: el paso EXACTO del workflow por el
+que entra la inscripción.** Si cambias la cabeza del grafo (insertar/mover
+el primer paso), los triggers siguen entrando por el paso viejo — y NINGÚN
+save del workflow (API o UI) los repunta. Síntoma: editas el grafo y el
+comportamiento no cambia jamás (nos costó 6 conversaciones de prueba).
+Arreglo: `PUT /workflow/{loc}/trigger/{id}` con `targetActionId` = nuevo
+primer paso. Corolario: el IF de guarda no se ejecutaba hasta este arreglo
+(la entrada lo esquivaba); el candado real era `allowMultiple=false`.
+
+### ⚠️ Credenciales del entorno: son de OTRO workspace
+Las env vars `GHL_*` que trae el entorno (location `DjVejJurmfmaPhDlDkBg`)
+**no son de Academia Valenz** — no usarlas. El token bueno se pega en chat
+→ `gohighlevel-cli/.env` (pisar las env vars al ejecutar: `set -a; . .env`).
+Con cabecera **`Version: 2021-07-28`** la API interna también sirve
+contactos y oportunidades (search/delete) — ver sesión 8 del historial.
 
 ## ⏭️ SIGUIENTE PASO
-1. **Borrar el último contacto de prueba**: "Marta" / oportunidad
-   "Guest Visitor arwsm" (validación del re-entry, 7-ago noche).
-2. **Decidir el nombre de las oportunidades del bot** (salen "Guest
-   Visitor xxxx" con el trigger de primer mensaje — ver hallazgo y 3
-   opciones en el checklist de QA; la buena: aviso → Wait 3-5 min →
-   Create Opportunity).
-3. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
+1. **Re-poner el filtro del trigger** "Customer Replied" de LS02: quedó
+   con `filters: []` (cualquier canal inscribe — una respuesta a un email
+   de SP01 crearía oportunidad "Bot web"). UI → trigger → *Reply Channel =
+   Live Chat* y guardar.
+2. **Token de Firebase fresco** → `gohighlevel-cli/.env` (no sobrevive entre
    sesiones) para trabajo de GHL por API en la próxima sesión.
 4. **Subtarea 8**: cablear Book Appointment al calendario `Asesorías 133ª`
    y quitar el texto puente del prompt Objetivo. Con eso el embudo del bot

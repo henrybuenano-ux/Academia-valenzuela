@@ -176,15 +176,26 @@ conversación nueva de 3 mensajes ("Marta"): el 1º creó contacto +
 **una** oportunidad + **una** tanda de avisos; los mensajes 2 y 3 no
 re-inscribieron. 
 
-**🟡 Hallazgo derivado del trigger nuevo — nombre de la oportunidad:**
-la oportunidad sale como **"Guest Visitor xxxx"** aunque el contacto
-luego se llame Marta. No es bug: *Create Opportunity* evalúa
-`{{contact.name}}` al crearse, y con el trigger de primer mensaje el
-contacto aún es el guest anónimo de Live Chat; el bot captura el nombre
-después y GHL no renombra oportunidades. Opciones: (1) aceptarlo,
-(2) nombre estático "Lead Bot web", (3) **recomendada**: reordenar LS02 →
-aviso interno inmediato → *Wait* 3-5 min → *Create Opportunity* (para
-entonces `{{contact.name}}` ya es el real). Decisión del equipo pendiente.
+**✅ Nombre de la oportunidad — RESUELTO con la opción 3 (7-ago noche):**
+la oportunidad salía como **"Guest Visitor xxxx"** porque *Create
+Opportunity* evalúa `{{contact.name}}` al crearse, cuando el contacto aún
+es el guest anónimo. Aplicado y **validado end-to-end**: LS02 ahora es
+`IF guarda → Aviso interno (inmediato) → Wait 5 min → Create Opportunity
+→ Add Tag`. Prueba real: primer mensaje 21:31:44 → oportunidad 21:36:48
+(5 min) con nombre **"Diego Fuentes"** (el real). 
+
+La pieza que costó 6 validaciones encontrar: **los triggers llevaban
+`targetActionId` apuntando DIRECTAMENTE al paso Create Opportunity**, así
+que la inscripción entraba saltándose la cabeza del workflow (por eso
+ningún cambio del grafo — por API ni por UI — cambiaba nada, y de paso el
+IF de guarda no se ejecutaba). Arreglo: repuntar `targetActionId` de los
+2 triggers al IF raíz. Desde entonces el flujo entra por la puerta.
+
+**⚠️ Pendiente al hilo de esto:** al arreglar el trigger en la UI, el
+filtro *Reply Channel* quedó **vacío** (`filters: []`) — HOY cualquier
+respuesta de cualquier canal inscribe en LS02 (p. ej. la respuesta a un
+email de SP01 crearía una oportunidad "Bot web"). Re-añadir el filtro
+**Reply Channel = Live Chat** en la UI del trigger "Customer Replied".
 
 **🟡 Comportamiento a vigilar — el bot calla tras despedirse:** en una
 conversación reabierta tras la despedida/cierre por inactividad, el bot

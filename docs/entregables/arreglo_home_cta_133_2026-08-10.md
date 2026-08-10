@@ -147,16 +147,16 @@ en julio-2026, se anunciaba como "2025"). Sin la coletilla de la fecha de
 arranque ni "sin matrícula y sin permanencia"; se pueden añadir cuando se
 quiera, pero **el 404 —lo que costaba dinero— está resuelto**.
 
-### 🟡 Remate pendiente: quedan 2 menciones a "2024" en la home
-En otra sección más abajo (no la del curso):
-1. Titular: *"Oposiciones a Guardia Civil **2024** — Preparación integral y
-   personalizada para superar todas las pruebas y exámenes de acceso…"*
-2. Texto: *"¿Te has planteado presentarte a las oposiciones a la Guardia
-   Civil en **2024**? ¡Es tu oportunidad de unirte a este cuerpo…"*
+### ✅ Remate hecho también (10-ago): los dos "2024" de la home
+En la sección de más abajo quedaban dos menciones obsoletas; el equipo las
+actualizó y Claude verificó: **0 menciones a "2024"** en la portada.
+- Titular (`498ccc0`): "Oposiciones a Guardia Civil **2026**"
+- Párrafo (`a8af142`): "…presentarte a las oposiciones a la Guardia Civil en
+  **2026**?…", con el resaltado intacto.
+Revisión de regresión en la misma pasada: el bloque del curso sigue correcto
+(0 enlaces al producto muerto, 1 al de la 133ª, sin "132ª").
 
-Copy de hace dos años en la portada: no rompe nada, pero una academia que en
-agosto de 2026 anuncia las oposiciones de 2024 parece desatendida. Cambiar
-ambos "2024" por **2026** (o quitar el año) es un minuto en Elementor.
+**La portada queda limpia de copy obsoleto.**
 
 ## 🔴 Nota sobre el acceso a producción desde este entorno
 

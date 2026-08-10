@@ -67,9 +67,9 @@ devuelve **HTTP 200**. Titular en vivo: "Curso Ingreso Guardia Civil – 133ª
 Promoción". Ficha completa en
 `entregables/arreglo_home_cta_133_2026-08-10.md`.
 
-- 🟡 **Queda un remate**: en otra sección de la home siguen dos menciones a
-  **"Oposiciones a Guardia Civil 2024"** (titular y texto). Un minuto en
-  Elementor; no rompe nada pero da imagen de web desatendida.
+- ✅ **Remate hecho**: los dos "Oposiciones a Guardia Civil **2024**" de la
+  sección de más abajo pasados a 2026 y verificados. La portada queda sin
+  copy obsoleto.
 - 📌 **Claude no puede autenticarse en producción desde este entorno**: no
   es cuestión de credenciales — `av-login` rechaza *todo* intento sin
   mensaje de error (probado con usuario inventado y con uno real), señal de
@@ -109,10 +109,10 @@ gente que cree seguir dada de alta. **Confirmar en WooCommerce y decidir qué
 se hace con esas suscripciones antes de lanzar LS03.**
 
 ## ⏭️ SIGUIENTE PASO (por impacto, no por comodidad)
-1. ~~Arreglar el CTA roto de la home~~ ✅ **HECHO Y VERIFICADO** (10-ago).
-   Pendiente del mismo bloque, cuando se quiera: enlace secundario a
-   `/formacion`, embed del bot en la web (subtarea 12) y los dos "2024" que
-   quedan más abajo en la portada.
+1. ~~Arreglar el CTA roto de la home y el copy obsoleto~~ ✅ **HECHO Y
+   VERIFICADO** (10-ago). Del mismo bloque quedan, cuando se quiera: enlace
+   secundario a `/formacion` y embed del bot en la web (subtarea 12) — son
+   los que harían que la web alimente el embudo, no solo la venta directa.
 2. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
    (Paco o versión B) → arreglar CTA de B1 → publicar + activar trigger →
    etiquetar (tanda de prueba primero). Checklist completo en el entregable.

@@ -34,10 +34,16 @@ suyo.
 → *Mi recomendación: lanzarla esta semana con esa versión. A 22 días de que
 empiece el curso, esperar nos cuesta más que enviar.*
 
-**3. ¿Quién habla con Paco, y por qué vía?**
-Sigue bloqueando cuatro cosas: las novedades del punto anterior, su horario
-para las asesorías, qué hacemos con los 7 becados y un cambio en la web. Por
-email no está funcionando; quizá toque llamada.
+**3. Necesitamos el horario de asesorías de Paco, y esta semana.**
+Desde hoy el bot **agenda citas de verdad** también desde la web. Pero el
+calendario no tiene el horario real de Paco: está ofreciendo **36 huecos al
+día, de 8:00 a 16:45**, así que un interesado puede reservar una asesoría a
+las **8 de la mañana**. Si reserva y no hay nadie al otro lado, perdemos el
+lead y quedamos mal.
+→ *Con que nos diga sus franjas lo configuramos en diez minutos. Lleva 17
+días sin responder emails, así que probablemente toque llamarle — y de paso
+le sacamos las novedades del punto 2, qué hacemos con los 7 becados y el
+visto bueno a un cambio en la web.*
 
 Con esas tres respuestas, en un par de días lo tenemos en marcha.
 
@@ -83,13 +89,24 @@ email.
   para las novedades de Paco y otra que no lo necesita.
 - Todo en `reenganche_ls03_segmento_y_b2_2026-08-10.md`.
 
-### Sobre el punto 3 — lo que bloquea Paco
+### Sobre el punto 3 — el calendario y lo demás que bloquea Paco
 
-1. Novedades de la 133ª (para el email B2).
-2. Su horario de asesorías → hoy el calendario ofrece huecos por defecto y el
-   bot llegó a proponer citas **a las 8 de la mañana**.
-3. Los 7 becados: opción A o B (propuesta enviada el 17-jul, sin respuesta).
-4. Añadir el botón "Infórmate sin compromiso" en la home hacia la landing.
+**El dato del calendario, verificado hoy** (`Asesorías 133ª`,
+`HV3DnVxagoNduXbNx0UG`): sirve **36 huecos diarios de 08:00 a 16:45**, L-V,
+citas de 15 min. Es el **horario por defecto** de GoHighLevel, no el de Paco.
+- En julio se intentó cargar por API un horario provisional (10-14 / 16-20),
+  pero el motor de huecos lo ignoró y siguió sirviendo el de por defecto:
+  hay que meterlo **desde la UI** (Availability → editar → guardar reescribe
+  el formato bien). Son 10 minutos en cuanto tengamos sus franjas.
+- El riesgo ya es real: el bot ofreció citas a las 8:00 en una prueba, y
+  desde hoy el bot está también en la web.
+- Dueño provisional del calendario: **German**. Cambiar a Paco cuando tenga
+  usuario en la plataforma.
+
+**Lo demás que sigue bloqueado por él:**
+1. Novedades de la 133ª (para el email del punto 2).
+2. Los 7 becados: opción A o B (propuesta enviada el 17-jul, sin respuesta).
+3. Añadir el botón "Infórmate sin compromiso" en la home hacia la landing.
 
 ### Por si hace falta defender que el bloqueo no es de ejecución
 

@@ -101,9 +101,44 @@ web de los del funnel, se puede añadir `data-source="WEBSITE"`.)*
 5. Si se añade el botón a la landing: un lead de prueba entra por LS01
    (tag `lead-landing-133` + oportunidad en Captación) y se borra después.
 
-## Bloqueo
+## ✅ ENSAYO COMPLETADO EN STAGING (10-ago, 18:01)
 
-Falta **usuario y contraseña de wp-admin de producción** (login oculto con
-WPS Hide Login → `https://academiavalenz.com/av-login`). Con eso Claude
-aplica los 3 cambios y los verifica en la misma sesión. Alternativa: lo hace
-el equipo con esta ficha y Claude verifica después.
+Los 3 cambios se aplicaron y verificaron en
+`academiavalenz.com/staging` (portada = página **13**, widgets de Elementor
+`fb766bc` titular, `96defd6` párrafo, `3ba7359` botón). Verificación:
+
+| Check | Resultado |
+|---|---|
+| Enlaces al producto 132 (404) | **0** ✓ |
+| Enlaces al producto 133 | **1** ✓ |
+| Menciones "132ª" | **0** ✓ |
+| Menciones "2025" | **0** ✓ |
+| Botón "Apúntate ahora al curso" | → producto 133ª ✓ |
+
+Queda como herramienta reutilizable: **`tools/wp-fix-home-cta.py`**
+(DRY-RUN por defecto, backup automático del árbol de Elementor antes de
+escribir, `--apply` para ejecutar, `--restore <backup>` para revertir, e
+idempotente: si ya está arreglado, no toca nada).
+
+```bash
+export WP_BASE=https://academiavalenz.com
+export WP_LOGIN=https://academiavalenz.com/av-login
+export WP_USER=… WP_PASS=…
+python3 tools/wp-fix-home-cta.py            # dry-run
+python3 tools/wp-fix-home-cta.py --apply    # aplica + verifica
+```
+
+## 🔴 BLOQUEO: producción sigue rota
+
+Las credenciales **`DevOmibu` son de STAGING**: en producción ese usuario
+**no existe** (el login de `av-login` rechaza sin mensaje de error, probado
+dos veces con cabeceras de navegador). Es decir: **el 404 que ven los
+visitantes reales sigue ahí**.
+
+Hace falta un **usuario administrador de producción**. Con él, el arreglo es
+un solo comando (arriba) y tarda 30 segundos, ensayo ya hecho. Alternativa:
+lo aplica el equipo a mano con esta ficha y Claude verifica después.
+
+> ⚠️ **No usar "push staging → producción" de WP Staging** para llevar este
+> cambio: arrastraría toda la copia de julio encima de la web viva. El
+> cambio hay que hacerlo directamente en producción.

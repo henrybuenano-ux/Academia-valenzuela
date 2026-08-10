@@ -59,9 +59,20 @@ que ninguna otra cosa y es lo más barato de arreglar de todo el proyecto.
 5. Revisar si quedan más enlaces al producto 132 en otras páginas
    (`/preparacion-de-oposiciones/`, `/guardia-civil/`, novedades).
 
-**Falta acceso**: wp-admin de producción (wp-login oculto con WPS Hide Login,
-slug `av-login`). Con usuario y contraseña Claude lo deja hecho y verificado
-en la misma sesión.
+### Estado del arreglo (10-ago, noche)
+- ✅ **Ensayado y verificado en staging**: los 3 cambios aplicados sobre la
+  portada (página 13) por la API de Elementor, con los 4 checks en verde.
+  Herramienta reutilizable: **`tools/wp-fix-home-cta.py`** (dry-run por
+  defecto, backup automático, `--restore` para revertir, idempotente).
+- 🔴 **Producción sigue rota**: las credenciales `DevOmibu` son **de
+  staging** — ese usuario **no existe en producción** (`av-login` rechaza
+  sin mensaje). Falta un **admin de producción**; con él, el arreglo es un
+  comando de 30 segundos porque el ensayo ya está hecho.
+- ⚠️ **Ojo**: no llevar el cambio con "push staging → producción" de WP
+  Staging — arrastraría toda la copia de julio sobre la web viva.
+- 📌 Aprendizaje: `options-reading.php` no expone el select de portada en
+  este sitio; la forma fiable de detectarla es la clase `page-id-N` del
+  `<body>` de la home.
 
 ## Hecho hoy: preparar el re-enganche (el único activo con tracción inmediata)
 `docs/entregables/reenganche_ls03_segmento_y_b2_2026-08-10.md` — todo lo que

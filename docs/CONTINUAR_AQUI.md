@@ -1,6 +1,67 @@
-# CONTINUAR AQUÍ — estado al 7-ago-2026 (sesión 8)
+# CONTINUAR AQUÍ — estado al 10-ago-2026 (sesión 9)
 
 > **EMPIEZA POR AQUÍ ⬇️ — lo de abajo es histórico de sesiones anteriores.**
+
+---
+
+# 🔴 SESIÓN 9 (10-ago-2026) — EL EMBUDO ESTÁ TERMINADO Y VACÍO
+
+## Estado en una línea
+El sistema funciona de punta a punta (validado en la sesión 8) pero **no ha
+entrado ni un lead en 17 días**, y la 133ª arranca el **1-sep: quedan 22
+días**. El problema ya no es técnico, es de **tráfico**.
+
+## El dato (verificado por dos vías: listado y búsqueda por tag)
+| Métrica | Valor |
+|---|---|
+| Contactos en el CRM | **103** — los 103 de la importación de julio |
+| Con `lead-landing-133` (leads de la landing) | **0** |
+| Con `lead-bot` (leads del chat) | **0** |
+| Oportunidades (open/won/lost/abandoned) | **0** |
+
+**Por qué está vacío**: no hay puerta de entrada. `academiavalenz.com`
+menciona la "133ª" **7 veces y no enlaza el embudo ni una sola vez**
+(comprobado en el HTML); el bot vive en `/formacion`, una página del funnel a
+la que nadie llega; y las campañas de pago (F4) nunca arrancaron pese a que
+el plan las situaba en julio-agosto.
+
+## Hecho hoy: preparar el re-enganche (el único activo con tracción inmediata)
+`docs/entregables/reenganche_ls03_segmento_y_b2_2026-08-10.md` — todo lo que
+faltaba para poder lanzar LS03 a los ex-alumnos de la 132ª:
+- **Segmento definido: 69 contactos** (39 suscripción en baja + 19 suscripción
+  activos + 11 intensivo), todos con email. **Excluidos 9** becados y de
+  colegio a propósito: son altas manuales de Paco y no deben recibir oferta
+  comercial. Script reproducible con DRY-RUN por defecto:
+  `gohighlevel-cli/builders/av-reenganche-segmento.py`.
+- **Email B2 escrito en dos versiones**: (A) con 3 huecos para las novedades
+  de Paco, y (B) **autosuficiente sin Paco** — apoyada solo en hechos
+  verificables (temario actualizado a la nueva convocatoria, ranking real,
+  sin permanencia), para no quedarnos bloqueados si no contesta.
+- **Fallo encontrado en B1**: su CTA apunta a `academiavalenz.com` (la home,
+  que no enlaza el embudo) → el ex-alumno llega y no encuentra dónde
+  apuntarse. Cambiar a la landing o al widget de asesoría.
+- **Mensaje para Paco** redactado, con la petición concreta de 2 minutos.
+
+## ⛔ Bloqueo de negocio antes de enviar nada
+Los **39 "en baja"** cuadran con las **39 suscripciones pausadas en bloque el
+24-jun** (`p2_causa_raiz_2026-07-10.md`). Si su baja es esa pausa
+administrativa y no una decisión del alumno, B1 ("¿repetimos?") le llega a
+gente que cree seguir dada de alta. **Confirmar en WooCommerce y decidir qué
+se hace con esas suscripciones antes de lanzar LS03.**
+
+## ⏭️ SIGUIENTE PASO (por impacto, no por comodidad)
+1. **Abrir la puerta al embudo** (nadie más lo va a hacer): enlazar
+   `/formacion` desde la web principal y pegar allí el widget del bot (el
+   embed está en el checklist de QA). Hoy todo el tráfico orgánico se pierde.
+2. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
+   (Paco o versión B) → arreglar CTA de B1 → publicar + activar trigger →
+   etiquetar (tanda de prueba primero). Checklist completo en el entregable.
+3. **Perseguir a Paco** (17 días): novedades para B2 + horario de asesorías +
+   qué hacer con los 7 becados.
+4. **24-ago (14 días)**: deploy del plugin a producción — runbook verificado.
+5. **1-sep**: modo real del plugin + encender RP02 y RP04.
+6. Flecos del bot (10 min): textos del widget en castellano, quitar el texto
+   puente del prompt, franjas reales del calendario.
 
 ---
 

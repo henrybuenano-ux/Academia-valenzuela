@@ -128,16 +128,51 @@ python3 tools/wp-fix-home-cta.py            # dry-run
 python3 tools/wp-fix-home-cta.py --apply    # aplica + verifica
 ```
 
-## 🔴 BLOQUEO: producción sigue rota
+## ✅✅ APLICADO EN PRODUCCIÓN (10-ago, por el equipo) — VERIFICADO
 
-Las credenciales **`DevOmibu` son de STAGING**: en producción ese usuario
-**no existe** (el login de `av-login` rechaza sin mensaje de error, probado
-dos veces con cabeceras de navegador). Es decir: **el 404 que ven los
-visitantes reales sigue ahí**.
+El equipo lo aplicó desde wp-admin de producción. Verificación de Claude:
 
-Hace falta un **usuario administrador de producción**. Con él, el arreglo es
-un solo comando (arriba) y tarda 30 segundos, ensayo ya hecho. Alternativa:
-lo aplica el equipo a mano con esta ficha y Claude verifica después.
+| Check | Resultado |
+|---|---|
+| Enlaces al producto 132 (404) | **0** ✅ |
+| Enlaces al producto 133 | **1** ✅ |
+| Menciones "132ª" | **0** ✅ |
+| Menciones "2025" | **0** ✅ |
+| Destino del botón | **HTTP 200** → producto de la 133ª ✅ |
+
+Titular en vivo: *"Curso Ingreso Guardia Civil – 133ª Promoción"*.
+Párrafo: el equipo optó por **"oposiciones a la Guardia Civil 2026"** en vez
+de quitar el año — coherente con la convención anterior (la 132ª, con examen
+en julio-2026, se anunciaba como "2025"). Sin la coletilla de la fecha de
+arranque ni "sin matrícula y sin permanencia"; se pueden añadir cuando se
+quiera, pero **el 404 —lo que costaba dinero— está resuelto**.
+
+### 🟡 Remate pendiente: quedan 2 menciones a "2024" en la home
+En otra sección más abajo (no la del curso):
+1. Titular: *"Oposiciones a Guardia Civil **2024** — Preparación integral y
+   personalizada para superar todas las pruebas y exámenes de acceso…"*
+2. Texto: *"¿Te has planteado presentarte a las oposiciones a la Guardia
+   Civil en **2024**? ¡Es tu oportunidad de unirte a este cuerpo…"*
+
+Copy de hace dos años en la portada: no rompe nada, pero una academia que en
+agosto de 2026 anuncia las oposiciones de 2024 parece desatendida. Cambiar
+ambos "2024" por **2026** (o quitar el año) es un minuto en Elementor.
+
+## 🔴 Nota sobre el acceso a producción desde este entorno
+
+**Claude no puede autenticarse en producción desde este entorno**, y no es
+un problema de credenciales: el login de `av-login` rechaza **todos** los
+intentos sin mostrar mensaje de error — probado con un usuario inventado y
+con uno real, mismo resultado. WordPress siempre muestra error cuando la
+contraseña falla, así que algo (firewall del hosting o filtro por IP)
+bloquea antes de comprobar nada. La IP de salida de este entorno es un proxy
+fuera de España, que es la explicación más probable.
+
+> **Consecuencia práctica**: los cambios en producción los aplica el equipo
+> desde su navegador (donde sí funcionan las credenciales de siempre) y
+> Claude verifica después por HTTP, que sí es alcanzable. Así se hizo este.
+> `tools/wp-fix-home-cta.py` queda disponible por si algún día se habilita
+> el acceso, y sigue siendo utilizable contra staging.
 
 > ⚠️ **No usar "push staging → producción" de WP Staging** para llevar este
 > cambio: arrastraría toda la copia de julio encima de la web viva. El

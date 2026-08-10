@@ -59,17 +59,27 @@ que ninguna otra cosa y es lo más barato de arreglar de todo el proyecto.
 5. Revisar si quedan más enlaces al producto 132 en otras páginas
    (`/preparacion-de-oposiciones/`, `/guardia-civil/`, novedades).
 
-### Estado del arreglo (10-ago, noche)
-- ✅ **Ensayado y verificado en staging**: los 3 cambios aplicados sobre la
-  portada (página 13) por la API de Elementor, con los 4 checks en verde.
-  Herramienta reutilizable: **`tools/wp-fix-home-cta.py`** (dry-run por
-  defecto, backup automático, `--restore` para revertir, idempotente).
-- 🔴 **Producción sigue rota**: las credenciales `DevOmibu` son **de
-  staging** — ese usuario **no existe en producción** (`av-login` rechaza
-  sin mensaje). Falta un **admin de producción**; con él, el arreglo es un
-  comando de 30 segundos porque el ensayo ya está hecho.
-- ⚠️ **Ojo**: no llevar el cambio con "push staging → producción" de WP
-  Staging — arrastraría toda la copia de julio sobre la web viva.
+### ✅ ARREGLADO EN PRODUCCIÓN (10-ago) — el 404 ya no existe
+Ensayado primero en staging por API de Elementor (4 checks verdes) y
+**aplicado por el equipo en producción**, verificado por Claude: 0 enlaces
+al producto muerto, 1 al de la 133ª, sin "132ª" ni "2025", y el botón
+devuelve **HTTP 200**. Titular en vivo: "Curso Ingreso Guardia Civil – 133ª
+Promoción". Ficha completa en
+`entregables/arreglo_home_cta_133_2026-08-10.md`.
+
+- 🟡 **Queda un remate**: en otra sección de la home siguen dos menciones a
+  **"Oposiciones a Guardia Civil 2024"** (titular y texto). Un minuto en
+  Elementor; no rompe nada pero da imagen de web desatendida.
+- 📌 **Claude no puede autenticarse en producción desde este entorno**: no
+  es cuestión de credenciales — `av-login` rechaza *todo* intento sin
+  mensaje de error (probado con usuario inventado y con uno real), señal de
+  un firewall/filtro por IP delante de WordPress. **Reparto de trabajo que
+  funciona: el equipo aplica desde su navegador, Claude verifica por HTTP.**
+- ⚠️ **Nunca** usar "push staging → producción" de WP Staging para llevar
+  cambios: arrastraría la copia de julio sobre la web viva (pedidos y
+  suscripciones incluidos).
+- 🛠️ `tools/wp-fix-home-cta.py` queda disponible (dry-run por defecto,
+  backup automático, `--restore`, idempotente) y funciona contra staging.
 - 📌 Aprendizaje: `options-reading.php` no expone el select de portada en
   este sitio; la forma fiable de detectarla es la clase `page-id-N` del
   `<body>` de la home.
@@ -99,10 +109,10 @@ gente que cree seguir dada de alta. **Confirmar en WooCommerce y decidir qué
 se hace con esas suscripciones antes de lanzar LS03.**
 
 ## ⏭️ SIGUIENTE PASO (por impacto, no por comodidad)
-1. **🔥 ARREGLAR EL CTA ROTO DE LA HOME** (5 minutos, pide credenciales de
-   wp-admin): hoy el botón "Apúntate ahora al curso" da 404 y el curso de la
-   133ª, que está a la venta a 80 €/mes, no se enlaza desde la portada.
-   Después: copy a la 133ª, enlace a `/formacion` y embed del bot.
+1. ~~Arreglar el CTA roto de la home~~ ✅ **HECHO Y VERIFICADO** (10-ago).
+   Pendiente del mismo bloque, cuando se quiera: enlace secundario a
+   `/formacion`, embed del bot en la web (subtarea 12) y los dos "2024" que
+   quedan más abajo en la portada.
 2. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
    (Paco o versión B) → arreglar CTA de B1 → publicar + activar trigger →
    etiquetar (tanda de prueba primero). Checklist completo en el entregable.

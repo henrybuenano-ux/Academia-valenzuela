@@ -19,11 +19,49 @@ días**. El problema ya no es técnico, es de **tráfico**.
 | Con `lead-bot` (leads del chat) | **0** |
 | Oportunidades (open/won/lost/abandoned) | **0** |
 
-**Por qué está vacío**: no hay puerta de entrada. `academiavalenz.com`
-menciona la "133ª" **7 veces y no enlaza el embudo ni una sola vez**
-(comprobado en el HTML); el bot vive en `/formacion`, una página del funnel a
-la que nadie llega; y las campañas de pago (F4) nunca arrancaron pese a que
-el plan las situaba en julio-agosto.
+**Por qué está vacío**: no hay puerta de entrada — y la que hay está rota
+(auditoría de la web, 10-ago, más abajo). El bot vive en `/formacion`, una
+página del funnel a la que nadie llega, y las campañas de pago (F4) nunca
+arrancaron pese a que el plan las situaba en julio-agosto.
+
+## 🔴🔴 AUDITORÍA DE LA WEB PRINCIPAL — el CTA de la home lleva a un 404
+
+> ⚠️ **Corrección**: una nota anterior decía que la home "menciona la 133ª 7
+> veces". **Es falso** — ese conteo salió de un grep que capturó ids de
+> Elementor (`73133cf`). La realidad es peor: **la home no menciona la 133ª
+> en absoluto**.
+
+Lo verificado hoy en `academiavalenz.com`:
+
+| Hallazgo | Estado |
+|---|---|
+| Bloque destacado de la home | Vende **"Curso Ingreso Guardia Civil – 132ª Promoción"**, con el texto "oposiciones a la Guardia Civil **2025**" |
+| Botón principal "Apúntate ahora al curso" | → `/producto/curso-ingreso-guardia-civil-132-promocion/` → **HTTP 404** |
+| Producto de la 133ª | ✅ **existe, publicado y comprable**: `/producto/curso-ingreso-guardia-civil-133a-promocion/`, suscripción **80 €/mes** (precio confirmado en el datalayer: `"price":80`), botón "Añadir al carrito" (`add-to-cart=2054`) |
+| Enlace a ese producto desde la home | ❌ ninguno — solo se llega por el menú "Cursos" (tienda) |
+| Enlace a la landing `/formacion` | ❌ ninguno |
+| Widget del bot en la web | ❌ no está |
+
+**Traducción comercial**: quien entra hoy en la web de Paco y pulsa el botón
+más visible **se estrella contra un 404**. El curso nuevo está bien montado y
+a la venta, pero escondido a dos clics. Esto explica el embudo vacío mejor
+que ninguna otra cosa y es lo más barato de arreglar de todo el proyecto.
+
+### Arreglo propuesto (orden de impacto, todo en WordPress/Elementor)
+1. **Repuntar el CTA de la home** al producto de la 133ª (o a `/formacion`).
+   Es cambiar una URL: quita el 404 y abre la venta. **Hacer hoy.**
+2. **Actualizar el copy del bloque**: "132ª Promoción / oposiciones 2025" →
+   133ª, arranca el 1 de septiembre.
+3. **Enlazar la landing `/formacion`** desde la home (botón secundario tipo
+   "Infórmate sin compromiso") para alimentar LS01 con tráfico orgánico.
+4. **Pegar el embed del chat** (está en el checklist de QA) para que el bot
+   capte también en la web principal — subtarea 12.
+5. Revisar si quedan más enlaces al producto 132 en otras páginas
+   (`/preparacion-de-oposiciones/`, `/guardia-civil/`, novedades).
+
+**Falta acceso**: wp-admin de producción (wp-login oculto con WPS Hide Login,
+slug `av-login`). Con usuario y contraseña Claude lo deja hecho y verificado
+en la misma sesión.
 
 ## Hecho hoy: preparar el re-enganche (el único activo con tracción inmediata)
 `docs/entregables/reenganche_ls03_segmento_y_b2_2026-08-10.md` — todo lo que
@@ -50,9 +88,10 @@ gente que cree seguir dada de alta. **Confirmar en WooCommerce y decidir qué
 se hace con esas suscripciones antes de lanzar LS03.**
 
 ## ⏭️ SIGUIENTE PASO (por impacto, no por comodidad)
-1. **Abrir la puerta al embudo** (nadie más lo va a hacer): enlazar
-   `/formacion` desde la web principal y pegar allí el widget del bot (el
-   embed está en el checklist de QA). Hoy todo el tráfico orgánico se pierde.
+1. **🔥 ARREGLAR EL CTA ROTO DE LA HOME** (5 minutos, pide credenciales de
+   wp-admin): hoy el botón "Apúntate ahora al curso" da 404 y el curso de la
+   133ª, que está a la venta a 80 €/mes, no se enlaza desde la portada.
+   Después: copy a la 133ª, enlace a `/formacion` y embed del bot.
 2. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
    (Paco o versión B) → arreglar CTA de B1 → publicar + activar trigger →
    etiquetar (tanda de prueba primero). Checklist completo en el entregable.

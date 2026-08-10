@@ -97,9 +97,17 @@ Verificación de Claude, end-to-end:
 Contacto y oportunidad de prueba **borrados por id exacto**. El bot capta
 ahora también desde la web principal, no solo desde `/formacion`.
 
-🟡 **Pendientes menores confirmados en la prueba**: el saludo del widget sale
-en inglés (*"Hi there! Have a question?"*) — se cambia en la config del Chat
-Widget en GHL. Y `data-source="WEBSITE"` no llega a la oportunidad, que se
+🟢 **Textos del widget traducidos (10-ago)**: el equipo pasó a castellano el
+saludo, el encabezado, el mensaje de bienvenida al chat y el botón Enviar.
+**Queda**: el selector de idioma no se guardó (`locale` sigue en `en-us`, y
+existe `es.json` con 130 textos ya traducidos → con el idioma en español se
+traducen solos "Type a message", "Powered by"…), y 4 textos sueltos siguen en
+inglés: `success-msg`, `contact-form-intro-message`,
+`contact-form-system-message` y `redirect-text` (`branding-title` "Powered
+by" es de marca blanca, probablemente no editable).
+Config legible sin autenticación en
+`https://services.leadconnectorhq.com/chat-widget/public/config/<widget-id>`
+— útil para verificar cambios. Y `data-source="WEBSITE"` no llega a la oportunidad, que se
 crea con la fuente "Bot web" del paso de LS02: para separar leads de web y
 funnel haría falta un campo o etiqueta propia, no basta el atributo.
 

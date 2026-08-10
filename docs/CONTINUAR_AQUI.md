@@ -109,18 +109,29 @@ gente que cree seguir dada de alta. **Confirmar en WooCommerce y decidir qué
 se hace con esas suscripciones antes de lanzar LS03.**
 
 ## ⏭️ SIGUIENTE PASO (por impacto, no por comodidad)
-1. ~~Arreglar el CTA roto de la home y el copy obsoleto~~ ✅ **HECHO Y
-   VERIFICADO** (10-ago). Del mismo bloque quedan, cuando se quiera: enlace
-   secundario a `/formacion` y embed del bot en la web (subtarea 12) — son
-   los que harían que la web alimente el embudo, no solo la venta directa.
-2. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
+1. ~~CTA roto de la home + copy obsoleto + widget del bot~~ ✅ **HECHOS Y
+   VERIFICADOS** (10-ago). El bot ya capta desde la web principal: prueba
+   end-to-end con oportunidad "Bot web" a los 5 min y 10 s (**subtarea 12
+   cerrada**). Del mismo bloque queda **solo el botón "Infórmate sin
+   compromiso" a `/formacion`**, que está **⏸️ a la espera de aprobación del
+   cliente** (consulta enviada a Horacio).
+   🟡 Menores detectados en la prueba: el saludo del widget sale en inglés, y
+   `data-source="WEBSITE"` no llega a la oportunidad (se crea con la fuente
+   "Bot web" de LS02) → para separar leads de web y funnel hace falta un
+   campo o etiqueta propia.
+2. **📧 Enviar el email a Horacio** —
+   `entregables/email_horacio_decisiones_2026-08-10.md`, listo para copiar.
+   Consolida las 6 decisiones del cliente (encabezadas por las 39
+   suscripciones paradas, ~3.100 €/mes) y las 5 internas. **Es el paso que
+   desbloquea todo lo demás.**
+3. **Desbloquear y lanzar LS03**: decisión sobre las 39 pausadas → cerrar B2
    (Paco o versión B) → arreglar CTA de B1 → publicar + activar trigger →
    etiquetar (tanda de prueba primero). Checklist completo en el entregable.
-3. **Perseguir a Paco** (17 días): novedades para B2 + horario de asesorías +
+4. **Perseguir a Paco** (17 días): novedades para B2 + horario de asesorías +
    qué hacer con los 7 becados.
-4. **24-ago (14 días)**: deploy del plugin a producción — runbook verificado.
-5. **1-sep**: modo real del plugin + encender RP02 y RP04.
-6. Flecos del bot (10 min): textos del widget en castellano, quitar el texto
+5. **24-ago (14 días)**: deploy del plugin a producción — runbook verificado.
+6. **1-sep**: modo real del plugin + encender RP02 y RP04.
+7. Flecos del bot (10 min): textos del widget en castellano, quitar el texto
    puente del prompt, franjas reales del calendario.
 
 ---

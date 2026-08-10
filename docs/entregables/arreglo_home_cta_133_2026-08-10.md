@@ -79,9 +79,45 @@ pagar 80 €/mes. La landing captura al resto → LS01 los nutre con la secuenci
 de 4 emails → oportunidad en Captación. Es la única forma de que el embudo
 que llevamos construido desde julio empiece a recibir gente.
 
-## Después de esto (mismo bloque de trabajo, 5 min más)
+## ✅ WIDGET DEL BOT INSTALADO EN LA WEB (10-ago) — subtarea 12 CERRADA
 
-- **Embed del chat en la web** (subtarea 12) — pegar en el `<head>` o por GTM:
+Pegado por el equipo vía **Elementor Pro → Custom Code** (`<body> - End`,
+todo el sitio) y purgadas las cachés de WP Fastest Cache y Autoptimize.
+Verificación de Claude, end-to-end:
+
+| Check | Resultado |
+|---|---|
+| Embed en el HTML con los 4 atributos | ✅ (cargado con `defer` al final del body) |
+| Burbuja visible en `academiavalenz.com` | ✅ |
+| El bot responde al primer mensaje | ✅ *"¡Hola, Nuria! …la 133ª empieza el 1 de septiembre de 2026…"* |
+| Contacto creado en el CRM | ✅ |
+| Oportunidad en Captación | ✅ **'Nuria Bosch', fuente "Bot web"** |
+| Tiempo hasta la oportunidad | **5 min 10 s** (T0 16:40:24 → 16:45:34) — el wait de LS02 clavado |
+
+Contacto y oportunidad de prueba **borrados por id exacto**. El bot capta
+ahora también desde la web principal, no solo desde `/formacion`.
+
+🟡 **Pendientes menores confirmados en la prueba**: el saludo del widget sale
+en inglés (*"Hi there! Have a question?"*) — se cambia en la config del Chat
+Widget en GHL. Y `data-source="WEBSITE"` no llega a la oportunidad, que se
+crea con la fuente "Bot web" del paso de LS02: para separar leads de web y
+funnel haría falta un campo o etiqueta propia, no basta el atributo.
+
+### Referencia — el embed instalado
+
+```html
+<script src="https://widgets.leadconnectorhq.com/loader.js"
+        data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+        data-widget-id="6a75e4fae425d99b06dba3bf"
+        data-source="WEBSITE"></script>
+```
+
+Datos del entorno por si hace falta otra vía: contenedor GTM **GTM-W4VN9FVG**
+(activo, con GTM4WP) y **Elementor Pro** disponible. Cachés a purgar tras
+cualquier cambio: **WP Fastest Cache** y **Autoptimize**.
+
+<!-- histórico: instrucciones originales -->
+- Embed del chat (subtarea 12) — pegar en el `<head>` o por GTM:
 
 ```html
 <script src="https://widgets.leadconnectorhq.com/loader.js"

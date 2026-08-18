@@ -7,50 +7,40 @@
 
 ---
 
-**Asunto:** Academia Valenzuela: necesito 3 decisiones tuyas
+**Asunto:** Academia Valenzuela: 4 cosas que necesito de ti
 
 Hola Horacio,
 
-El sistema está terminado y funcionando: el bot conversa, capta y agenda
-citas, y todo entra solo en el CRM. El problema es otro: **llevamos 17 días
-sin un solo lead** y la 133ª arranca **el 1 de septiembre, en 22 días**.
+Contexto en dos líneas: el sistema está listo y funcionando, pero llevamos 17
+días sin un solo lead y la 133ª arranca en 22 días. Lo que falta son
+decisiones, no desarrollo.
 
-Lo que falta no es técnico, son decisiones. Te pido tres:
+• **WhatsApp con Meta — urgente por plazos.** El bot le pide el WhatsApp a
+cada lead y le promete que le escribimos por ahí… y no tenemos el canal
+conectado. Hoy eso se responde a mano desde móviles personales. La aprobación
+de Meta tarda semanas y la 133ª es el 1 de septiembre: si no arranca esta
+semana, no llega.
 
-**1. ¿Qué hacemos con las 39 suscripciones paradas?**
-Están "en espera" desde el 24 de junio, así que la facturación lleva parada
-desde entonces: unos **3.100 €/mes**. Además bloquea la campaña de
-re-enganche, porque son exactamente las mismas personas a las que queremos
-escribir.
-→ *Lo más limpio me parece cancelarlas formalmente: el curso terminó y quien
-vuelva se suscribe a la 133ª. Reactivarlas dispararía cobros atrasados. Pero
-esto lo tiene que decidir Paco.*
+• **39 suscripciones paradas desde el 24 de junio** → unos 3.100 €/mes sin
+facturar. Además bloquea la campaña de re-enganche, porque son las mismas
+personas a las que queremos escribir. ¿Las cancelamos? Reactivarlas
+dispararía cobros atrasados. Lo decide Paco.
 
-**2. ¿Lanzamos la campaña de re-enganche sin esperar a Paco?**
-Tenemos los tres emails escritos y el listado de **69 ex-alumnos** preparado.
-Solo falta que Paco nos cuente las novedades de la 133ª… y lleva **17 días
-sin contestar**. Tengo escrita una versión del email que no necesita nada
-suyo.
-→ *Mi recomendación: lanzarla esta semana con esa versión. A 22 días de que
-empiece el curso, esperar nos cuesta más que enviar.*
+• **Campaña de re-enganche a 69 ex-alumnos: lista para enviar.** Solo falta
+que Paco cuente las novedades de la 133ª y lleva 17 días sin contestar. Tengo
+escrita una versión que no lo necesita. ¿La lanzo esta semana?
 
-**3. Necesitamos el horario de asesorías de Paco, y esta semana.**
-Desde hoy el bot **agenda citas de verdad** también desde la web. Pero el
-calendario no tiene el horario real de Paco: está ofreciendo **36 huecos al
-día, de 8:00 a 16:45**, así que un interesado puede reservar una asesoría a
-las **8 de la mañana**. Si reserva y no hay nadie al otro lado, perdemos el
-lead y quedamos mal.
-→ *Con que nos diga sus franjas lo configuramos en diez minutos. Lleva 17
-días sin responder emails, así que probablemente toque llamarle — y de paso
-le sacamos las novedades del punto 2, qué hacemos con los 7 becados y el
-visto bueno a un cambio en la web.*
+• **Horario de asesorías de Paco.** El bot ya agenda citas de verdad, pero el
+calendario ofrece los huecos por defecto: de 8:00 a 16:45. Un interesado
+puede reservar a las 8 de la mañana y no encontrar a nadie. Son diez minutos
+de configuración en cuanto nos dé sus franjas.
 
-Con esas tres respuestas, en un par de días lo tenemos en marcha.
+Los tres últimos pasan por hablar con Paco. Por email no responde, así que
+habría que llamarle.
 
-**Otros temas que hay que cerrar pero que hoy no me bloquean:** la fecha del
-paso a producción del plugin (ClickUp dice 6 de agosto, el runbook dice 24),
-las campañas de captación que nunca llegaron a arrancar, WhatsApp con Meta y
-la gestoría para el tema de facturación. Los vemos cuando quieras.
+Menores, cuando quieras: fecha del paso a producción del plugin (ClickUp dice
+6 de agosto, el runbook 24), las campañas de captación que nunca arrancaron y
+la gestoría para facturación.
 
 Un abrazo,
 [tu nombre]

@@ -87,21 +87,78 @@ de exención). Trae **las dos versiones**: exenta y con 21 %.
 Sirve para dos cosas: las facturas atrasadas que hagan a mano, y como
 referencia de lo que debe generar la automatización.
 
+## ✅ PROBADO EN STAGING (10-ago) — resultados de primera mano
+
+No es una comparativa de folleto: las webs de los fabricantes están
+bloqueadas desde nuestro entorno, así que se instaló el candidato en el
+staging y se leyeron sus ajustes reales.
+
+**Entorno de prueba** (mejor de lo esperado): staging tiene WooCommerce,
+**WooCommerce Subscriptions**, WooPayments y nuestro plugin de EvoCampus
+activos, con 3 productos y **286 pedidos** copiados de producción.
+
+**Candidato probado**: *PDF Invoices & Packing Slips* (WP Overnight) **v1.8.0**,
+gratuito. Instalado y activo en staging.
+
+| # | Requisito | Resultado |
+|---|---|---|
+| 1 | **Reinicio mensual** del contador | ❌ **NO existe.** El único ajuste es una casilla *"Restablecer el número de factura anualmente"* (`reset_number_yearly`). Verificado en el propio formulario |
+| 2 | Formato `26/08-0001` | ✅ El prefijo acepta `[invoice_year]` y `[invoice_month]`, más relleno de ceros configurable |
+| 3 | **Facturar renovaciones** de suscripción | ✅ **Excelente**: adjunta la factura a 10 correos de renovación distintos (`customer_completed_renewal_order`, `new_renewal_order`, `customer_renewal_invoice`…) |
+| 4 | Mención de exención de IVA | ✅ Vía plantilla/textos del documento |
+| 5 | Envío automático del PDF al alumno | ✅ Se adjunta al correo de pedido completado |
+
+**Resumen: 4 de 5.** Falla exactamente donde se preveía — y la buena noticia
+es que ese requisito no hace falta.
+
+### 🎯 Recomendación: proponerles serie ANUAL en vez de mensual
+
+El formato mensual lo eligieron para tener margen con el atrasado, pero **ese
+razonamiento no se sostiene** (la numeración va por fecha de expedición, no de
+venta: ya está explicado arriba). Si el motivo no aplica, el formato mensual
+solo añade coste y complejidad.
+
+**Propuesta:**
+- **Facturas corrientes** → serie anual `26-0001`, generada automáticamente
+  por el plugin gratuito, renovaciones incluidas. Coste: **0 €**.
+- **Facturas atrasadas** → serie propia `26/ANT-0001`, emitidas a mano con
+  `plantilla_factura_academia_valenz.html`. Es un trabajo histórico y puntual;
+  no merece pagar un plugin por él.
+
+Legalmente equivalente (las series están permitidas; lo que importa es que
+dentro de cada una la numeración sea correlativa), gratis y sin piezas extra.
+
+**Si insisten en el formato mensual**: hay que pasar a una versión de pago
+(WebToffee anuncia reinicio mensual; WP Overnight lo tiene en su extensión
+Professional). No se ha podido verificar precio ni funcionamiento desde aquí
+—sus webs están bloqueadas— así que habría que probarlo antes de comprometerlo.
+
+### Estado del staging
+El plugin queda **instalado y activo en staging**, sin configurar. No afecta a
+producción. Si molesta, se desactiva desde la lista de plugins.
+
 ## Borrador de respuesta al cliente
 
 > Hola,
 >
 > Genial, con esto podemos avanzar. Te comento tres cosas:
 >
-> **1. La numeración funciona, pero te propongo un ajuste.** El formato
-> `26/08-0001` es correcto. El único punto flojo es el motivo: la numeración
-> va por fecha de emisión, no por la de la venta. Si emitís ahora una factura
-> de una venta de marzo, se expide en agosto, así que entraría igualmente en
-> la serie de agosto y volvería a pisarse.
+> **1. La numeración es correcta, pero os proponemos simplificarla.** El
+> formato `26/08-0001` es válido. El punto flojo está en el motivo: la
+> numeración va por fecha de emisión, no por la de la venta. Si emitís ahora
+> una factura de una venta de marzo, se expide en agosto, así que entraría
+> igualmente en la serie de agosto y volvería a pisarse. O sea, el reinicio
+> mensual no os da el margen que buscáis.
 >
-> Lo que sí os da ese margen es usar **una serie distinta para las facturas
-> atrasadas**, por ejemplo `26/ANT-0001`. Las nuevas siguen en `26/08-0001` y
-> las antiguas van por su cuenta, sin cruzarse y más fácil de cuadrar.
+> Lo que sí os lo da es **una serie aparte para las facturas atrasadas**, por
+> ejemplo `26/ANT-0001`. Y si el atrasado va por su propia serie, las
+> corrientes ya no necesitan el corte mensual: con una **serie anual
+> `26-0001`** os vale, es igual de válida legalmente y os simplifica la vida.
+>
+> Hay un motivo práctico añadido: hemos probado el sistema de facturación
+> automática y el reinicio **anual** viene de serie y sale gratis, mientras
+> que el mensual obliga a una versión de pago. Si preferís mantener el formato
+> mensual se puede, pero conviene saber que tiene coste.
 >
 > **2. Os pasamos el modelo de factura, pero necesitamos una confirmación de
 > vuestra gestoría antes: ¿el curso está exento de IVA?** La formación suele

@@ -44,7 +44,7 @@ por widget). Anotar PASA/FALLA y el texto real de la respuesta si falla.
 
 | # | Qué escribir | Debe pasar | Falla si… |
 |---|---|---|---|
-| 1 | "¿cuánto cuesta?" | Dice **80 €/mes, sin matrícula ni permanencia**, y remata con pregunta de cualificación u oferta de asesoría | Da otro precio, inventa descuentos, o suelta un párrafo enorme |
+| 1 | "¿cuánto cuesta?" | Dice **80 €/mes, sin matrícula ni permanencia** — y, mientras dure la oferta, **48 € el primer mes hasta el 31-ago** (ver nota abajo) — y remata con pregunta de cualificación u oferta de asesoría | Da otro precio, inventa descuentos, o suelta un párrafo enorme |
 | 2 | "quiero empezar ya con la 133ª" | Ofrece **asesoría/matrícula**, pide datos **de uno en uno** (nombre → teléfono → email) | Pide todo de golpe, o no captura datos antes de despedirse |
 | 3 | "¿me lo puedo pagar en dos veces?" | **Handoff a humano** (es pregunta de condiciones de precio), capturando antes nombre y WhatsApp | El bot negocia o inventa condiciones de pago |
 | 4 | "soy alumno y no puedo entrar al campus" | **Handoff a humano** (problema de cuenta), con captura de datos | El bot intenta resolver el acceso él mismo |
@@ -215,3 +215,20 @@ Conversations. Revisar el ajuste de fin de sesión del Conversation AI.
   respondió el bot — los fallos se corrigen retocando el prompt
   correspondiente (Personalidad/Objetivo/Información) de
   `bot_ls02_prompts_2026-08-07.md`.
+
+
+---
+
+## 🔴 Nota 25-ago — el bot está dando un precio obsoleto
+
+La prueba 1 pasó en su día porque el bot decía "80 €/mes", que era lo correcto
+el 7-ago. **Ya no lo es**: la web ofrece **48 € el primer mes** a quien se
+matricule antes del **31 de agosto**.
+
+El bot sigue con el prompt viejo, así que cita un precio un 67 % más alto que la
+oferta vigente y pierde el mejor argumento de cierre disponible. Y un lead que
+hable con el bot y luego entre en la web verá dos precios distintos.
+
+**Texto corregido listo para pegar en `bot_ls02_prompts_2026-08-07.md`.** Hay que
+volver a repasarlo cuando la oferta caduque, o el bot ofrecerá un descuento
+muerto.

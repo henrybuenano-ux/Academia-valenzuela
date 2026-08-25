@@ -15,7 +15,7 @@ becados y convenio de colegio. Los 69 tienen email válido.
 
 | Sub-segmento | N | Por qué entra |
 |---|---|---|
-| Suscripción · último estado **baja** | 39 | Núcleo del re-enganche: pagaban 80 €/mes y lo dejaron |
+| Suscripción · último estado **baja** | 39 | Núcleo del re-enganche: pagaban 80 €/mes y lo dejaron. ⚠️ Ojo: **32 de ellos figuran como baja porque el lote del 24-jun les paró la suscripción**, no porque impagaran (ver `dryrun_produccion_2026-08-25.md`) |
 | Suscripción · último estado **activo** | 19 | Siguen "dentro"; el curso terminó (examen 10-11 jul) y no hay 133ª contratada |
 | **Intensivo** (pago único) | 11 | Compraron una vez; perfil distinto pero comprador probado |
 
@@ -23,7 +23,7 @@ becados y convenio de colegio. Los 69 tienen email válido.
 
 | Excluidos | N | Motivo |
 |---|---|---|
-| `becado` + `colegio-173` | 9 | **No se les manda oferta comercial.** Los 7 becados son altas manuales de Paco (ver `respuesta_paco_becados_2026-07-17.md`): mandarles "reserva tu plaza por 80 €/mes" es un error de relación. Su continuidad la decide Paco. |
+| `becado` + `colegio-173` | 9 | **No se les manda oferta comercial.** Los 7 becados son altas manuales de Paco (ver `respuesta_paco_becados_2026-07-17.md`): mandarles una oferta comercial es un error de relación. Su continuidad la decide Paco. |
 | `sin-pago-web` y resto | 25 | Sin rastro de pago en Woo; incluye `info@academiavalenz.com` (la propia academia) y altas manuales |
 
 Los 69 ids están calculados y listos para etiquetar con `reenganche-133`
@@ -61,8 +61,9 @@ Solo hay que rellenar 3 huecos; el resto está escrito:
 > - **[NOVEDAD 2 — p. ej. algo nuevo del campus: simulacros, corrección, tutorías]**
 > - **[NOVEDAD 3 — opcional: resultados de la 132ª, si se pueden dar]**
 >
-> Lo que no cambia: 80 €/mes, sin matrícula y sin permanencia — si no te
-> encaja, lo cancelas tú mismo cuando quieras.
+> Lo que no cambia: sin matrícula y sin permanencia — si no te encaja, lo
+> cancelas tú mismo cuando quieras. Y por volver ahora, **el primer mes te sale
+> por 48 € en vez de 80 €**; la oferta acaba el 31 de agosto.
 >
 > Si tienes dudas de si repetir, responde a este correo y lo vemos, sin
 > compromiso.
@@ -90,8 +91,9 @@ cierto y en lo que de verdad le importa a un **repetidor**.
 > **ranking real** entre opositores. No es un "te ha salido un 7", es saber
 > en qué puesto estarías hoy — que es justo lo que decide una plaza.
 >
-> Y como el año pasado: 80 €/mes, sin matrícula y sin permanencia. Cancelas
-> tú cuando quieras, así que volver no te compromete a nada.
+> Y como el año pasado: sin matrícula y sin permanencia, cancelas tú cuando
+> quieras, así que volver no te compromete a nada. Con una diferencia a tu favor:
+> **el primer mes son 48 € en vez de 80 €** si te decides antes del 31 de agosto.
 >
 > ¿Lo hablamos 10 minutos antes de decidir? Reserva cuando te venga bien:
 > **[ENLACE ASESORÍA]**
@@ -153,3 +155,25 @@ asesoría, igual que en B2/B3.
 > qué hacemos con los **7 becados** en esta promoción.
 >
 > Un abrazo.
+
+
+---
+
+## 🔴 Nota 25-ago — la oferta caduca el 31 de agosto
+
+Los textos de arriba se han actualizado con el precio real: **48 € el primer mes
+en vez de 80 €**, para quien se matricule **antes del 31 de agosto** (40 % de
+descuento; desde octubre, 80 €/mes normales).
+
+Eso le da a esta campaña algo que no tenía cuando se escribió: **una fecha
+límite**. Un correo de re-enganche con descuento y caducidad a seis días
+convierte mucho mejor que uno sin ella.
+
+**Pero también la pone en el reloj.** Si se lanza después del 31, hay que quitar
+la oferta de los dos correos o estaremos prometiendo un descuento muerto. Y si se
+lanza ahora, tiene que salir **ya**: los correos necesitan margen para que a
+alguien le dé tiempo a decidirse.
+
+⚠️ **Antes de lanzar, comprobar el estado de las 39 suscripciones.** Si se
+reactivan en vez de cancelarse, esas personas ya son alumnos y no deben recibir
+una oferta de captación.

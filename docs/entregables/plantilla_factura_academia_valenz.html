@@ -15,10 +15,17 @@
     color:var(--tinta); font-size:14px; line-height:1.5;
   }
   .aviso{
-    max-width:820px; margin:0 auto 22px; padding:14px 18px; border-radius:10px;
-    background:#fff8e6; border:1px solid #f0d9a0; font-size:13px; line-height:1.6;
+    max-width:820px; margin:0 auto 22px; padding:16px 20px; border-radius:10px;
+    background:#fff8e6; border:1px solid #f0d9a0; font-size:13px; line-height:1.65;
   }
   .aviso strong{color:#8a6100}
+  .aviso h3{margin:0 0 8px; font-size:14px; color:#8a6100}
+  .aviso h3 + p{margin-top:0}
+  .aviso table{width:100%; border-collapse:collapse; margin:12px 0 4px; font-size:12.5px}
+  .aviso th, .aviso td{padding:6px 9px; border:1px solid #e8d5a4; text-align:left}
+  .aviso th{background:#fdf3dc; font-weight:700}
+  .aviso td.n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .aviso .rojo{background:#fdecea; border-color:#f3c2bd}
   .hoja{
     max-width:820px; margin:0 auto 26px; background:#fff; padding:44px 46px;
     border:1px solid var(--linea); border-radius:12px;
@@ -38,15 +45,15 @@
   }
   .parte p{margin:0; font-size:13.5px; line-height:1.65}
   .parte .nom{font-weight:600}
-  table{width:100%; border-collapse:collapse; margin-top:26px}
-  thead th{
+  .hoja table{width:100%; border-collapse:collapse; margin-top:26px}
+  .hoja thead th{
     text-align:left; font-size:11px; letter-spacing:1.1px; text-transform:uppercase;
     color:var(--suave); padding:0 0 9px; border-bottom:2px solid var(--verde); font-weight:700;
   }
-  th.num, td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
-  tbody td{padding:14px 0; border-bottom:1px solid var(--linea); vertical-align:top}
-  tbody .desc{font-weight:600}
-  tbody .detalle{color:var(--suave); font-size:12.5px; margin-top:3px}
+  .hoja th.num, .hoja td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .hoja tbody td{padding:14px 0; border-bottom:1px solid var(--linea); vertical-align:top}
+  .hoja tbody .desc{font-weight:600}
+  .hoja tbody .detalle{color:var(--suave); font-size:12.5px; margin-top:3px}
   .totales{margin-top:22px; margin-left:auto; width:290px}
   .totales div{display:flex; justify-content:space-between; padding:7px 0; font-variant-numeric:tabular-nums}
   .totales .linea{border-bottom:1px solid var(--linea)}
@@ -75,11 +82,52 @@
 <body>
 
 <div class="aviso">
-  <strong>Antes de usar esta plantilla:</strong> hay que confirmar con la gestoría
-  si el curso está <strong>exento de IVA</strong> (art. 20.Uno.9º de la Ley del IVA,
-  enseñanza). Abajo están las dos versiones: la <strong>exenta</strong> y la de
-  <strong>con IVA al 21 %</strong>. Se usa una u otra, no las dos. Los campos entre
-  <code>[corchetes]</code> hay que rellenarlos. Para guardar en PDF: imprimir → Guardar como PDF.
+  <h3>Antes de usar esta plantilla — dos cosas sin cerrar</h3>
+
+  <p><strong>1. El IVA sigue sin confirmar, y ya se está vendiendo sin él.</strong>
+  Los pedidos que entran hoy no llevan ninguna línea de impuesto: se está
+  facturando de facto como exento. Hay que confirmar con la gestoría si el curso
+  está <strong>exento</strong> (art. 20.Uno.9º de la Ley del IVA, enseñanza). Si
+  dijeran que no lo está, se debería el 21 % de todo lo vendido, hacia atrás.</p>
+
+  <p><strong>2. El precio tiene dos tramos.</strong> El producto está montado como
+  <strong>80 €/mes recurrente + 48 € de cuota de registro + 1 mes de prueba</strong>,
+  con la facturación sincronizada al día 1. En la práctica: los 48 € cubren
+  septiembre (40 % de descuento) y desde octubre se cobran 80 €/mes. Hay que emitir
+  <strong>dos facturas distintas</strong>, no una.</p>
+
+  <table>
+    <thead>
+      <tr><th>Concepto</th><th>Importe</th><th>Si es exento</th><th>Si es 21 % (IVA incluido)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Cuota de registro</strong> — cubre septiembre</td>
+        <td class="n">48,00 €</td>
+        <td class="n">base 48,00 € · sin IVA</td>
+        <td class="n">base 39,67 € + 8,33 €</td>
+      </tr>
+      <tr>
+        <td><strong>Cuota mensual</strong> — desde octubre</td>
+        <td class="n">80,00 €</td>
+        <td class="n">base 80,00 € · sin IVA</td>
+        <td class="n">base 66,12 € + 13,88 €</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Abajo están las dos versiones de la hoja: la <strong>exenta</strong> y la de
+  <strong>21 %</strong>. Se usa una u otra, no las dos. Los campos entre
+  <code>[corchetes]</code> hay que rellenarlos. Para guardar en PDF:
+  imprimir → Guardar como PDF.</p>
+
+  <p class="rojo" style="padding:10px 12px; border:1px solid #f3c2bd; border-radius:8px; margin-top:12px">
+  ⚠️ <strong>Ojo con la fecha de expedición.</strong> El WordPress está configurado
+  en huso horario de <em>Buenos Aires</em>, 5 horas por detrás de Madrid. Una venta
+  del 1 de octubre a las 02:00 hora española queda fechada el 30 de septiembre. Con
+  la <strong>serie mensual</strong> elegida (<code>26/08-0001</code>), esa factura
+  entraría en la serie del mes equivocado. Es una razón más para pasar a serie
+  anual — o para corregir el huso del sitio.</p>
 </div>
 
 <!-- ══════════════ VERSIÓN A · OPERACIÓN EXENTA DE IVA ══════════════ -->
@@ -92,8 +140,8 @@
       <h1>Factura</h1>
       <div class="numero">26/08-0001</div>
       <div class="fechas">
-        <b>Fecha de expedición:</b> [10/08/2026]<br>
-        <b>Fecha de la operación:</b> [10/08/2026]
+        <b>Fecha de expedición:</b> [25/08/2026]<br>
+        <b>Fecha de la operación:</b> [14/08/2026]
       </div>
     </div>
   </header>
@@ -133,24 +181,29 @@
       <tr>
         <td>
           <div class="desc">Curso Ingreso Guardia Civil — 133ª promoción</div>
-          <div class="detalle">Cuota mensual · periodo [01/09/2026] – [30/09/2026]</div>
+          <div class="detalle">Cuota de registro · cubre el periodo [01/09/2026] – [30/09/2026]</div>
         </td>
         <td class="num">1</td>
-        <td class="num">80,00 €</td>
-        <td class="num">80,00 €</td>
+        <td class="num">48,00 €</td>
+        <td class="num">48,00 €</td>
       </tr>
     </tbody>
   </table>
 
   <div class="totales">
-    <div class="linea"><span>Base imponible</span><span>80,00 €</span></div>
+    <div class="linea"><span>Base imponible</span><span>48,00 €</span></div>
     <div class="linea"><span>IVA</span><span>Exento</span></div>
-    <div class="total"><span>Total</span><span>80,00 €</span></div>
+    <div class="total"><span>Total</span><span>48,00 €</span></div>
   </div>
 
   <div class="nota-legal">
     Operación exenta de IVA conforme al artículo 20.Uno.9º de la Ley 37/1992
     del Impuesto sobre el Valor Añadido (servicios de enseñanza).
+    <br><br>
+    <strong>Para la factura de octubre en adelante</strong>, la misma hoja con:
+    concepto <em>"Cuota mensual · periodo [01/10/2026] – [31/10/2026]"</em>,
+    precio e importe <strong>80,00 €</strong>, base imponible 80,00 € y total
+    80,00 €.
   </div>
 
   <footer>
@@ -170,8 +223,8 @@
       <h1>Factura</h1>
       <div class="numero">26/08-0001</div>
       <div class="fechas">
-        <b>Fecha de expedición:</b> [10/08/2026]<br>
-        <b>Fecha de la operación:</b> [10/08/2026]
+        <b>Fecha de expedición:</b> [25/08/2026]<br>
+        <b>Fecha de la operación:</b> [14/08/2026]
       </div>
     </div>
   </header>
@@ -211,26 +264,31 @@
       <tr>
         <td>
           <div class="desc">Curso Ingreso Guardia Civil — 133ª promoción</div>
-          <div class="detalle">Cuota mensual · periodo [01/09/2026] – [30/09/2026]</div>
+          <div class="detalle">Cuota de registro · cubre el periodo [01/09/2026] – [30/09/2026]</div>
         </td>
         <td class="num">1</td>
-        <td class="num">66,12 €</td>
-        <td class="num">66,12 €</td>
+        <td class="num">39,67 €</td>
+        <td class="num">39,67 €</td>
       </tr>
     </tbody>
   </table>
 
   <div class="totales">
-    <div class="linea"><span>Base imponible</span><span>66,12 €</span></div>
-    <div class="linea"><span>IVA (21 %)</span><span>13,88 €</span></div>
-    <div class="total"><span>Total</span><span>80,00 €</span></div>
+    <div class="linea"><span>Base imponible</span><span>39,67 €</span></div>
+    <div class="linea"><span>IVA (21 %)</span><span>8,33 €</span></div>
+    <div class="total"><span>Total</span><span>48,00 €</span></div>
   </div>
 
   <div class="nota-legal">
-    <strong>Ojo con el precio:</strong> aquí se ha supuesto que los 80 € que ya
-    se cobran son el <em>total con IVA incluido</em>, así que la base baja a
-    66,12 €. Si la decisión fuera añadir el 21 % encima, el alumno pasaría a
-    pagar 96,80 € — es una decisión comercial, no contable.
+    <strong>Ojo con el precio:</strong> aquí se ha supuesto que los 48 € que ya se
+    cobran son el <em>total con IVA incluido</em>, así que la base baja a 39,67 €.
+    Si la decisión fuera añadir el 21 % encima, el alumno pasaría a pagar 58,08 € —
+    es una decisión comercial, no contable.
+    <br><br>
+    <strong>Para la factura de octubre en adelante</strong> (cuota mensual de
+    80,00 €): base imponible <strong>66,12 €</strong>, IVA (21 %)
+    <strong>13,88 €</strong>, total <strong>80,00 €</strong>. Si se añadiera
+    encima, el alumno pagaría 96,80 €.
   </div>
 
   <footer>

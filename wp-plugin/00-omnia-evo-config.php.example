@@ -24,10 +24,19 @@ if ( ! defined( 'OMNIA_EVO_GRACE_DAYS' ) ) {
 	define( 'OMNIA_EVO_GRACE_DAYS', 38 );
 }
 if ( ! defined( 'OMNIA_EVO_BECADOS_EMAILS' ) ) {
-	// Becados confirmados por Paco (14-jul-2026): matriculación manual autorizada.
-	// El informe mensual los etiqueta como autorizados; no se les corta nada
-	// (tampoco los ve la conciliación al no tener suscripción en Woo).
-	define( 'OMNIA_EVO_BECADOS_EMAILS', 'danielsanchezluc55@gmail.com,mirellacrespo29@gmail.com,juanjolirio2003@gmail.com,juncaluam@gmail.com,marioventapuer@hotmail.com,santiml.89@hotmail.com,sergiohuelma_123@hotmail.com' );
+	// Accesos manuales AUTORIZADOS. El informe mensual los etiqueta como
+	// autorizados en vez de señalarlos como anomalía; no se les corta nada
+	// (tampoco los ve la conciliación, al no tener suscripción en Woo).
+	//
+	//   - Los 7 becados confirmados por Paco (14-jul-2026).
+	//   - info@academiavalenz.com: la cuenta de la propia academia. Añadida el
+	//     25-ago tras salir como "Desconocido — revisar" en el primer informe
+	//     de producción.
+	//
+	// Nota: solo aparecen en el informe los que NO tengan ningún rastro en la
+	// tienda — has_woo_footprint() descarta antes a quien tenga usuario WP o
+	// algún pedido. Que salgan menos de los que hay aquí es lo normal.
+	define( 'OMNIA_EVO_BECADOS_EMAILS', 'danielsanchezluc55@gmail.com,mirellacrespo29@gmail.com,juanjolirio2003@gmail.com,juncaluam@gmail.com,marioventapuer@hotmail.com,santiml.89@hotmail.com,sergiohuelma_123@hotmail.com,info@academiavalenz.com' );
 }
 /* GoHighLevel — vía A (API pública directa, la que se usa desde la v0.6).
    Sin OMNIA_GHL_PIT el espejo cae a los webhooks (vía B, menos fiable). */

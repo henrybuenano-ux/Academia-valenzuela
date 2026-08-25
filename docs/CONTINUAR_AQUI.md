@@ -37,7 +37,7 @@ Lo verificado hoy en `academiavalenz.com`:
 |---|---|
 | Bloque destacado de la home | Vende **"Curso Ingreso Guardia Civil – 132ª Promoción"**, con el texto "oposiciones a la Guardia Civil **2025**" |
 | Botón principal "Apúntate ahora al curso" | → `/producto/curso-ingreso-guardia-civil-132-promocion/` → **HTTP 404** |
-| Producto de la 133ª | ✅ **existe, publicado y comprable**: `/producto/curso-ingreso-guardia-civil-133a-promocion/`, suscripción **80 €/mes** (precio confirmado en el datalayer: `"price":80`), botón "Añadir al carrito" (`add-to-cart=2054`) |
+| Producto de la 133ª | ✅ **existe, publicado y comprable**: `/producto/curso-ingreso-guardia-civil-133a-promocion/`, suscripción **80 €/mes** (precio confirmado en el datalayer: `"price":80`) — ⚠️ *corregido el 25-ago: la estructura real es 80 €/mes + 48 € de cuota de registro + 1 mes de prueba; ver la sección del 25-ago al final*, botón "Añadir al carrito" (`add-to-cart=2054`) |
 | Enlace a ese producto desde la home | ❌ ninguno — solo se llega por el menú "Cursos" (tienda) |
 | Enlace a la landing `/formacion` | ❌ ninguno |
 | Widget del bot en la web | ❌ no está |
@@ -754,3 +754,112 @@ Ahora:
 - NUNCA desactivar DRY-RUN sin pasar el checklist de wp-plugin/README.md.
 - Producción no se toca hasta cerrar P1/P2 y A6.
 - Secretos solo en .env/wp-config (gitignorados) — nunca commiteados.
+
+---
+
+# 📌 SESIÓN 25-ago-2026 — Deploy en producción verificado (DRY-RUN)
+
+## Lo que se hizo
+
+El equipo desplegó el plugin **v0.8.0 en producción** junto al mini-plugin de
+config `00-omnia-evo-config/`, y ejecutó los dos informes. **El deploy pasa.**
+
+| Check | Resultado |
+|---|---|
+| "Modo: DRY-RUN · Ventana de pago: 38 días" | ✅ |
+| Conciliación | ✅ **71 de 71 alumnos en 15 s**, sin errores |
+| Informe de acceso sin pago | ✅ 35 filas |
+| Censo cuadrado contra pedidos de Woo | ✅ 16 activos = los 16 pedidos de 48 € |
+
+**Entregable completo con toda la evidencia:
+`docs/entregables/dryrun_produccion_2026-08-25.md`.**
+
+## 🔴 Los dos bloqueos NUESTROS del modo real
+
+### 1. El plugin cortaría a 8-13 de los 16 alumnos nuevos en septiembre
+
+El producto se vendió como **80 €/mes + 48 € de cuota de registro + 1 mes de
+prueba + facturación sincronizada al día 1**. Confirmado en la suscripción
+`#2088`: compra 14-ago, fin de prueba 14-sep, **siguiente pago 1-oct**.
+
+`reconcile()` mide **"días desde el último pedido pagado ≤ 38"**. De 14-ago a
+1-oct hay **48 días** → **corte el 22-sep**, nueve días antes de que le toque
+pagar, con tag `alumno-impago` + oportunidad de recobro + dunning.
+
+**Es estructural, no del lanzamiento**: quien compre el 2-sep tiene 60 días hasta
+su primer cobro (1-nov). Mientras haya prueba + sincronización, el plugin cortará
+a quien compre a principios de mes.
+
+**Arreglo (v0.8.1)**: preguntarle a la suscripción, no a la fecha del último
+pedido. Si `next_payment` está en el futuro o sigue en prueba → activo. La
+ventana de 38 días queda como red de seguridad.
+
+### 2. El primer pase real dispara 55 avisos de golpe
+
+`omnia_evo_verdicts` no se persiste en DRY-RUN (deliberado), así que la primera
+pasada real notifica a los 71: **55 tags de impago + 55 oportunidades de
+recobro**. Y **32 de esas 55** llevan 67-86 días sin pagar porque el lote del
+**24-jun** les paró la suscripción — no impagaron.
+
+**Arreglo (v0.8.1)**: persistir veredictos también en DRY-RUN, con botón
+"Olvidar veredictos" para forzar el aviso completo si alguna vez se quiere.
+
+> ⚠️ **Hasta que esté el parche, seguir en DRY-RUN.** La mitigación de dejar
+> `OMNIA_GHL_DRYRUN = true` con `OMNIA_EVO_DRYRUN = false` sirve para el bloqueo
+> 2 pero **NO para el 1**: el corte del campus sería real.
+
+## 🟡 Otros hallazgos
+
+- **IVA**: los pedidos salen sin ninguna línea de impuesto (`#2087`: subtotal
+  48 €, total 48 €, `is_vat_exempt: no`). Se vende como exento sin confirmación
+  de la gestoría. Expuesto hoy: 768 € (≈133 € de IVA) + el atrasado desde
+  nov-2025. **Ha pasado a ser urgente.**
+- **Huso horario**: el WordPress está en `America/Buenos_Aires`, 5 h por detrás
+  de Madrid. Rompe la serie **mensual** de facturación en los cambios de mes
+  (una venta del 1-oct a las 02:00 de Madrid se fecha el 30-sep). Argumento
+  adicional para la serie anual.
+- **30 alumnos `ENTREVISTA 2026 PROMOCIÓN 132GC`** con acceso activo y cero
+  registro en Woo, conectándose esta semana. Altas manuales posteriores al examen
+  de julio. **Sin riesgo técnico** (la conciliación no los ve, el informe es de
+  solo lectura). Decidido: **pregunta neutra** en la reunión, no hallazgo de fuga.
+- **Becados 2 de 7 es correcto**: `has_woo_footprint()` descarta antes a quien
+  tenga usuario WP o pedido. El check del runbook estaba mal formulado.
+  Añadido `info@academiavalenz.com` al `.example` de autorizados.
+- 🟢 **La 133ª vende**: 16 pedidos del 14 al 25-ago, acelerando (4 el 24, 3 el
+  25), tras **cero pedidos desde el 19-jun**. El 404 de la home se arregló el
+  10-ago y la primera venta es del 14-ago — secuencia, no causalidad probada.
+- 🟢 Los pedidos capturan **DNI, segundo apellido, dirección y teléfono**: la
+  facturación automática tiene todo lo del art. 6 sin pedir nada más.
+
+## Trampa de API / entorno aprendida hoy
+
+La ficha pública del producto **no muestra el precio de WooCommerce**: cero
+`class="price"`, cero `woocommerce-Price-amount`. El "~~80€~~ 48€*/mes" es texto
+de Elementor. Para saber el precio real hay que mirar la pantalla de datos del
+producto o un pedido — **no fiarse del HTML de la ficha**.
+
+## Próximos pasos
+
+1. **Reunión con el cliente (26-ago)** — guion en
+   `docs/entregables/checklist_deploy_26ago.md`. Tres preguntas: IVA, curso de
+   entrevista, 39 suscripciones. **No prometer el 1-sep para modo real.**
+2. **Parche v0.8.1** con los dos arreglos, probado en staging, antes del modo
+   real.
+3. 🔴 **Corregir el precio del bot en GHL — corre.** Su prompt dice "80 €/mes"
+   mientras la web ofrece **48 € el primer mes hasta el 31-ago**. Cita un precio
+   un 67 % más alto que la oferta y contradice a la web. Texto listo para pegar
+   en `bot_ls02_prompts_2026-08-07.md`. **Y quitarlo el 1-sep**, o ofrecerá un
+   descuento caducado.
+4. **Enviar el email a Horacio** (`email_horacio_decisiones_2026-08-10.md`,
+   actualizado hoy) y la respuesta de facturación al cliente.
+5. **12 leads del bot sin contactar** desde el 11-ago, y la oferta caduca el
+   **31-ago**. No es trabajo nuestro, pero hay que insistir.
+6. Menor: limpiar el campo "Precio rebajado" del producto (vacío pero con fechas
+   6-ago → 31-ago) y corregir el huso horario del sitio.
+
+## Reglas que siguen vigentes
+- NUNCA desactivar DRY-RUN sin pasar el checklist de `wp-plugin/README.md` —
+  y ahora, además, **sin el parche v0.8.1**.
+- Secretos solo en .env/wp-config (gitignorados) — nunca commiteados.
+- Borrar contactos de prueba **por id exacto, nunca por búsqueda de nombre**.
+- **Nunca** usar el "push staging → producción" de WP Staging.

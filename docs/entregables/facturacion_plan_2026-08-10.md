@@ -5,19 +5,70 @@
 > tienen plantilla y preguntan cómo resolver las ventas que ya están
 > entrando. Esto es lo que hay que contestar y hacer.
 
+## 🔄 ACTUALIZACIÓN 25-ago — dos datos que cambian este documento
+
+Al verificar el deploy del plugin en producción salieron dos cosas que afectan
+directamente a la facturación. Detalle completo en
+`dryrun_produccion_2026-08-25.md`.
+
+### 1. El precio tiene dos tramos, no uno
+
+El producto está montado como **80 €/mes recurrente + 48 € de cuota de registro
++ 1 mes de prueba gratuita**, con la facturación **sincronizada al día 1**.
+En la práctica: los 48 € cubren septiembre (el 40 % de descuento anunciado) y
+desde **octubre** se cobran 80 €/mes. Verificado en la suscripción `#2088`.
+
+Consecuencia: **son dos facturas distintas por alumno**, no una repetida.
+
+| Concepto | Importe | Si exento | Si 21 % (incluido) |
+|---|---|---|---|
+| Cuota de registro (cubre septiembre) | 48,00 € | base 48,00 € | base 39,67 € + 8,33 € |
+| Cuota mensual (desde octubre) | 80,00 € | base 80,00 € | base 66,12 € + 13,88 € |
+
+### 2. Ya se está vendiendo sin IVA — la pregunta ha dejado de ser teórica
+
+El pedido `#2087` sale con **subtotal 48 €, total 48 € y ninguna línea de
+impuesto**. Se está facturando de facto como exento mientras la gestoría no ha
+confirmado nada.
+
+Si dijeran que **no** está exento, se debe el 21 % de lo vendido **hacia atrás**:
+hoy 16 pedidos × 48 € = **768 €** (≈133 € de IVA), más el atrasado desde
+noviembre de 2025. Es poco dinero todavía; justo por eso conviene cerrarlo ahora
+y no en enero. **Sube al primer puesto de las preguntas al cliente.**
+
+### 3. Y un tercer argumento para la serie anual: el huso horario
+
+El WordPress está en **`America/Buenos_Aires`** — 5 horas por detrás de Madrid.
+Una venta del 1 de octubre a las 02:00 hora española queda fechada por el sitio
+el **30 de septiembre**. Con serie **mensual**, esa factura entraría en la serie
+del mes equivocado y rompería la correlatividad justo en el cambio de mes.
+
+Con serie **anual** el problema desaparece (solo importaría en Nochevieja). Es el
+argumento más concreto de todos los que ya teníamos, y conviene además corregir
+el huso del sitio.
+
+### 4. Buena noticia: los pedidos ya traen todos los datos fiscales
+
+El pedido `#2087` captura **DNI** (`billing_dni`), segundo apellido
+(`billing_last_name_2`), dirección completa y teléfono. Están todos los campos
+del art. 6 del RD 1619/2012 **sin pedirle nada más al alumno**: la automatización
+puede emitir con lo que ya hay.
+
 ## 🔴 Lo que bloquea todo: el IVA
 
 **Antes de emitir la primera factura hay que saber si el curso está exento de
-IVA.** La enseñanza puede estarlo (art. 20.Uno.9º de la Ley 37/1992) y las
+IVA** — y a fecha de 25-ago **ya se está vendiendo sin repercutirlo**, así que
+el reloj corre. La enseñanza puede estarlo (art. 20.Uno.9º de la Ley 37/1992) y las
 academias de oposiciones suelen encajar, pero depende del caso concreto y
 **lo confirma la gestoría, no nosotros**.
 
 Por qué no es un detalle de diseño:
 - Si **está exenta** → factura sin IVA, citando el artículo de la exención.
-- Si **no lo está** → 21 %, y aparece una decisión comercial: ¿los 80 € pasan
-  a ser el total con IVA incluido (base 66,12 €, el alumno paga lo mismo) o se
-  añade encima (el alumno pasa a pagar 96,80 €)?
-- Y afecta hacia atrás: llevan cobrando desde **noviembre de 2025**.
+- Si **no lo está** → 21 %, y aparece una decisión comercial: ¿el precio pasa a
+  ser el total con IVA incluido (48 € → base 39,67 €; 80 € → base 66,12 €; el
+  alumno paga lo mismo) o se añade encima (48 € → 58,08 €; 80 € → 96,80 €)?
+- Y afecta hacia atrás: llevan cobrando desde **noviembre de 2025**, y los
+  pedidos de agosto ya salen **sin ninguna línea de impuesto**.
 
 ## La numeración: válida, pero con un agujero en el razonamiento
 
@@ -42,8 +93,9 @@ configurarla bien.)*
 
 ## "Ya hay gente comprando": la respuesta es automatizar
 
-Con las suscripciones renovando mensualmente son **~39 facturas al mes** hoy,
-y crece con cada alumno de la 133ª. A mano es inviable.
+El volumen manda: **16 alumnos nuevos en 11 días** (14-25 ago) y subiendo, cada
+uno con su factura de registro ahora y su cuota mensual desde octubre. Súmale
+las 39 suscripciones de la 132ª si se reactivan. A mano es inviable.
 
 Dato ya verificado en la auditoría de julio: **en la web no hay ningún plugin
 ni servicio de facturación** (revisados los 31 plugins activos). Cada venta
@@ -164,14 +216,13 @@ producción. Si molesta, se desactiva desde la lista de plugins.
 > vuestra gestoría antes: ¿el curso está exento de IVA?** La formación suele
 > estarlo, pero hay que confirmarlo en vuestro caso. Cambia la factura: si
 > está exenta hay que indicar el artículo de la exención, y si no lo está hay
-> que aplicar el 21 % y decidir si los 80 € pasan a incluirlo o se suma
-> encima. Os mandamos la plantilla con las dos versiones para que la gestoría
+> que aplicar el 21 % y decidir si el precio pasa a incluirlo o se suma encima. Os mandamos la plantilla con las dos versiones para que la gestoría
 > vea de qué hablamos.
 >
 > **3. Sobre la gente que ya está comprando: os proponemos automatizarlo.**
-> Con las suscripciones renovando cada mes son unas 39 facturas mensuales
-> ahora mismo, y suben con cada alumno de la 133ª. A mano se os hace bola
-> enseguida. Podemos instalar en la web un sistema que genere la factura en
+> Solo en los últimos once días han entrado 16 matrículas, cada una con su
+> factura, y a partir de octubre se les suma la cuota mensual. A mano se os hace
+> bola enseguida. Podemos instalar en la web un sistema que genere la factura en
 > PDF automáticamente con cada pedido, ya con vuestra numeración, y se la
 > envíe al alumno.
 >

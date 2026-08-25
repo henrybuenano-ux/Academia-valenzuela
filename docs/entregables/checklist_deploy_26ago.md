@@ -39,33 +39,100 @@ activarla.**
 **Activar primero el config, después el plugin principal.**
 
 **5. Verificar en el momento (5 min)** → WooCommerce → EvoCampus Sync:
-- [ ] La página carga y dice **"Modo: DRY-RUN … Ventana de pago: 38 días"**
-- [ ] "Ejecutar conciliación ahora" → termina sin errores y lista el censo
-- [ ] "Generar informe de acceso sin pago" → los 7 becados salen como
-      **"Becado (autorizado)"**
-- [ ] Sin errores PHP en pantalla ni en el log (fuente `omnia-evocampus-sync`)
+- [x] La página carga y dice **"Modo: DRY-RUN … Ventana de pago: 38 días"**
+- [x] "Ejecutar conciliación ahora" → **71 de 71 alumnos en 15 s**, sin errores
+- [x] "Generar informe de acceso sin pago" → 35 filas, etiquetado correcto
+- [x] Sin errores PHP en pantalla ni en el log
 
-**6. Avisar a Claude** → verifico por HTTP y reviso el log al día siguiente.
+> ⚠️ **El check de los becados estaba mal formulado.** Decía "los 7 becados salen
+> como *Becado (autorizado)*", pero solo pueden salir los que **no tengan ningún
+> rastro en la tienda**: `has_woo_footprint()` descarta antes a quien tenga
+> usuario WP o algún pedido. Salen **2 de 7** y es el comportamiento correcto.
+> Lo que hay que comprobar es que **los que aparecen estén bien etiquetados** — y
+> lo están.
+
+**6. Avisar a Claude** → ✅ hecho el 25-ago. Resultados y hallazgos completos en
+**`dryrun_produccion_2026-08-25.md`**.
 
 ## Rollback
 
 Desactivar el plugin principal. Todo vuelve al instante: no altera datos de
 WooCommerce y en DRY-RUN ni siquiera llama a EvoCampus.
 
-## ⚠️ Para la reunión: qué NO prometer
+## ✅ ESTADO 25-ago: desplegado y verificado
 
-**El paso a modo real del 1-sep no se puede confirmar todavía.** Le faltan dos
-prerequisitos que no dependen de nosotros:
-1. La decisión sobre las **39 suscripciones pausadas** — sin ella, el primer
-   censo real arranca sucio.
-2. La confirmación de **Paco sobre los becados** (por defecto, opción A).
+El plugin está **activo en producción en DRY-RUN** y sus dos informes se han
+ejecutado. **El deploy pasa** y el censo cuadra al 100 % contra los pedidos.
 
-Lo que sí se puede decir: el plugin queda desplegado y observándose esta
-semana, y el modo real se activa en cuanto se cierren esos dos puntos.
+Pero la pasada en seco ha destapado **un fallo que cortaría el acceso a 8-13 de
+los 16 alumnos nuevos en septiembre**. Todo el detalle, con la evidencia, en
+**`dryrun_produccion_2026-08-25.md`**.
 
-## Contexto útil para la reunión
+---
 
-- El embudo lleva **12 leads reales del bot** desde el 11-ago (0 antes).
-- **Ninguno ha sido contactado todavía** — si el cliente abre el CRM, lo verá.
-- Web arreglada (el botón principal daba 404) y bot captando también desde
-  la web principal.
+## 🎤 Guion para la reunión del 26-ago
+
+### Lo que se enseña
+
+- Plugin **desplegado y observándose** en producción.
+- Censo **perfecto**: 71 de 71 alumnos en 15 s, cuadrado uno a uno con los
+  pedidos de WooCommerce.
+- **La 133ª está vendiendo**: 16 matrículas en 11 días y acelerando (4 el 24-ago,
+  3 el 25), con atribución de origen.
+- Web arreglada — el botón principal daba 404 — y bot captando también desde la
+  web principal.
+- Y el argumento que lo une todo: **el modo seco ya ha evitado un corte masivo**.
+  Es exactamente para lo que servía.
+
+### Las tres preguntas
+
+1. **¿La gestoría ha confirmado la exención de IVA?** Ya se está vendiendo sin
+   repercutirlo (768 € expuestos hoy, y creciendo). Es la que más corre.
+2. **¿El curso de entrevista se cobra aparte o va incluido?** Hay 30 alumnos del
+   grupo `ENTREVISTA 2026` con acceso activo y sin ningún registro en la tienda.
+   *Pregunta neutra, no acusación.*
+3. **¿Qué se hace con las 39 suscripciones pausadas** desde el 24-jun?
+
+### ⚠️ Qué NO prometer
+
+**El paso a modo real del 1-sep no se puede confirmar.** Ahora son cuatro
+bloqueos, y **dos son nuestros**:
+
+| Bloqueo | Depende de |
+|---|---|
+| 🔴 El corte de septiembre | **Nosotros** — parche v0.8.1 |
+| 🔴 Los 55 avisos de golpe al CRM | **Nosotros** — parche v0.8.1 |
+| 🟡 Las 39 suscripciones pausadas | Paco |
+| 🟡 Confirmación de los becados | Paco |
+
+Lo que sí se puede decir: el plugin queda desplegado y observándose, y el modo
+real se activa en cuanto estén el parche y las dos decisiones.
+
+### 🔴 Y algo que sí es nuestro, y corre HOY
+
+**El bot está dando el precio equivocado.** Su prompt dice "80 €/mes" mientras la
+web ofrece **48 € el primer mes hasta el 31 de agosto**. O sea: el bot cita un
+precio un 67 % más alto que la oferta vigente, pierde el mejor argumento de
+cierre que hay ahora mismo —un descuento con fecha— y contradice a la web delante
+del lead.
+
+El bot no falla: su prompt le prohíbe inventarse precios y obedece. **Está mal el
+prompt.** Texto corregido listo para pegar en `bot_ls02_prompts_2026-08-07.md`.
+Son cinco minutos en GHL y quedan **6 días de oferta**.
+
+*(Y anotar en el calendario: el 1 de septiembre hay que quitarlo, o el bot
+ofrecerá un descuento caducado.)*
+
+### La urgencia que no es nuestra
+
+- **La oferta caduca el 31 de agosto — en 6 días.**
+- Hay **12 leads del bot sin contactar** desde el 11-ago. Doce personas a las que
+  llamar con un argumento que tiene fecha de caducidad. Si abren el CRM en la
+  reunión, lo van a ver.
+
+### Dos apuntes menores, por si salen
+
+- El campo **"Precio rebajado"** del producto está **vacío pero con fechas
+  puestas** (6-ago → 31-ago). No hace nada, pero conviene limpiarlo.
+- El WordPress está en huso horario de **Buenos Aires**. Afecta a las fechas de
+  las facturas (ver `facturacion_plan_2026-08-10.md`).

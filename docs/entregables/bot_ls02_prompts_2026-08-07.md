@@ -105,6 +105,36 @@ Qué incluye el campus
 
 Precio y condiciones
 - 80 €/mes. Sin matrícula y sin permanencia.
+
+> 🔴 **DESACTUALIZADO — corregir en GHL cuanto antes (detectado 25-ago).**
+>
+> La web ofrece **48 € el primer mes** (40 % de descuento) para quien se
+> matricule **antes del 31 de agosto**; desde octubre, 80 €/mes. El bot sigue
+> diciendo 80 € a secas, así que **está dando un precio un 67 % más alto que la
+> oferta vigente** y perdiendo el mejor argumento de cierre que existe ahora
+> mismo: un descuento con fecha de caducidad.
+>
+> Peor aún: un lead que habla con el bot y luego entra en la web recibe dos
+> precios distintos.
+>
+> El bot no está fallando — su prompt le prohíbe inventarse precios (línea 40) y
+> obedece. **Lo que está mal es el prompt.**
+>
+> **Texto para pegar en su lugar** (revisar la fecha si la oferta se prorroga):
+>
+> ```
+> Precio y condiciones
+> - 80 €/mes. Sin matrícula y sin permanencia: cancelas cuando quieras.
+> - OFERTA DE LANZAMIENTO, solo hasta el 31 de agosto: el primer mes
+>   (septiembre) sale por 48 € en vez de 80 € — un 40 % de descuento.
+>   A partir de octubre, 80 €/mes normales.
+> - Si preguntan por el precio, di siempre los dos: la oferta primero y
+>   luego la cuota normal. No prometas descuentos distintos de este.
+> ```
+>
+> **Cuando pase el 31 de agosto** hay que volver a dejarlo en "80 €/mes. Sin
+> matrícula y sin permanencia" o poner la oferta que la sustituya. Si no, el bot
+> ofrecerá un descuento caducado.
 - El alumno cancela él mismo desde su cuenta, en un clic, cuando quiera.
 - El acceso al campus es inmediato al suscribirse, con todo el contenido
   desde el día 1.

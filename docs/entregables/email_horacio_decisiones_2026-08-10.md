@@ -1,9 +1,13 @@
-# Email para Horacio · 10-ago-2026
+# Email para Horacio · actualizado 25-ago-2026
 
-> Listo para copiar. Pide **3 decisiones**, cada una con recomendación, para
-> que se pueda contestar con un sí/no. El resto de pendientes va en una sola
-> línea al final. El detalle largo queda abajo, **fuera del email**, por si
-> pregunta.
+> Listo para copiar. Pide **4 decisiones**, cada una con recomendación, para que
+> se pueda contestar con un sí/no. El detalle largo queda abajo, **fuera del
+> email**, por si pregunta.
+>
+> ⚠️ **Actualizado el 25-ago**: la versión del 10-ago abría diciendo que
+> llevábamos 17 días sin un solo lead. Ya no es cierto — hay 12 leads del bot y
+> **16 matrículas vendidas**. El arranque cambia, y entra el IVA como decisión
+> nueva y urgente.
 
 ---
 
@@ -11,36 +15,46 @@
 
 Hola Horacio,
 
-Contexto en dos líneas: el sistema está listo y funcionando, pero llevamos 17
-días sin un solo lead y la 133ª arranca en 22 días. Lo que falta son
-decisiones, no desarrollo.
+Contexto en dos líneas: **la 133ª ha arrancado a vender** — 16 matrículas en 11
+días y acelerando — y el sistema está desplegado y funcionando. Lo que falta son
+decisiones, no desarrollo. Y una corre de verdad.
 
-• **WhatsApp con Meta — urgente por plazos.** El bot le pide el WhatsApp a
-cada lead y le promete que le escribimos por ahí… y no tenemos el canal
-conectado. Hoy eso se responde a mano desde móviles personales. La aprobación
-de Meta tarda semanas y la 133ª es el 1 de septiembre: si no arranca esta
-semana, no llega.
+• **WhatsApp con Meta — urgente por plazos.** El bot le pide el WhatsApp a cada
+lead y le promete que le escribimos por ahí… y no tenemos el canal conectado.
+Hoy eso se responde a mano desde móviles personales. La aprobación de Meta tarda
+semanas y el curso empieza el 1 de septiembre: si no arranca esta semana, no
+llega.
+
+• **El IVA, y esta ha pasado a correr.** Las matrículas que están entrando se
+cobran **sin repercutir IVA**, sin que la gestoría lo haya confirmado. Si resulta
+que el curso no está exento, se debe el 21 % de todo lo vendido hacia atrás. Hoy
+son 768 € — poco — pero sube con cada venta y arrastra lo de noviembre de 2025.
+Es una llamada a la gestoría.
 
 • **39 suscripciones paradas desde el 24 de junio** → unos 3.100 €/mes sin
 facturar. Además bloquea la campaña de re-enganche, porque son las mismas
-personas a las que queremos escribir. ¿Las cancelamos? Reactivarlas
-dispararía cobros atrasados. Lo decide Paco.
+personas a las que queremos escribir. ¿Las cancelamos? Reactivarlas dispararía
+cobros atrasados. Lo decide Paco.
 
-• **Campaña de re-enganche a 69 ex-alumnos: lista para enviar.** Solo falta
-que Paco cuente las novedades de la 133ª y lleva 17 días sin contestar. Tengo
-escrita una versión que no lo necesita. ¿La lanzo esta semana?
+• **Campaña de re-enganche a 69 ex-alumnos: lista para enviar.** Solo falta que
+Paco cuente las novedades de la 133ª, y lleva semanas sin contestar. Tengo escrita
+una versión que no lo necesita. ¿La lanzo esta semana?
 
-• **Horario de asesorías de Paco.** El bot ya agenda citas de verdad, pero el
-calendario ofrece los huecos por defecto: de 8:00 a 16:45. Un interesado
-puede reservar a las 8 de la mañana y no encontrar a nadie. Son diez minutos
-de configuración en cuanto nos dé sus franjas.
+Y dos avisos que no necesitan decisión tuya, solo que lo sepas:
 
-Los tres últimos pasan por hablar con Paco. Por email no responde, así que
-habría que llamarle.
+1. **Hay 12 leads del bot sin contactar** desde el 11 de agosto, y la oferta de
+   lanzamiento caduca el **31**. Son doce llamadas con fecha de caducidad.
+2. **El paso a modo real del plugin no puede ser el 1 de septiembre.** Al
+   verificarlo en producción encontramos que habría cortado el acceso a la mayoría
+   de los alumnos nuevos a mediados de mes. Lo arreglamos nosotros; lo digo para
+   que no se prometa esa fecha.
 
-Menores, cuando quieras: fecha del paso a producción del plugin (ClickUp dice
-6 de agosto, el runbook 24), las campañas de captación que nunca arrancaron y
-la gestoría para facturación.
+Lo del re-enganche y el calendario de Paco pasan por hablar con él. Por email no
+responde, así que habría que llamarle — su horario de asesorías sigue sin
+configurar y el bot está ofreciendo citas a las 8 de la mañana.
+
+Menores, cuando quieras: las campañas de captación que nunca arrancaron y el
+botón de la home hacia la landing, que sigue pendiente de que lo aprueben ellos.
 
 Un abrazo,
 [tu nombre]
@@ -53,7 +67,7 @@ Un abrazo,
 Para responder si Horacio pregunta, o si prefieres una reunión en vez de un
 email.
 
-### Sobre el punto 1 — las 39 suscripciones
+### Las 39 suscripciones
 
 - El **24-jun** una edición en lote pasó las suscripciones de *Activa* a
   *En espera*. Figura hecha desde la cuenta **DeVOmibu**.
@@ -69,7 +83,7 @@ email.
   suscripciones quedaron en espera desde el 24 de junio" — la decisión no
   depende de quién lo hizo.*
 
-### Sobre el punto 2 — el re-enganche
+### El re-enganche
 
 - Segmento: **69 ex-alumnos que pagaron** (39 de suscripción dados de baja,
   19 activos, 11 de intensivo), todos con email.
@@ -79,7 +93,7 @@ email.
   para las novedades de Paco y otra que no lo necesita.
 - Todo en `reenganche_ls03_segmento_y_b2_2026-08-10.md`.
 
-### Sobre el punto 3 — el calendario y lo demás que bloquea Paco
+### El calendario y lo demás que bloquea Paco
 
 **El dato del calendario, verificado hoy** (`Asesorías 133ª`,
 `HV3DnVxagoNduXbNx0UG`): sirve **36 huecos diarios de 08:00 a 16:45**, L-V,
@@ -98,10 +112,42 @@ citas de 15 min. Es el **horario por defecto** de GoHighLevel, no el de Paco.
 2. Los 7 becados: opción A o B (propuesta enviada el 17-jul, sin respuesta).
 3. Añadir el botón "Infórmate sin compromiso" en la home hacia la landing.
 
+### El IVA, por si pregunta
+
+- Los pedidos salen con **subtotal 48 €, total 48 € y ninguna línea de
+  impuesto**. Verificado en el pedido `#2087`.
+- La enseñanza suele estar exenta (art. 20.Uno.9º de la Ley 37/1992) y una
+  academia de oposiciones encaja bien, pero **lo confirma la gestoría**.
+- Si estuviera exento: no hay nada que corregir, solo hay que citar el artículo
+  en la factura.
+- Si no lo estuviera: 21 % sobre lo vendido. Y una decisión comercial — ¿el
+  precio pasa a incluirlo (48 € → base 39,67 €) o se suma encima (48 € →
+  58,08 €)?
+- Detalle y plantilla en `facturacion_plan_2026-08-10.md` y
+  `plantilla_factura_academia_valenz.html`.
+
+### El corte de septiembre, por si pregunta
+
+- El plugin decide quién tiene acceso por **"días desde el último pago"**, con
+  una ventana de 38 días.
+- El curso se vendió con **1 mes de prueba y facturación sincronizada al día 1**:
+  quien compró el 14-ago no vuelve a pagar hasta el **1-oct**. Son 48 días.
+- Resultado: los habría cortado a mediados de septiembre, con tag de impago y
+  reclamación de deuda incluidos. **8 seguros y 5 más a suerte, de 16.**
+- Lo encontró la pasada en seco, que es exactamente para lo que estaba.
+- Se arregla preguntándole a la suscripción en vez de a la fecha del último
+  pedido. Detalle en `dryrun_produccion_2026-08-25.md`.
+
 ### Por si hace falta defender que el bloqueo no es de ejecución
 
 Hecho, probado y funcionando: bot que conversa, cualifica, capta datos y
-**agenda cita**; CRM que reacciona solo (oportunidad + avisos, sin
-duplicados); widget del bot instalado hoy en la web y verificado de punta a
-punta; y el botón principal de la home, que **llevaba a un error 404** desde
-que se retiró el curso de la 132ª, arreglado hoy junto con el texto obsoleto.
+**agenda cita**; CRM que reacciona solo (oportunidad + avisos, sin duplicados);
+widget del bot instalado en la web y verificado de punta a punta; el botón
+principal de la home, que **llevaba a un error 404** desde que se retiró el curso
+de la 132ª, arreglado; y el plugin de EvoCampus **desplegado en producción**, con
+el censo cuadrando 71 de 71 alumnos en 15 segundos.
+
+Y el dato que mejor lo resume: **el 10-ago se arregló el botón roto de la home y
+el 14-ago entró la primera matrícula de la 133ª**, después de casi dos meses sin
+un solo pedido. No es prueba de causalidad —el producto ya era comprable— pero la
+secuencia está ahí y WooCommerce guarda la atribución de cada venta.

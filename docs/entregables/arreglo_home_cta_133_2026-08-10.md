@@ -39,8 +39,21 @@ Se reconoce por el H2 "Curso Ingreso Guardia Civil – 132ª Promoción".
 | Enlace **actual** | `https://academiavalenz.com/producto/curso-ingreso-guardia-civil-132-promocion/` → **404** |
 | Enlace **nuevo** | `https://academiavalenz.com/producto/curso-ingreso-guardia-civil-133a-promocion/` |
 
-Destino verificado: producto publicado y comprable, suscripción **80 €/mes**
-(id de producto `2054`, botón "Añadir al carrito" operativo).
+Destino verificado: producto publicado y comprable (id `2054`, botón "Añadir al
+carrito" operativo).
+
+> 📌 **Corrección 25-ago sobre el precio.** Aquí se dijo "suscripción 80 €/mes".
+> La estructura real es **80 €/mes recurrente + 48 € de cuota de registro + 1 mes
+> de prueba**, con facturación sincronizada al día 1: los 48 € cubren septiembre
+> (40 % de descuento, oferta hasta el 31-ago) y desde octubre se cobran 80 €/mes.
+> Verificado en la ficha del producto y en la suscripción `#2088`.
+>
+> **Y la página no muestra el precio.** Leído el HTML público: en el bloque de
+> compra hay **cero** `class="price"`, cero `woocommerce-Price-amount`. El
+> "~~80€~~ 48€*/mes" es texto de Elementor, no el precio de WooCommerce, así que
+> el comprador no ve en ningún sitio el importe recurrente ni las condiciones de
+> renovación. Conviene resolverlo: es información obligatoria antes de comprar y
+> es material de contracargos cuando en octubre se cobren 80 €.
 
 ### 2. El copy (texto listo para pegar)
 
@@ -221,3 +234,19 @@ fuera de España, que es la explicación más probable.
 > ⚠️ **No usar "push staging → producción" de WP Staging** para llevar este
 > cambio: arrastraría toda la copia de julio encima de la web viva. El
 > cambio hay que hacerlo directamente en producción.
+
+## 📈 Nota 25-ago — qué pasó después del arreglo
+
+| Fecha | Hecho |
+|---|---|
+| 19-jun | Último pedido antes del parón |
+| 24-jun | Las suscripciones pasan a *En espera* en lote |
+| **10-ago** | **Se arregla el 404 del botón principal** |
+| **14-ago** | **Primer pedido de la 133ª** (`#2087`) |
+| 25-ago | 16 pedidos acumulados, acelerando: 4 el día 24, 3 el 25 |
+
+**Cuidado con la lectura**: el producto de la 133ª ya era comprable antes del
+10-ago, así que esto **no prueba causalidad**. Pero la secuencia es la que es, y
+WooCommerce guarda la atribución de cada pedido (`Orgánico: Google`,
+`Fuente: Google`, `Directo`), así que se puede comprobar de verdad en vez de
+suponerlo.

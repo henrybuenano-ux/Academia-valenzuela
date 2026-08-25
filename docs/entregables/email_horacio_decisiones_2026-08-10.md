@@ -42,8 +42,10 @@ una versión que no lo necesita. ¿La lanzo esta semana?
 
 Y dos avisos que no necesitan decisión tuya, solo que lo sepas:
 
-1. **Hay 12 leads del bot sin contactar** desde el 11 de agosto, y la oferta de
-   lanzamiento caduca el **31**. Son doce llamadas con fecha de caducidad.
+1. **El bot lleva caído desde el 19 de agosto y lo hemos detectado hoy.** Siete
+   personas han preguntado por el curso y han recibido "no hay nadie disponible";
+   la última, esta mañana. Justo la semana en que caduca la oferta. Lo estamos
+   levantando, pero hace falta una alerta: se cayó y nadie se enteró en seis días.
 2. **El paso a modo real del plugin no puede ser el 1 de septiembre.** Al
    verificarlo en producción encontramos que habría cortado el acceso a la mayoría
    de los alumnos nuevos a mediados de mes. Lo arreglamos nosotros; lo digo para

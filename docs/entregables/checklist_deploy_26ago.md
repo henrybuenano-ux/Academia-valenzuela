@@ -126,9 +126,14 @@ ofrecerá un descuento caducado.)*
 ### La urgencia que no es nuestra
 
 - **La oferta caduca el 31 de agosto — en 6 días.**
-- Hay **12 leads del bot sin contactar** desde el 11-ago. Doce personas a las que
-  llamar con un argumento que tiene fecha de caducidad. Si abren el CRM en la
-  reunión, lo van a ver.
+- 🔴 **El bot lleva caído desde el 19-ago.** Siete personas han preguntado por el
+  curso —"cuánto cuesta", "quiero información", "cuándo empieza"— y han recibido
+  *"no hay nadie disponible"*. La última, hoy. Ver
+  **`bot_caido_desde_19ago_2026-08-25.md`**.
+- Y las "12 oportunidades del bot" no son 12 leads: **10 no tienen teléfono ni
+  email**, y de los 2 que sí, uno es una prueba nuestra. Si abren el CRM verán
+  doce tarjetas llamadas *Guest Visitor*. Hay que llevarlo nosotros, con el
+  diagnóstico hecho.
 
 ### Dos apuntes menores, por si salen
 

@@ -852,8 +852,11 @@ producto o un pedido — **no fiarse del HTML de la ficha**.
    descuento caducado.
 4. **Enviar el email a Horacio** (`email_horacio_decisiones_2026-08-10.md`,
    actualizado hoy) y la respuesta de facturación al cliente.
-5. **12 leads del bot sin contactar** desde el 11-ago, y la oferta caduca el
-   **31-ago**. No es trabajo nuestro, pero hay que insistir.
+5. 🔴 **EL BOT ESTÁ CAÍDO desde el 19-ago** — siete conversaciones perdidas, la
+   última hoy. Ventana del corte: entre el 18-ago 07:22 y el 19-ago 18:33.
+   Primero mirar los **créditos de IA** de la sub-cuenta. Y las "12 oportunidades"
+   no son 12 leads: 10 son incontactables y 1 es prueba nuestra. Todo en
+   `docs/entregables/bot_caido_desde_19ago_2026-08-25.md`.
 6. Menor: limpiar el campo "Precio rebajado" del producto (vacío pero con fechas
    6-ago → 31-ago) y corregir el huso horario del sitio.
 

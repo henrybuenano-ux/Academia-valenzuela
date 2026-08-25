@@ -29,6 +29,18 @@ if ( ! defined( 'OMNIA_EVO_BECADOS_EMAILS' ) ) {
 	// (tampoco los ve la conciliación al no tener suscripción en Woo).
 	define( 'OMNIA_EVO_BECADOS_EMAILS', 'danielsanchezluc55@gmail.com,mirellacrespo29@gmail.com,juanjolirio2003@gmail.com,juncaluam@gmail.com,marioventapuer@hotmail.com,santiml.89@hotmail.com,sergiohuelma_123@hotmail.com' );
 }
+/* GoHighLevel — vía A (API pública directa, la que se usa desde la v0.6).
+   Sin OMNIA_GHL_PIT el espejo cae a los webhooks (vía B, menos fiable). */
+if ( ! defined( 'OMNIA_GHL_PIT' ) ) {
+	define( 'OMNIA_GHL_PIT', '<PIT-DE-LA-SUBCUENTA-GHL>' );
+}
+if ( ! defined( 'OMNIA_GHL_LOCATION_ID' ) ) {
+	define( 'OMNIA_GHL_LOCATION_ID', 'hBvP7lemQSMibPYcJPEP' );
+}
+if ( ! defined( 'OMNIA_GHL_DRYRUN' ) ) {
+	// Si no se define, hereda OMNIA_EVO_DRYRUN. true = simula también el CRM.
+	define( 'OMNIA_GHL_DRYRUN', true );
+}
 if ( ! defined( 'OMNIA_GHL_WEBHOOK_URL_BAJA' ) ) {
 	define( 'OMNIA_GHL_WEBHOOK_URL_BAJA', 'https://services.leadconnectorhq.com/hooks/hBvP7lemQSMibPYcJPEP/webhook-trigger/vJkOtiVDBtx0TChtWl9U' );
 }

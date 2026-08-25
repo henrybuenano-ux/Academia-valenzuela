@@ -2,8 +2,9 @@
 
 > Objetivo: dejar el plugin corriendo en producción con DRY-RUN=true 24-48 h,
 > revisar, y pasar a real el 1-sep con la 133ª. Tiempo estimado: 30-45 min
-> + observación. Claude puede ejecutar los pasos 2-6 si se le da el OK
-> (misma técnica validada en staging); este runbook permite hacerlo a mano.
+> + observación. **Lo ejecuta el equipo desde su navegador**: se comprobó el
+> 10-ago que el wp-admin de producción rechaza a Claude (un firewall filtra
+> por IP antes de WordPress). Claude verifica después por HTTP.
 
 ## Pre-requisitos (verificar ANTES de empezar)
 - [ ] Decisión tomada sobre las 39 suscripciones pausadas (tarea del 24-jul).

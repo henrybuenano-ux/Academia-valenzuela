@@ -50,10 +50,18 @@ electrónico, le dice la plataforma que ya está»*. Y explica por qué los del
 intensivo sí pudieron: pago único, sin cuenta obligatoria. Y por qué alguno lo
 resolvió con un segundo correo: era la única salida que le dejaba la tienda.
 
-**Segundo sospechoso, aún abierto:** el producto `#1374` (la 132ª en staging)
-tiene **«limitar suscripción» = _una activa_**, y WooCommerce Subscriptions
-cuenta también las **En espera** para ese límite. Falta ver si el `#2054` heredó
-el ajuste.
+**El «segundo sospechoso», descartado como causa.** El `#2054` sí tenía
+**«Limitar a una suscripción activa»** (confirmado en producción), pero ese
+límite es **por producto**: impide comprar el `#2054` a quien ya tenga una
+suscripción a *ese mismo* `#2054`. Los ex-alumnos vienen de la 132ª, otro
+producto con otro ID — no les afectaba.
+
+El síntoma tampoco encaja: cuando el límite salta, WooCommerce **retira el botón
+de «Añadir al carrito»** y avisa de que ya se tiene una suscripción. Paco
+describió el error al meter el correo, que es el fallo de la casilla de login.
+
+Corrijo lo que escribí antes: dije que bloquearía «por partida doble» y era una
+suposición, no un hecho.
 
 ## Los arreglos
 
@@ -61,11 +69,16 @@ el ajuste.
 WooCommerce → Ajustes → Cuentas y privacidad. **El pago como invitado se queda
 como está** — desactivarlo no arregla nada y rompe otras compras.
 
-**2 · Revisar «Limitar suscripción» en el `#2054`** *(pendiente de comprobar)*
-En la ficha del producto, pestaña **Avanzado** — no General: en las versiones
-recientes de WooCommerce Subscriptions el campo vive ahí. Si está en «una
-activa», ponerlo en **«Sin límite»**: quien terminó la 132ª tiene todo el derecho
-a comprar la 133ª.
+**2 · «Limitar suscripción» del `#2054` → «No limitar»** *(higiene, no la causa)*
+Ficha del producto, pestaña **Avanzado** — no General: en las versiones recientes
+de WooCommerce Subscriptions el campo vive ahí. Estaba en «Limitar a una
+suscripción activa».
+
+No bloqueaba a los de la 132ª (ver arriba), pero **es una trampa hacia adelante**:
+la 133ª corre mes a mes hasta el examen, y a quien le falle un cobro la
+suscripción pasa a *En espera*. Con el límite puesto no podría volver a comprar
+el mismo producto — ni él, ni la academia por él. Justo la gente que se quiere
+recuperar es la que se quedaría fuera.
 
 Treinta segundos cada uno. **Los aplica el equipo** — nuestra IP sigue bloqueada
 en el wp-admin de producción.

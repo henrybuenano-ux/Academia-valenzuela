@@ -24,9 +24,10 @@
 > **Y entraron dos nuevos, los dos con fecha:**
 >
 > 1. **Ex-alumnos de la 132ª no pueden re-matricularse** — al meter su email, la
->    tienda no les deja terminar la compra. **Causa confirmada en producción** el
->    mismo 26-ago: falta la casilla «Activar el inicio de sesión durante el
->    pago». Arreglo de treinta segundos.
+>    tienda no les deja terminar la compra. **Causa confirmada y arreglada en
+>    producción** el mismo 26-ago: faltaba la casilla «Activar el inicio de
+>    sesión durante el pago». Queda pendiente **la compra de prueba** que lo
+>    confirme antes de llamar a nadie.
 > 2. **El precio de lanzamiento no caduca solo.** Las fechas del producto están
 >    puestas sobre un campo vacío y no hacen nada; los 48 € son cuota de
 >    registro, fija. **El 1-sep hay que subirla a mano.** Detalle en
@@ -167,9 +168,9 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 
 | Cuándo | Qué | Quién |
 |---|---|---|
-| **Ya** | Marcar «Activar el inicio de sesión durante el pago» en Cuentas y privacidad | Equipo (wp-admin) |
-| **Ya** | Comprobar «Limitar suscripción» del `#2054` — pestaña **Avanzado**, no General. Si está en «una activa» → Sin límite | Equipo (wp-admin) |
-| **Ya** | Compra de prueba en incógnito con un email de la 132ª, hasta la pasarela | Equipo |
+| ~~Ya~~ ✅ | Marcar «Activar el inicio de sesión durante el pago» en Cuentas y privacidad | Hecho 26-ago |
+| ~~Ya~~ ✅ | «Limitar suscripción» del `#2054` (pestaña **Avanzado**) → «No limitar» | Hecho 26-ago |
+| **Ya** | **Compra de prueba en incógnito** con un email de la 132ª, hasta la pasarela | Equipo |
 | **1-sep** | Subir la cuota de registro del `#2054` de **48 € a 80 €** y vaciar las fechas del precio rebajado | Equipo (wp-admin) |
 
 ⚠️ **Y no llamar a los 32 de la lista de recuperación** hasta que la compra de

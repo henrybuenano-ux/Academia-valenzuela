@@ -894,12 +894,18 @@ cuenta»*. Así que el ex-alumno entra como invitado, WooCommerce le exige cuent
 la crea con su email, ya existe, le manda a iniciar sesión — y no hay formulario
 de login en el checkout. Sin salida.
 
-**Arreglos:**
-1. ✅ **La causa:** marcar «Activar el inicio de sesión durante el pago».
+**Arreglos, los dos aplicados en producción el 26-ago:**
+
+1. ✅ **La causa:** marcada «Activar el inicio de sesión durante el pago».
    El pago como invitado se queda como está.
-2. ⏳ **Pendiente:** «Limitar suscripción» del `#2054`, pestaña **Avanzado** (no
-   General). Si está en «una activa» → **Sin límite**. El `#1374` (132ª) lo
-   tiene así, y WCS cuenta también las *En espera*.
+2. ✅ **Higiene:** «Limitar suscripción» del `#2054` (pestaña **Avanzado**, no
+   General) pasa de «una activa» a **«No limitar»**.
+
+**Corrección sobre el punto 2:** escribí que bloqueaba «por partida doble» a los
+ex-alumnos. No es cierto — el límite es **por producto**, y los de la 132ª vienen
+de otro producto. Tampoco encaja el síntoma: el límite retira el botón de
+«Añadir al carrito», no da el error del correo. Se apaga igualmente porque a
+quien le falle un cobro en la 133ª le impediría volver a comprarla.
 
 ⚠️ **Y no llamar a los 32 de la lista de recuperación hasta que esté arreglado.**
 Llamarles para que se encuentren un muro es peor que no llamar.

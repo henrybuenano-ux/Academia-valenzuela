@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EvoCampus ↔ WooCommerce Subscriptions Sync (Omnia)
  * Description: Da de baja / reactiva automáticamente las matrículas en EvoCampus según el estado de las suscripciones de WooCommerce. Complementa al conector oficial de Evolmind (que solo gestiona el alta). Espejo opcional de eventos hacia GoHighLevel.
- * Version:     0.8.0  (política A6 de Paco 14-jul: 7 días de cortesía — el impago avisa a GHL sin cortar; corta la conciliación al agotar la ventana. Becados etiquetados en el informe de acceso sin pago)
+ * Version:     0.8.1  (la ventana de pago se deriva del calendario de cada suscripción, no de una constante fija: con prueba gratuita + cobros sincronizados hay hasta 60 días entre pagos legítimos y los 38 fijos daban de baja a alumnos al corriente. Añade siembra de veredictos para que el primer pase real no notifique a GHL de golpe)
  * Author:      Omnia
  * Requires Plugins: woocommerce
  *
@@ -65,6 +65,16 @@ if ( ! defined( 'OMNIA_EVO_DRYRUN' ) ) {
 	define( 'OMNIA_EVO_DRYRUN', true );
 }
 
+/**
+ * Días de cortesía tras la fecha de cobro prevista (política A6, Paco 14-jul-2026).
+ * Se aplica sobre la fecha de próximo cobro que declara la propia suscripción.
+ * No confundir con OMNIA_EVO_GRACE_DAYS, que es la ventana de la regla de
+ * reserva (días desde el último pedido pagado) y sigue valiendo 38.
+ */
+if ( ! defined( 'OMNIA_EVO_COURTESY_DAYS' ) ) {
+	define( 'OMNIA_EVO_COURTESY_DAYS', 7 );
+}
+
 // Guard: si otra copia/versión del plugin sigue activa, no redeclarar la
 // clase (evita el error crítico de WordPress) y avisar en el admin.
 // Hallazgo staging 10-jul-2026: una inclusión temprana ajena define la clase
@@ -109,7 +119,9 @@ class Omnia_EvoCampus_Sync {
 		add_action( 'woocommerce_subscription_status_active',    array( __CLASS__, 'on_activate' ), 10, 1 );
 
 		// --- Conciliación diaria (red de seguridad) ---------------------------
-		add_action( self::CRON_HOOK, array( __CLASS__, 'reconcile' ) );
+		// accepted_args = 0 a propósito: reconcile() acepta ahora un $seed_only,
+		// y no queremos que un argumento del cron pueda activarlo por accidente.
+		add_action( self::CRON_HOOK, array( __CLASS__, 'reconcile' ), 10, 0 );
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CRON_HOOK );
 		}
@@ -153,31 +165,55 @@ class Omnia_EvoCampus_Sync {
 			self::reconcile();
 			$ran = true;
 		}
+		$seeded = false;
+		if ( isset( $_POST['omnia_evo_seed'] ) && check_admin_referer( 'omnia_evo_run_now' ) ) {
+			self::log( 'SIEMBRA de veredictos lanzada desde la página de administración.' );
+			self::reconcile( true );
+			$seeded = true;
+		}
 		$audited = false;
 		if ( isset( $_POST['omnia_evo_audit'] ) && check_admin_referer( 'omnia_evo_run_now' ) ) {
 			self::audit_manual_access();
 			$audited = true;
 		}
 
-		$grace  = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
-		$dryrun = OMNIA_EVO_DRYRUN;
+		$grace    = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
+		$courtesy = defined( 'OMNIA_EVO_COURTESY_DAYS' ) ? (int) OMNIA_EVO_COURTESY_DAYS : 7;
+		$dryrun   = OMNIA_EVO_DRYRUN;
+		$stored   = get_option( 'omnia_evo_verdicts', array() );
 
 		echo '<div class="wrap"><h1>Omnia — EvoCampus Sync</h1>';
 		printf(
-			'<p>Modo: <strong>%s</strong> · Ventana de pago: <strong>%d días</strong> · Próxima conciliación automática: <strong>%s</strong></p>',
+			'<p>Modo: <strong>%s</strong> · Cortesía sobre el cobro previsto: <strong>%d días</strong> · Ventana de reserva: <strong>%d días</strong> · Próxima conciliación automática: <strong>%s</strong></p>',
 			$dryrun ? 'DRY-RUN (simulación, no toca matrículas)' : '<span style="color:#b32d2e">REAL</span>',
+			$courtesy,
 			$grace,
 			esc_html( wp_next_scheduled( self::CRON_HOOK ) ? date_i18n( 'd M Y H:i', wp_next_scheduled( self::CRON_HOOK ) ) : '—' )
 		);
 		if ( $ran ) {
 			echo '<div class="notice notice-success"><p>Conciliación ejecutada — resultado abajo.</p></div>';
 		}
+		if ( $seeded ) {
+			echo '<div class="notice notice-success"><p><strong>Veredictos sembrados.</strong> No se ha tocado ninguna matrícula ni se ha avisado a GoHighLevel. El primer pase en modo real ya solo notificará los cambios reales.</p></div>';
+		}
 		echo '<form method="post">';
 		wp_nonce_field( 'omnia_evo_run_now' );
 		submit_button( 'Ejecutar conciliación ahora', 'primary', 'omnia_evo_run', false );
 		echo ' ';
 		submit_button( 'Generar informe de acceso sin pago', 'secondary', 'omnia_evo_audit', false );
+		echo ' ';
+		submit_button( 'Sembrar veredictos (sin avisar a GHL)', 'secondary', 'omnia_evo_seed', false );
 		echo '</form>';
+
+		// Estado de la siembra: sin ella, el primer pase real avisa de TODOS.
+		if ( empty( $stored ) ) {
+			echo '<div class="notice notice-warning inline"><p><strong>Sin veredictos guardados.</strong> Si se quita el DRY-RUN ahora, el primer pase notificará a GoHighLevel el estado de <em>todos</em> los alumnos de golpe. Pulsa «Sembrar veredictos» antes de pasar a modo real.</p></div>';
+		} else {
+			printf(
+				'<p><em>%d veredicto(s) guardados. El próximo pase solo avisará de los que cambien.</em></p>',
+				count( $stored )
+			);
+		}
 
 		// Informe de acceso sin pago (matriculaciones manuales sin registro en Woo).
 		$audit = get_option( 'omnia_evo_manual_access' );
@@ -417,6 +453,106 @@ class Omnia_EvoCampus_Sync {
 	}
 
 	/**
+	 * Veredicto de un alumno: ¿está al corriente de pago?
+	 *
+	 * Función PURA — solo enteros, sin WordPress ni WooCommerce — para que la
+	 * decisión se pueda probar fuera del sitio. La batería está en
+	 * wp-plugin/tests/test-verdict.php.
+	 *
+	 * Dos ramas, por este orden:
+	 *
+	 *  1. CALENDARIO. Si la suscripción declara fecha de próximo cobro, esa
+	 *     fecha manda: el alumno está al corriente mientras no se pase de ella
+	 *     más los días de cortesía. Es la rama que arregla el fallo del
+	 *     26-ago-2026: con prueba gratuita + cobros sincronizados al día 1,
+	 *     WooCommerce puede dejar hasta 60 días entre pagos legítimos, y la
+	 *     ventana fija de 38 días daba de baja a alumnos impecables.
+	 *
+	 *  2. ÚLTIMO PAGO (reserva). Sin fecha de próximo cobro —impago,
+	 *     cancelada, expirada— se mantiene la regla histórica: al corriente si
+	 *     el último pedido pagado tiene como mucho GRACE_DAYS días.
+	 *
+	 * OJO: el veredicto NO se basa en el ESTADO de la suscripción, y es
+	 * deliberado. En esta tienda el estado no refleja el pago (ver el
+	 * comentario de reconcile()): basarse en él daría de baja en bloque a
+	 * alumnos que están pagando.
+	 *
+	 * @param int      $now             Momento de la evaluación (timestamp).
+	 * @param int|null $last_paid_ts    Último pedido pagado, o null si nunca pagó.
+	 * @param int      $next_payment_ts Próximo cobro previsto, 0 si no hay.
+	 * @param int      $grace           Ventana de la regla de reserva, en días.
+	 * @param int      $courtesy        Cortesía sobre la fecha prevista, en días.
+	 * @return array{verdict:string,reason:string} 'activo' | 'baja' + motivo para el log.
+	 */
+	public static function verdict_for( $now, $last_paid_ts, $next_payment_ts, $grace, $courtesy ) {
+		$now             = (int) $now;
+		$next_payment_ts = (int) $next_payment_ts;
+		$grace           = (int) $grace;
+		$courtesy        = (int) $courtesy;
+
+		// --- Rama 1: la suscripción dice cuándo toca cobrar ---
+		if ( $next_payment_ts > 0 ) {
+			$limit = $next_payment_ts + $courtesy * DAY_IN_SECONDS;
+			$ok    = ( $now <= $limit );
+			$diff  = (int) floor( ( $now - $next_payment_ts ) / DAY_IN_SECONDS );
+
+			return array(
+				'verdict' => $ok ? 'activo' : 'baja',
+				'reason'  => sprintf(
+					'calendario: próximo cobro %s (%s), cortesía %d d',
+					gmdate( 'd-m-Y', $next_payment_ts ),
+					$diff > 0 ? "vencido hace {$diff} d" : 'aún no vencido',
+					$courtesy
+				),
+			);
+		}
+
+		// --- Rama 2 (reserva): días desde el último pedido pagado ---
+		if ( null === $last_paid_ts ) {
+			return array(
+				'verdict' => 'baja',
+				'reason'  => 'sin fecha de próximo cobro y sin ningún pedido pagado',
+			);
+		}
+
+		$days = (int) floor( ( $now - (int) $last_paid_ts ) / DAY_IN_SECONDS );
+
+		return array(
+			'verdict' => ( $days <= $grace ) ? 'activo' : 'baja',
+			'reason'  => sprintf(
+				'sin fecha de próximo cobro; último pago hace %d d (ventana %d d)',
+				$days, $grace
+			),
+		);
+	}
+
+	/**
+	 * Fecha de próximo cobro que declara una suscripción, como timestamp.
+	 * Devuelve 0 si no hay (impago, cancelada, expirada) o si el objeto no es
+	 * una suscripción utilizable.
+	 */
+	private static function next_payment_timestamp( $subscription ) {
+		if ( ! $subscription || ! is_a( $subscription, 'WC_Subscription' ) ) {
+			return 0;
+		}
+		try {
+			// get_time() devuelve el timestamp directamente; 0 si no hay fecha.
+			if ( method_exists( $subscription, 'get_time' ) ) {
+				return (int) $subscription->get_time( 'next_payment' );
+			}
+			$date = $subscription->get_date( 'next_payment' );
+			return $date ? (int) wcs_date_to_time( $date ) : 0;
+		} catch ( \Throwable $e ) {
+			self::log( sprintf(
+				'No se pudo leer la fecha de próximo cobro de la suscripción #%s: %s',
+				method_exists( $subscription, 'get_id' ) ? $subscription->get_id() : '?',
+				$e->getMessage()
+			), 'warning' );
+			return 0;
+		}
+	}
+
+	/**
 	 * Conciliación diaria — SEÑAL PRINCIPAL de esta tienda.
 	 *
 	 * El estado de la suscripción no refleja el pago (hallazgo 10-jul-2026:
@@ -424,7 +560,7 @@ class Omnia_EvoCampus_Sync {
 	 * Redsys), así que el veredicto se calcula por PEDIDOS: si el último
 	 * pedido pagado del alumno tiene ≤ GRACE_DAYS días → activo; si no → baja.
 	 */
-	public static function reconcile() {
+	public static function reconcile( $seed_only = false ) {
 		if ( ! function_exists( 'wcs_get_subscriptions' ) ) { return; }
 
 		// La conciliación hace ~1 llamada HTTP por alumno: ampliar el límite
@@ -432,10 +568,13 @@ class Omnia_EvoCampus_Sync {
 		if ( function_exists( 'set_time_limit' ) ) { @set_time_limit( 600 ); }
 		ignore_user_abort( true );
 
-		$grace = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
+		$grace    = defined( 'OMNIA_EVO_GRACE_DAYS' ) ? (int) OMNIA_EVO_GRACE_DAYS : 38;
+		$courtesy = defined( 'OMNIA_EVO_COURTESY_DAYS' ) ? (int) OMNIA_EVO_COURTESY_DAYS : 7;
 		self::log( sprintf(
-			'Conciliación diaria: inicio (ventana de pago: %d días)%s',
-			$grace, OMNIA_EVO_DRYRUN ? ' [DRY-RUN]' : ''
+			'Conciliación diaria: inicio (cortesía sobre el cobro previsto: %d días · ventana de reserva: %d días)%s%s',
+			$courtesy, $grace,
+			OMNIA_EVO_DRYRUN ? ' [DRY-RUN]' : '',
+			$seed_only ? ' [SIEMBRA: no toca EvoCampus ni avisa a GHL]' : ''
 		) );
 
 		$started = time();
@@ -489,18 +628,30 @@ class Omnia_EvoCampus_Sync {
 				break;
 			}
 			try {
-				$days = $info['last_paid']
-					? (int) floor( ( $now - $info['last_paid'] ) / DAY_IN_SECONDS )
-					: null;
-				$ok      = ( null !== $days && $days <= $grace );
-				$verdict = $ok ? 'activo' : 'baja';
+				$decision = self::verdict_for(
+					$now,
+					$info['last_paid'],
+					self::next_payment_timestamp( $info['sub'] ),
+					$grace,
+					$courtesy
+				);
+				$verdict = $decision['verdict'];
+				$ok      = ( 'activo' === $verdict );
 
 				self::log( sprintf(
-					'%s — último pago %s → %s',
-					$info['email'],
-					null === $days ? 'NUNCA' : "hace {$days} días",
-					$verdict
+					'%s — %s → %s',
+					$info['email'], $decision['reason'], $verdict
 				) );
+
+				// En modo siembra solo se registra el veredicto: ni se toca
+				// EvoCampus ni se avisa a GHL. Sirve para dejar el estado
+				// inicial guardado antes del primer pase real, y que ese pase
+				// no dispare una notificación por cada alumno.
+				if ( $seed_only ) {
+					$verdicts[ $key ] = $verdict;
+					$done++;
+					continue;
+				}
 
 				self::set_status_for_email( $info['email'], $ok ? 0 : 2 );
 
@@ -519,13 +670,16 @@ class Omnia_EvoCampus_Sync {
 
 		// En DRY-RUN no se persisten veredictos: el primer pase real
 		// notificará a GHL el estado inicial de todos los alumnos.
-		if ( ! OMNIA_EVO_DRYRUN ) {
+		// La SIEMBRA es justo la excepción: guarda precisamente para que ese
+		// primer pase real solo avise de los cambios de verdad.
+		if ( $seed_only || ! OMNIA_EVO_DRYRUN ) {
 			update_option( 'omnia_evo_verdicts', $verdicts, false );
 		}
 
 		self::log( sprintf(
-			'Conciliación diaria: fin (%d de %d alumnos evaluados en %d s)',
-			$done, count( $students ), time() - $started
+			'Conciliación diaria: fin (%d de %d alumnos evaluados en %d s)%s',
+			$done, count( $students ), time() - $started,
+			$seed_only ? sprintf( ' — %d veredictos sembrados, 0 avisos enviados', count( $verdicts ) ) : ''
 		) );
 	}
 

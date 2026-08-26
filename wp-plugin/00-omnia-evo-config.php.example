@@ -23,6 +23,16 @@ if ( ! defined( 'OMNIA_EVO_GRACE_DAYS' ) ) {
 	// confirmada por Paco el 14-jul-2026).
 	define( 'OMNIA_EVO_GRACE_DAYS', 38 );
 }
+
+/**
+ * Días de cortesía sobre la FECHA DE COBRO PREVISTA de cada suscripción
+ * (política A6, Paco 14-jul-2026). Desde v0.8.1 esta es la regla principal:
+ * la ventana ya no es fija, se deriva del calendario real de la suscripción.
+ * GRACE_DAYS de arriba solo se usa cuando no hay fecha de próximo cobro.
+ */
+if ( ! defined( 'OMNIA_EVO_COURTESY_DAYS' ) ) {
+	define( 'OMNIA_EVO_COURTESY_DAYS', 7 );
+}
 if ( ! defined( 'OMNIA_EVO_BECADOS_EMAILS' ) ) {
 	// Accesos manuales AUTORIZADOS. El informe mensual los etiqueta como
 	// autorizados en vez de señalarlos como anomalía; no se les corta nada

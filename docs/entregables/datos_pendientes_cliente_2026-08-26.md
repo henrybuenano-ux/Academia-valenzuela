@@ -6,6 +6,25 @@
 > Separado a propósito en **datos** (nos los pasan y ya) y **decisiones** (hay
 > que pensarlas). Los datos se pueden recoger en una llamada de diez minutos;
 > las decisiones no.
+>
+> ## ✅ ACTUALIZADO tras la llamada del 26-ago
+>
+> La llamada con Paco cerró **seis** de estos pendientes. Lo tachado abajo ya no
+> hay que pedirlo. Acta completa en `llamada_2026-08-26_acuerdos.md`.
+>
+> | Resuelto | Valor |
+> |---|---|
+> | Nombre fiscal | **Francisco Valenzuela Rodríguez** |
+> | Domicilio fiscal | **Camino de Ronda 57, 2º F · 18004 Granada** |
+> | IVA | Exento — *de palabra, falta el respaldo escrito de la gestoría* |
+> | Horario de asesorías | **9:00-13:00 y 17:00-20:00** · 30 min · 24 h de antelación |
+> | Curso de entrevista | Altas manuales de Paco, con otra forma de pago. Quiere que queden fuera de facturación y avisos |
+> | Aterrizaje de campañas | Acordado moverlas a la landing con formulario |
+>
+> **Y entró uno nuevo, urgente:** ex-alumnos de la 132ª **no pueden
+> re-matricularse** — al meter su email, la tienda no les deja terminar la
+> compra. Diagnosticado, con dos arreglos de treinta segundos cada uno. Con la
+> oferta caducando el 31, es lo que más corre de todo.
 
 ---
 
@@ -17,15 +36,15 @@ Tenemos el NIF (**26956058N**, persona física) porque estaba en el plan. Nos
 faltan dos campos que son **obligatorios por ley** en una factura
 (art. 6 del RD 1619/2012):
 
-- [ ] **Nombre y apellidos fiscales completos**
-- [ ] **Domicilio fiscal** (calle, número, CP, localidad, provincia)
+- [x] ~~Nombre y apellidos fiscales completos~~ → **Francisco Valenzuela Rodríguez**
+- [x] ~~Domicilio fiscal~~ → **Camino de Ronda 57, 2º F · 18004 Granada**
 
 Sin esto no se puede emitir ni una factura, ni de las nuevas ni de las
 atrasadas. Es lo más barato de conseguir y lo que más bloquea.
 
 ## 2 · ¿El curso está exento de IVA? → lo confirma la gestoría, no nosotros
 
-- [ ] **Respuesta de la gestoría por escrito**
+- [~] Paco confirmó de palabra que está exento. **Sigue faltando el respaldo por escrito de la gestoría** antes de emitir a volumen
 
 **Ya se está vendiendo sin repercutir IVA.** Si resulta que no está exento, se
 debe el 21 % de todo lo vendido, hacia atrás. Hoy son ~768 € de las 16
@@ -34,8 +53,7 @@ todavía: por eso conviene cerrarlo ahora y no en enero.
 
 ## 3 · WhatsApp → la aprobación de Meta tarda semanas y el curso empieza el 1-sep
 
-- [ ] **Un número de teléfono** que NO esté dado de alta en WhatsApp normal
-      (o que puedan liberar)
+- [x] ~~Un número de teléfono~~ → tienen un móvil dedicado a la academia, **sin WhatsApp Business**. Sirve
 - [ ] **Acceso a su Facebook Business Manager** (o que nos añadan)
 - [ ] **Datos para la verificación de empresa** de Meta: nombre legal,
       dirección y web
@@ -50,7 +68,7 @@ esta semana, no llega al arranque del curso.
 
 ## 4 · Horario real de asesorías de Paco
 
-- [ ] **Sus franjas horarias reales**, por día de la semana
+- [x] ~~Franjas horarias~~ → **9:00-13:00 y 17:00-20:00**, citas de 30 min, 24 h de antelación mínima
 
 El calendario está sirviendo el horario **por defecto de GoHighLevel: 36 huecos
 de 08:00 a 16:45, de lunes a viernes**. Un interesado puede reservar a las 8 de
@@ -68,7 +86,7 @@ no lo necesita, por si no llega.)*
 
 ## 6 · El curso de entrevista
 
-- [ ] **¿Se cobra aparte o va incluido?**
+- [x] ~~¿Se cobra aparte?~~ → altas manuales de Paco para la entrevista, con otra forma de pago. Quiere que queden fuera de facturación y de avisos
 
 Hay **30 alumnos** del grupo `ENTREVISTA 2026 PROMOCIÓN 132GC` con acceso
 activo al campus, conectándose esta misma semana, y **sin ningún registro en la

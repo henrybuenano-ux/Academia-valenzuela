@@ -90,14 +90,39 @@ hacer con ellos: no es una lista para un email masivo, es una lista para llamar.
 
 ## Qué son estas personas, exactamente
 
-Gente que **estaba pagando religiosamente** hasta que la academia les paró el
-cobro. No se fueron: dejaron de ser cobrados.
+> 🔄 **Corregido el 26-ago tras hablar con Paco.** Aquí decíamos que se les dejó
+> de cobrar por *«un error administrativo»*. **No lo fue.** Fue deliberado:
+>
+> *«Como eran simplemente unos 11 días del mes de julio, quisimos tener el
+> detalle hacia ellos de que esos 11 días no los pagaran, es decir, como
+> regalo.»*
+>
+> El curso terminaba a los 11 días de julio y la academia decidió no cobrar ese
+> tramo. Un gesto, no un fallo.
 
-Eso los convierte en el mejor público posible para la 133ª —mejor incluso que
-los ex-alumnos de verdad— porque su relación con la academia no se rompió: se
-interrumpió por un error administrativo. Y la conversación de recuperación es
-distinta: no es *«vuelve con nosotros»*, es *«se paró tu suscripción por un
-problema nuestro, ¿quieres retomarla?»*.
+Gente que **estaba pagando religiosamente** y a la que la academia **le regaló
+el final del curso**. No se fueron: se les dejó de cobrar a propósito.
+
+Eso los convierte en el mejor público posible para la 133ª, y con un argumento
+mucho más cómodo del que teníamos:
+
+| | |
+|---|---|
+| ❌ Lo que decíamos antes | «Se paró tu suscripción por un problema nuestro, ¿la retomamos?» |
+| ✅ Lo correcto | «Te regalamos el final de julio. ¿Retomamos en septiembre?» |
+
+No hay nada que disculpar: se llama para ofrecer, no para reparar.
+
+*(Paco, con humor resignado: «poquita gente lo agradeció».)*
+
+## ⚠️ Y algo que hay que arreglar ANTES de llamarles
+
+Varios de estos ex-alumnos **ya han intentado volver y no han podido**: al meter
+su email, la tienda les dice que ya existe una cuenta y no les deja terminar la
+compra. Está diagnosticado en `llamada_2026-08-26_acuerdos.md`.
+
+**Llamar a 32 personas para que se encuentren un muro es peor que no llamar.**
+Primero se arregla el checkout, después se llama.
 
 ## Y la trampa que hay que evitar
 

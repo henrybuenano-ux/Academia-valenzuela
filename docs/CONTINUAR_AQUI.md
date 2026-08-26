@@ -866,3 +866,81 @@ producto o un pedido — **no fiarse del HTML de la ficha**.
 - Secretos solo en .env/wp-config (gitignorados) — nunca commiteados.
 - Borrar contactos de prueba **por id exacto, nunca por búsqueda de nombre**.
 - **Nunca** usar el "push staging → producción" de WP Staging.
+
+---
+
+# 📌 LLAMADA CON PACO — 26-ago-2026
+
+Acta completa: **`docs/entregables/llamada_2026-08-26_acuerdos.md`**
+Grabación: `https://fathom.video/share/Czxtx44ywhF1Tezx98rTU8jpQ3tq8pCs`
+
+## 🔴 Lo que corre: no pueden re-matricularse
+
+Ex-alumnos de la 132ª que quieren volver **no pueden completar la compra**: al
+meter su email, la tienda dice que ya existe cuenta y les corta. Caso concreto
+dado por Paco: **Óscar Vargas Balboa**. Uno lo resolvió creando **otro usuario
+con otro correo** — cuenta duplicada y acceso doble al campus.
+
+**Diagnóstico** (comprobado en staging, confirmar en producción):
+
+| Ajuste | Estado |
+|---|---|
+| `enable_guest_checkout` | off |
+| `enable_checkout_login_reminder` | off |
+| `enable_signup_and_login_from_checkout` | off |
+
+Las tres apagadas dejan sin salida a quien ya tiene cuenta. Y el producto
+`#1374` (132ª) tiene **«limitar suscripción» = una activa**, que en WCS cuenta
+también las *En espera*; si el `#2054` heredó el ajuste, bloquea por partida
+doble.
+
+**Arreglos** (los aplica el equipo, 30 s cada uno):
+1. Activar «permitir iniciar sesión durante la compra» en Cuentas y privacidad.
+2. Poner «Limitar suscripción» del `#2054` en **Sin límite**.
+
+⚠️ **Y no llamar a los 32 de la lista de recuperación hasta que esté arreglado.**
+Llamarles para que se encuentren un muro es peor que no llamar.
+
+## ✅ Seis pendientes cerrados
+
+| | |
+|---|---|
+| Nombre fiscal | **Francisco Valenzuela Rodríguez** (hijo de Paco, el autónomo) |
+| NIF | `26956058N` |
+| Domicilio fiscal | **Camino de Ronda 57, 2º F · 18004 Granada** |
+| Horario asesorías | **9:00-13:00 y 17:00-20:00** · 30 min · 24 h de antelación |
+| Usuario CRM | **gestion@academiavalenz.com** — invitación enviada |
+| Becados | Confirmado: altas manuales de Paco. Es justo lo que ya hace el plugin |
+
+**La factura va a nombre de Francisco**, no de «Academia Valenz», que entra solo
+como logo. Van a pasar el pack de logos (el actual tiene fondo verdoso).
+
+## ⚠️ El IVA no está cerrado
+
+Paco dijo de palabra que está exento y con eso avanzamos, **pero no es la
+gestoría**. Si se equivoca son el 21 % de todo lo vendido hacia atrás. Queda
+como **riesgo asumido**: pedir el respaldo escrito antes de emitir a volumen.
+
+## 🔄 Corrección: la pausa de junio fue un regalo, no un error
+
+Escribimos que a los 32 se les dejó de cobrar por «un error administrativo».
+**Falso.** Paco: *«eran simplemente unos 11 días del mes de julio, quisimos
+tener el detalle de que no los pagaran, como regalo»*. Corregido en
+`suscripciones_pausadas_2026-08-26.md`. Cambia el guion de la llamada de
+recuperación: no hay nada que disculpar.
+
+## Contenido nuevo para web y bot
+
+**El curso completo son CUATRO formaciones**, y la web no lo dice — por eso
+preguntan por Instagram: conocimientos (la más extensa), ortografía y gramática,
+psicotécnicos e inglés. Y **la suscripción corre mes a mes hasta el examen**
+(junio o julio), con el temario liberado poco a poco. Ya metido en el prompt del
+bot y en la landing.
+
+## Pendiente de otros
+
+- **Henry**: conexión de WhatsApp (~15 min). ⚠️ El número **no puede quedar
+  facturado a la agencia** — la tarjeta la ponen ellos.
+- **Paco**: Business Manager de Facebook · Google My Business · una llamada corta
+  para conectar su Google Calendar estando él logueado.
+- **Sin resolver**: quién apagó el bot el 18-ago. Nadie lo sabía en la llamada.

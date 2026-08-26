@@ -103,6 +103,30 @@ Qué incluye el campus
   examen real.
 - Seguimiento y tutoría de la academia hasta el examen.
 
+> 🆕 **Añadido el 26-ago tras la llamada con Paco.** Le preguntan por Instagram
+> qué incluye «el curso completo», porque el nombre no lo dice. **Hay que meter
+> esto en el campo de Información adicional:**
+>
+> ```
+> Qué incluye el curso completo
+> - El curso completo son CUATRO formaciones, no una. Muchos creen que
+>   es solo la de conocimientos, que es la más extensa. Aclararlo
+>   siempre que pregunten qué entra:
+>     1. Conocimientos (la más extensa)
+>     2. Ortografía y gramática
+>     3. Psicotécnicos
+>     4. Inglés
+> - Son las cuatro pruebas de la primera fase de la oposición.
+> - Todo entra en la misma cuota: no se venden por separado.
+>
+> Duración de la suscripción
+> - Se paga mes a mes hasta el examen, que cae en junio o julio.
+> - Sin permanencia: se cancela cuando se quiera.
+> - El temario se libera poco a poco, como evaluación continua, no
+>   todo de golpe. Si alguien pregunta por qué, la razón es que dar
+>   todo el material de una vez satura y desmotiva.
+> ```
+
 Precio y condiciones
 - 80 €/mes. Sin matrícula y sin permanencia.
 

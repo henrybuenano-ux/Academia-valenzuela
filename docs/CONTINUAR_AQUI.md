@@ -881,25 +881,41 @@ meter su email, la tienda dice que ya existe cuenta y les corta. Caso concreto
 dado por Paco: **Óscar Vargas Balboa**. Uno lo resolvió creando **otro usuario
 con otro correo** — cuenta duplicada y acceso doble al campus.
 
-**Diagnóstico** (comprobado en staging, confirmar en producción):
+**Diagnóstico — confirmado en producción** (Henry, 26-ago). Producción no
+coincidía con staging; la causa es más simple:
 
-| Ajuste | Estado |
-|---|---|
-| `enable_guest_checkout` | off |
-| `enable_checkout_login_reminder` | off |
-| `enable_signup_and_login_from_checkout` | off |
+| Casilla · Cuentas y privacidad | Staging | **Producción** |
+|---|---|---|
+| Activar el pago como invitado | off | **ON** |
+| Activar el inicio de sesión durante el pago | off | **off** ❌ |
 
-Las tres apagadas dejan sin salida a quien ya tiene cuenta. Y el producto
-`#1374` (132ª) tiene **«limitar suscripción» = una activa**, que en WCS cuenta
-también las *En espera*; si el `#2054` heredó el ajuste, bloquea por partida
-doble.
+La ayuda de WooCommerce lo dice: *«adquirir una suscripción requiere tener una
+cuenta»*. Así que el ex-alumno entra como invitado, WooCommerce le exige cuenta,
+la crea con su email, ya existe, le manda a iniciar sesión — y no hay formulario
+de login en el checkout. Sin salida.
 
-**Arreglos** (los aplica el equipo, 30 s cada uno):
-1. Activar «permitir iniciar sesión durante la compra» en Cuentas y privacidad.
-2. Poner «Limitar suscripción» del `#2054` en **Sin límite**.
+**Arreglos:**
+1. ✅ **La causa:** marcar «Activar el inicio de sesión durante el pago».
+   El pago como invitado se queda como está.
+2. ⏳ **Pendiente:** «Limitar suscripción» del `#2054`, pestaña **Avanzado** (no
+   General). Si está en «una activa» → **Sin límite**. El `#1374` (132ª) lo
+   tiene así, y WCS cuenta también las *En espera*.
 
 ⚠️ **Y no llamar a los 32 de la lista de recuperación hasta que esté arreglado.**
 Llamarles para que se encuentren un muro es peor que no llamar.
+
+## 🔴 El precio de lanzamiento no caduca solo
+
+Revisando el `#2054` en producción: **«Precio rebajado» está vacío** pero
+«Fechas del precio rebajado» tiene 6-ago → 31-ago. Esa programación no aplica
+nada. Los 48 € están puestos como **cuota de registro**, un campo fijo sin
+fechas.
+
+**El 1 de septiembre no sube nada solo.** Hay que entrar y cambiar la cuota de
+registro de 48 a 80 a mano, mientras la landing y el bot ya prometen que la
+oferta terminó el 31.
+
+Detalle y alternativas: `entregables/precio_lanzamiento_caduca_31ago.md`.
 
 ## ✅ Seis pendientes cerrados
 

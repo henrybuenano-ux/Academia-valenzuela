@@ -21,10 +21,16 @@
 > | Curso de entrevista | Altas manuales de Paco, con otra forma de pago. Quiere que queden fuera de facturación y avisos |
 > | Aterrizaje de campañas | Acordado moverlas a la landing con formulario |
 >
-> **Y entró uno nuevo, urgente:** ex-alumnos de la 132ª **no pueden
-> re-matricularse** — al meter su email, la tienda no les deja terminar la
-> compra. Diagnosticado, con dos arreglos de treinta segundos cada uno. Con la
-> oferta caducando el 31, es lo que más corre de todo.
+> **Y entraron dos nuevos, los dos con fecha:**
+>
+> 1. **Ex-alumnos de la 132ª no pueden re-matricularse** — al meter su email, la
+>    tienda no les deja terminar la compra. **Causa confirmada en producción** el
+>    mismo 26-ago: falta la casilla «Activar el inicio de sesión durante el
+>    pago». Arreglo de treinta segundos.
+> 2. **El precio de lanzamiento no caduca solo.** Las fechas del producto están
+>    puestas sobre un campo vacío y no hacen nada; los 48 € son cuota de
+>    registro, fija. **El 1-sep hay que subirla a mano.** Detalle en
+>    `precio_lanzamiento_caduca_31ago.md`.
 
 ---
 
@@ -153,7 +159,21 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 | D | **El atrasado desde nov-2025**: ¿quién emite esas facturas? | No es trabajo nuestro, pero es volumen y es su responsabilidad |
 | E | **Dónde aterriza el tráfico de campañas** | Hoy va a la home, que solo sirve al que ya viene decidido. El que aún compara no tiene dónde dejar sus datos |
 | F | **El botón "Infórmate sin compromiso"** en la home hacia la landing | Es la segunda vía de captura que faltó durante la caída del bot |
-| G | **¿Los 48 € son solo de lanzamiento?** | Para saber si el 1-sep hay que quitarlo del bot y de la landing, o sustituirlo por otra oferta |
+| G | **¿Los 48 € son solo de lanzamiento?** | Para saber si el 1-sep hay que quitarlo del bot y de la landing, o sustituirlo por otra oferta. ⚠️ Decidan lo que decidan, **el producto no cambia solo**: la cuota de registro es un campo fijo y hay que tocarla a mano |
+
+---
+
+## ⏰ Con fecha, y no dependen del cliente
+
+| Cuándo | Qué | Quién |
+|---|---|---|
+| **Ya** | Marcar «Activar el inicio de sesión durante el pago» en Cuentas y privacidad | Equipo (wp-admin) |
+| **Ya** | Comprobar «Limitar suscripción» del `#2054` — pestaña **Avanzado**, no General. Si está en «una activa» → Sin límite | Equipo (wp-admin) |
+| **Ya** | Compra de prueba en incógnito con un email de la 132ª, hasta la pasarela | Equipo |
+| **1-sep** | Subir la cuota de registro del `#2054` de **48 € a 80 €** y vaciar las fechas del precio rebajado | Equipo (wp-admin) |
+
+⚠️ **Y no llamar a los 32 de la lista de recuperación** hasta que la compra de
+prueba pase.
 
 ---
 

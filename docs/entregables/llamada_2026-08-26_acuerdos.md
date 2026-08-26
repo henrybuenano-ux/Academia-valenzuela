@@ -22,41 +22,56 @@ Detalles que estrechan el diagnóstico:
 **Esto es dinero perdido hoy**, con la oferta caducando el 31 de agosto, y sobre
 el público que más fácil convierte: gente que ya estudió con ellos.
 
-## Diagnóstico
+## Diagnóstico · confirmado en producción el 26-ago
 
-Comprobado en staging (copia de julio — **confirmar en producción**):
+Henry abrió el wp-admin de producción y comprobó los ajustes. **No coinciden con
+staging**, y el diagnóstico real resulta más simple:
 
-| Ajuste de WooCommerce | Estado |
-|---|---|
-| `enable_guest_checkout` — comprar sin cuenta | **off** |
-| `enable_checkout_login_reminder` — iniciar sesión en el checkout | **off** |
-| `enable_signup_and_login_from_checkout` | **off** |
+| Casilla (WooCommerce → Cuentas y privacidad) | Staging (julio) | **Producción** |
+|---|---|---|
+| Activar el pago como invitado | off | **ON** |
+| Activar el inicio de sesión durante el pago | off | **off** ❌ |
 
-**Las tres apagadas a la vez dejan al ex-alumno sin salida**: no puede comprar
-como invitado porque su email ya existe, y tampoco puede iniciar sesión desde la
-página de compra. El que sí pudo comprar es quien ya venía logueado.
+La causa la explica el propio WooCommerce, en la ayuda bajo la primera casilla:
+*«Permite a los clientes finalizar la compra sin crear una cuenta. Observa que
+adquirir una suscripción requiere tener una cuenta.»*
 
-**Segundo sospechoso, independiente:** el producto `#1374` (la 132ª en staging)
-tiene **«limitar suscripción» = _una activa_**. WooCommerce Subscriptions cuenta
-también las **En espera** para ese límite. Si el producto de la 133ª (`#2054`,
-creado después de la copia y no visible desde aquí) heredó el ajuste, bloquearía
-por partida doble.
+**La secuencia del muro:**
 
-## Los dos arreglos
+1. El ex-alumno llega al checkout como invitado — se lo permiten.
+2. Pero el producto es una **suscripción**, así que WooCommerce le exige cuenta.
+3. Intenta crearla con su email → ya existe → *«Ya existe una cuenta registrada
+   con tu dirección de correo electrónico. Por favor, inicia sesión.»*
+4. Y **no hay formulario de inicio de sesión en esa página**, porque la segunda
+   casilla está desmarcada.
 
-**1 · Activar «Permitir a los clientes iniciar sesión durante la compra»**
-WooCommerce → Ajustes → Cuentas y privacidad. Es el cambio mínimo: desbloquea
-sin tocar la política de cuentas y sin generar duplicados.
+Callejón sin salida. Es literalmente lo que describió Paco: *«al meter su correo
+electrónico, le dice la plataforma que ya está»*. Y explica por qué los del
+intensivo sí pudieron: pago único, sin cuenta obligatoria. Y por qué alguno lo
+resolvió con un segundo correo: era la única salida que le dejaba la tienda.
 
-**2 · Revisar «Limitar suscripción» en el producto `#2054`**
-Pestaña General. Si está en «una activa», ponerlo en **«Sin límite»**: quien
-terminó la 132ª tiene todo el derecho a comprar la 133ª.
+**Segundo sospechoso, aún abierto:** el producto `#1374` (la 132ª en staging)
+tiene **«limitar suscripción» = _una activa_**, y WooCommerce Subscriptions
+cuenta también las **En espera** para ese límite. Falta ver si el `#2054` heredó
+el ajuste.
+
+## Los arreglos
+
+**1 · Marcar «Activar el inicio de sesión durante el pago»** ✅ *la causa*
+WooCommerce → Ajustes → Cuentas y privacidad. **El pago como invitado se queda
+como está** — desactivarlo no arregla nada y rompe otras compras.
+
+**2 · Revisar «Limitar suscripción» en el `#2054`** *(pendiente de comprobar)*
+En la ficha del producto, pestaña **Avanzado** — no General: en las versiones
+recientes de WooCommerce Subscriptions el campo vive ahí. Si está en «una
+activa», ponerlo en **«Sin límite»**: quien terminó la 132ª tiene todo el derecho
+a comprar la 133ª.
 
 Treinta segundos cada uno. **Los aplica el equipo** — nuestra IP sigue bloqueada
 en el wp-admin de producción.
 
-**Verificación:** intentar una compra con un email que ya tenga cuenta y
-comprobar que llega hasta la pasarela.
+**Verificación:** compra de prueba en ventana de incógnito con un email que ya
+tenga cuenta (p. ej. Óscar Vargas Balboa) — debe llegar hasta la pasarela.
 
 ---
 

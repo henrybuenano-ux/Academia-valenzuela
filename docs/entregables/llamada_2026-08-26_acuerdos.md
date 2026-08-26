@@ -94,18 +94,28 @@ existe y el formulario está completo:
 **El muro está caído.** Quien ya tiene cuenta puede iniciar sesión desde la
 propia página de compra y terminar el pedido.
 
-**Dónde aparece** (esto confundió en la primera prueba): es una línea gris **en
-lo alto de la página**, en la zona de avisos, encima del formulario de
-facturación. Sale **al cargar**, no al escribir el correo, y hay que **pincharla**
-para que se despliegue el formulario.
+**Comprobado también en el navegador**, en ventana de incógnito: el aviso sale en
+**su propio recuadro con borde**, solo, encima del bloque de «Detalles de
+facturación». Bien visible. Hay que **pinchar el enlace** para que se despliegue
+el formulario, que viene oculto (`display:none`).
+
+**Ojo con cómo se prueba** — esto costó dos intentos: el aviso **no se muestra a
+quien tiene la sesión iniciada**. Si hay un wp-admin abierto en otra pestaña, esa
+ventana comparte sesión y el aviso desaparece. Hay que probar en incógnito de
+verdad.
+
+**Y aparece un campo nuevo** al final del formulario: «Crear una contraseña para
+la cuenta». El cliente nuevo elige su contraseña durante la compra en vez de
+recibir una generada por correo — mejor experiencia y menos soporte.
 
 ### ⚠️ La fricción que queda: la contraseña
 
 Los 32 de la lista de recuperación **no van a recordar su contraseña** — la
 pusieron hace meses. Llegan al formulario y se atascan ahí.
 
-El enlace **«¿Olvidó su contraseña?»** está en el mismo sitio, así que hay
-salida, pero **hay que decírselo por teléfono**. Guion para la llamada:
+El enlace **«¿Olvidó su contraseña?»** está dentro del bloque desplegable, así
+que hay salida — pero está a dos clics y **hay que decírselo por teléfono**.
+Guion para la llamada:
 
 > *«Entra en la página de compra. Arriba del todo verás "¿Ya eres cliente? Haz
 > clic aquí para acceder". Si no te acuerdas de la contraseña, justo debajo

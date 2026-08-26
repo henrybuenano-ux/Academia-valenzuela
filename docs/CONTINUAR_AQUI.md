@@ -907,10 +907,14 @@ de otro producto. Tampoco encaja el síntoma: el límite retira el botón de
 «Añadir al carrito», no da el error del correo. Se apaga igualmente porque a
 quien le falle un cobro en la 133ª le impediría volver a comprarla.
 
-✅ **Verificado el 26-ago** en el HTML de `/finalizar-compra/`: el aviso
-«¿Ya eres cliente? Haz clic aquí para acceder» existe, con formulario de acceso
-y enlace de contraseña olvidada. **El muro está caído.** Aparece como una línea
-gris en lo alto de la página, al cargar — no al escribir el correo.
+✅ **Verificado el 26-ago**, en el HTML y en el navegador en incógnito: el aviso
+«¿Ya eres cliente? Haz clic aquí para acceder» sale en su propio recuadro encima
+del formulario, con acceso y enlace de contraseña olvidada. **El muro está
+caído.**
+
+**Para probarlo hay que estar deslogueado**: con sesión iniciada el aviso no se
+renderiza, y eso costó dos intentos. Un wp-admin abierto en otra pestaña basta
+para falsear la prueba.
 
 ⚠️ **La fricción que queda:** los 32 no recordarán su contraseña. El enlace
 «¿Olvidó su contraseña?» está ahí, pero **hay que decírselo en la llamada**, o se

@@ -16,6 +16,22 @@ copias**: el detalle vive en su sitio.
 | **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
 | **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?» | `entregables/llamada_2026-08-26_acuerdos.md` |
 
+## ❓ Sin resolver: ¿hasta cuándo tiene acceso el alumno?
+
+Hoy se publicó en la landing y en el bot que **la suscripción corre hasta el
+examen**. Al verificarlo, tres fuentes dicen tres cosas: la llamada del 26-ago
+dice hasta el examen (junio o julio); la de descubrimiento del 10-jun, con Fran
+delante, dice que la mensual **dura hasta abril/mayo** y que el intensivo es un
+**pago único aparte**; y el producto en producción no tiene fecha de fin.
+
+**Ya está publicado**, así que si la buena es la de abril/mayo estamos
+prometiendo algo que no se vende. Pregunta concreta para Paco y análisis en
+`entregables/duracion_suscripcion_contradiccion.md`.
+
+⚠️ La transcripción del 26-ago **no se guardó**: se pegó en el chat y se
+compactó. La fecha de fin es interpretación del acta, no cita. **Guardar las
+transcripciones en `docs/` antes de trabajarlas.**
+
 ## 📨 Esperando respuesta de Paco (enviado el 26-ago)
 
 Contestada su pregunta de si había que dar de baja a los ex-alumnos para que

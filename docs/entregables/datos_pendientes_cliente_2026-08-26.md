@@ -154,13 +154,36 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 
 | # | Decisión | Por qué corre |
 |---|---|---|
-| A | **Las 39 suscripciones pausadas** desde el 24-jun: ¿cancelar, reactivar o dejar expirar? | Son ~3.100 €/mes sin facturar, y **bloquean el paso del plugin a modo real**: sin decidirlo, el primer censo real arranca sucio |
-| B | **Los 7 becados**: opción A o B (propuesta enviada el 17-jul, sin respuesta) | Segundo bloqueo del modo real |
+| A | **Las suscripciones paradas desde el 24-jun.** ⚠️ Ya no preguntar «¿cancelar, reactivar o dejar expirar?» en abstracto — la llamada dio una formulación mucho mejor, ver abajo | ~3.100 €/mes sin facturar, y **bloquean el paso del plugin a modo real**: sin decidirlo, el primer censo real arranca sucio |
+| ~~B~~ ✅ | ~~**Los 7 becados**: opción A o B~~ **Resuelta en la llamada del 26-ago.** Paco describió lo que quería —*«exentos del tema de facturación, del tema de los avisos»*, con etiqueta de becado— sin saber que es exactamente lo que hace `OMNIA_EVO_BECADOS_EMAILS` desde julio. No hay que elegir entre A y B. **Lo que queda es un dato, no una decisión: confirmar qué 7 correos son** |
 | C | **Numeración de facturas**: ¿anual `26-0001` o mensual `26/08-0001`? | La mensual obliga a plugin de pago, y el huso horario la rompería en los cambios de mes. Recomendamos anual |
 | D | **El atrasado desde nov-2025**: ¿quién emite esas facturas? | No es trabajo nuestro, pero es volumen y es su responsabilidad |
 | E | **Dónde aterriza el tráfico de campañas** | Hoy va a la home, que solo sirve al que ya viene decidido. El que aún compara no tiene dónde dejar sus datos |
 | F | **El botón "Infórmate sin compromiso"** en la home hacia la landing | Es la segunda vía de captura que faltó durante la caída del bot |
 | ~~G~~ ✅ | ~~**¿Los 48 € son solo de lanzamiento?**~~ **Resuelta sin preguntar**: la landing y el bot dicen «primer mes 48 € en vez de 80», «40 % de descuento» y «sin matrícula» — es el primer mes rebajado, no una matrícula. Lo que queda no es una decisión de precio sino **de configuración**, y es nuestra: ver `precio_lanzamiento_caduca_31ago.md` |
+
+
+### 🎯 Cómo plantear la decisión A, después de la llamada
+
+Paco explicó **por qué** se pararon, no qué hacer ahora:
+
+> *«Como eran simplemente unos 11 días del mes de julio, quisimos tener el
+> detalle hacia ellos de que esos 11 días no los pagaran, es decir, como
+> regalo.»*
+
+**El regalo eran 11 días de julio. Llevan sin cobrarse desde el 24 de junio**
+— más de dos meses. O la pausa tenía que haber terminado y nadie las reactivó,
+o cambió la intención en algún momento y no está escrito en ninguna parte.
+
+Esa es la pregunta, y no se la hemos hecho así:
+
+| | |
+|---|---|
+| ❌ Como lo preguntábamos | «¿Qué hacemos con las 39: cancelar, reactivar o dejar expirar?» |
+| ✅ Como hay que preguntarlo | «El detalle eran 11 días de julio. ¿Por qué siguen paradas en agosto?» |
+
+La segunda es mucho más difícil de dejar sin contestar, y lleva sola a la
+decisión.
 
 ---
 

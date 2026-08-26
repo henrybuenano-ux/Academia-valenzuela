@@ -927,11 +927,28 @@ Revisando el `#2054` en producción: **«Precio rebajado» está vacío** pero
 nada. Los 48 € están puestos como **cuota de registro**, un campo fijo sin
 fechas.
 
-**El 1 de septiembre no sube nada solo.** Hay que entrar y cambiar la cuota de
-registro de 48 a 80 a mano, mientras la landing y el bot ya prometen que la
-oferta terminó el 31.
+**El 1 de septiembre no sube nada solo.** Pero al mirarlo salió algo peor que el
+precio.
 
-Detalle y alternativas: `entregables/precio_lanzamiento_caduca_31ago.md`.
+### 🔴 El hueco de pagos llega a 60 días, no a 36
+
+Prueba gratuita de 1 mes **+** sincronización al día 1: WCS aplica la prueba y
+luego salta al **siguiente** día 1. Quien compre el 2-sep no paga nada hasta el
+**1-nov** — sesenta días.
+
+La ventana de gracia del conciliador son **38 días** (`OMNIA_EVO_GRACE`). Ese
+alumno saldría como **baja** con la suscripción impecable, y en modo real
+perdería el acceso al campus.
+
+**Esto convierte el parche v0.8.1 en bloqueante para quitar el DRY-RUN**, no en
+una mejora conveniente. El veredicto tiene que venir del estado de la
+suscripción en WooCommerce, no de contar días desde el último pago.
+
+Corrijo lo que escribí antes: dije «36 días, pasa por dos». Era mirando solo el
+caso del 26 de agosto.
+
+Detalle, tabla de fechas y las tres opciones de reconfiguración:
+`entregables/precio_lanzamiento_caduca_31ago.md`.
 
 ## ✅ Seis pendientes cerrados
 

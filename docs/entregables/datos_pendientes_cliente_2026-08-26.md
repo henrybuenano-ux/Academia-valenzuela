@@ -160,7 +160,7 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 | D | **El atrasado desde nov-2025**: ¿quién emite esas facturas? | No es trabajo nuestro, pero es volumen y es su responsabilidad |
 | E | **Dónde aterriza el tráfico de campañas** | Hoy va a la home, que solo sirve al que ya viene decidido. El que aún compara no tiene dónde dejar sus datos |
 | F | **El botón "Infórmate sin compromiso"** en la home hacia la landing | Es la segunda vía de captura que faltó durante la caída del bot |
-| G | **¿Los 48 € son solo de lanzamiento?** | Para saber si el 1-sep hay que quitarlo del bot y de la landing, o sustituirlo por otra oferta. ⚠️ Decidan lo que decidan, **el producto no cambia solo**: la cuota de registro es un campo fijo y hay que tocarla a mano |
+| ~~G~~ ✅ | ~~**¿Los 48 € son solo de lanzamiento?**~~ **Resuelta sin preguntar**: la landing y el bot dicen «primer mes 48 € en vez de 80», «40 % de descuento» y «sin matrícula» — es el primer mes rebajado, no una matrícula. Lo que queda no es una decisión de precio sino **de configuración**, y es nuestra: ver `precio_lanzamiento_caduca_31ago.md` |
 
 ---
 
@@ -172,7 +172,8 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 | ~~Ya~~ ✅ | «Limitar suscripción» del `#2054` (pestaña **Avanzado**) → «No limitar» | Hecho 26-ago |
 | ~~Ya~~ ✅ | Verificado que el formulario de acceso aparece en la página de compra | Hecho 26-ago |
 | **Antes de llamar** | Añadir al guion la instrucción de «¿Olvidó su contraseña?» | Quien llame |
-| **1-sep** | Subir la cuota de registro del `#2054` de **48 € a 80 €** y vaciar las fechas del precio rebajado | Equipo (wp-admin) |
+| **1-sep** | **Reconfigurar el `#2054`** — no basta con subir la cuota de registro: la combinación prueba + sincronización deja huecos de hasta 60 días. Opciones y recomendación en `precio_lanzamiento_caduca_31ago.md` | Equipo (wp-admin) |
+| **1-sep** | Actualizar landing y prompt del bot con el precio nuevo | Omnia |
 
 ✅ **Ya se puede llamar a los 32 de la lista de recuperación** — el muro está
 caído. Con la instrucción de la contraseña olvidada en el guion.

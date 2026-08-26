@@ -12,8 +12,20 @@
 - El **curso empieza el 1 de septiembre**. Es la última semana útil de captación.
 - Cuatro de las siete preguntas eran **de compra directa** ("cuánto cuesta",
   "quiero información", "cuándo empieza"). No eran curiosos.
-- Y el widget está en la **web principal** desde el 10-ago, así que el problema
-  afecta a todo el tráfico del sitio, no solo a la landing.
+- Y esto es lo que agrava todo: **el bot no es un canal de captación más, es el
+  único.** El widget está en toda la web desde el 10-ago, y la home tiene
+  exactamente dos salidas: comprar a 48 € o hablar con el chat. Quien no está
+  listo para pagar hoy —la mayoría— solo tiene el bot. No hay ningún "déjanos
+  tu email y te mandamos información".
+
+  Así que la caída no fue "perdimos unos chats". Fue **la web entera sin
+  capacidad de captar un solo lead durante seis días**, en la semana de la
+  oferta.
+
+- **Y el repuesto tampoco funciona.** Durante la caída el widget sí pedía los
+  datos ("Por favor, deje sus datos de contacto"). **Ninguna de las 7 personas
+  los dejó. Cero de siete.** Cuando el bot no conversa, el formulario de reserva
+  no convierte: la gente se va.
 
 ## La evidencia
 
@@ -103,3 +115,16 @@ que no vuelva a pasar en silencio.*
 
 **Lo urgente es levantarlo antes del 1 de septiembre**, que es cuando llega el
 grueso del tráfico.
+
+## Lo que este incidente demuestra, más allá del bot
+
+Que la captación del sitio **depende de una sola pieza y no hay red**. Dos cosas
+distintas hacen falta:
+
+1. **Una alerta.** Estuvo caído seis días sin que saltara nada. Un workflow que
+   avise si pasan 48 h sin conversación del bot vale más que el propio arreglo.
+2. **Una segunda vía de captura en la home.** Lo más rentable es enlazar a
+   `/formacion`, que reaprovecha LS01 y SP01 —ya construidos y validados— y
+   cuesta cero. **Con un parámetro de origen propio**
+   (`?utm_source=web&utm_medium=home`), para no mezclar estos leads con los de
+   campañas y poder medir cada cosa por separado.

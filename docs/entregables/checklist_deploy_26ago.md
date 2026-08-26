@@ -92,6 +92,12 @@ los 16 alumnos nuevos en septiembre**. Todo el detalle, con la evidencia, en
    grupo `ENTREVISTA 2026` con acceso activo y sin ningún registro en la tienda.
    *Pregunta neutra, no acusación.*
 3. **¿Qué se hace con las 39 suscripciones pausadas** desde el 24-jun?
+4. **¿Cuándo arrancan las campañas?** La landing, LS01 y la secuencia de 4
+   emails están hechos y validados desde julio, y **no han recibido un solo lead
+   real** porque nunca se lanzó ninguna campaña. No falta desarrollo: falta
+   tráfico. *(Y de paso: el botón de la home hacia `/formacion` da una segunda
+   vía de captura, que es justo lo que faltó durante la caída del bot — pero con
+   parámetro de origen propio para no mezclar con la atribución de campañas.)*
 
 ### ⚠️ Qué NO prometer
 

@@ -55,8 +55,11 @@ Lo del re-enganche y el calendario de Paco pasan por hablar con él. Por email n
 responde, así que habría que llamarle — su horario de asesorías sigue sin
 configurar y el bot está ofreciendo citas a las 8 de la mañana.
 
-Menores, cuando quieras: las campañas de captación que nunca arrancaron y el
-botón de la home hacia la landing, que sigue pendiente de que lo aprueben ellos.
+Y una que ya no es menor: **las campañas de captación**. La landing, el
+workflow que recoge sus leads y la secuencia de 4 emails llevan hechos y
+probados desde julio, y no han recibido un solo lead real porque nunca se lanzó
+ninguna campaña que los alimentara. Está todo construido esperando tráfico que
+no llega. ¿Hay presupuesto para arrancarlas, o lo damos por aparcado?
 
 Un abrazo,
 [tu nombre]

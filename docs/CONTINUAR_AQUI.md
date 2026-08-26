@@ -17,6 +17,34 @@ copias**: el detalle vive en su sitio.
 | **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
 | **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?» | `entregables/llamada_2026-08-26_acuerdos.md` |
 
+## 📅 Calendario de asesorías: desbloqueado, con dos minas
+
+El horario de Paco era lo único que faltaba y lo dio en la llamada. Verificado
+hoy por API el estado real del calendario `Asesorías 133ª`:
+
+- **Lo guardado y lo servido no coinciden.** Guardado: 10-14 / 16-20. Servido:
+  **08:00–16:45, 36 huecos de 15 min.** Confirma el hallazgo de julio: el
+  horario cargado por API está almacenado pero el motor lo ignora. **Hay que
+  reescribirlo desde la UI.**
+- **Ninguna de las dos es la de Paco** (9-13 / 17-20, 30 min, 24 h).
+
+### 🔴 Dos cosas que hay que arreglar antes de encender nada
+
+1. **Ya existe un segundo calendario** — `Paco Valenzuela's Personal Calendar`.
+   La auditoría del 6-ago avisó: *«si se añade otro, ponerle el filtro In
+   calendar»* a SP02. Nadie lo hizo. Hoy **una cita en la agenda personal de
+   Paco sacaría al contacto de SP01/LS03**. Treinta segundos de arreglo.
+2. **No encender el nodo de agenda del bot** hasta que Paco conecte su Google
+   Calendar. Sin eso GHL ofrece sus 14 franjas diarias como libres y los leads
+   reservan encima de sus clases.
+
+Pasos de UI, valores y checklist de verificación:
+`entregables/calendario_asesorias_config.md`
+
+**Dos decisiones abiertas**: cuánto dura la asesoría (el bot dice 10 min, Paco
+pidió 30, el calendario sirve 15) y quién la atiende (está en round robin con 3
+personas, pero el horario es el de Paco).
+
 ## ✅ Resuelto: el acceso llega hasta el examen
 
 El censo de EvoCampus lo dice desde las matrículas reales: **todas las de la 132ª

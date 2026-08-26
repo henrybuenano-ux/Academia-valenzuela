@@ -51,10 +51,24 @@ del equipo actual, así que los accesos se consiguen directamente con Paco/Fran:
 ## Sistema 2 · Facturación automática (700 € / 70 €/mes)
 
 **⚠️ Punto de decisión previo — VeriFactu (RD 1007/2023):**
-Desde el **1 de julio de 2026** (ya en vigor) los autónomos están obligados a
-emitir factura desde un SIF certificado VeriFactu o desde el sistema de la
-AEAT. Paco factura como persona física (NIF 26956058N). **GHL Invoices NO es
-un SIF certificado** → GHL no puede ser el emisor legal de las facturas.
+
+> 🔴 **CORRECCIÓN 25-ago-2026.** Este párrafo decía que los autónomos estaban
+> obligados *"desde el 1 de julio de 2026, ya en vigor"*. **Es falso**: los
+> plazos se aplazaron por el **RD-ley 15/2025** (BOE 3-dic-2025). Quien lea la
+> versión anterior concluye que llevan meses incumpliendo, y no es así.
+
+**Plazos reales:** 1-ene-2027 (sociedades) · **1-jul-2027 (autónomos)**.
+Paco factura **como persona física, NIF 26956058N**, así que le aplica el de
+autónomos: **1 de julio de 2027**. Hay casi un año de margen.
+
+Lo que sí venció es la otra pata: los **fabricantes de software** debían tener
+sus productos adaptados en julio de 2025, así que las soluciones serias del
+mercado español ya vienen preparadas.
+
+**GHL Invoices NO es un SIF certificado** → GHL no puede ser el emisor legal de
+las facturas. (Confirmado además por API: la sub-cuenta tiene el módulo de
+facturas sin estrenar — 0 facturas, 0 plantillas.) La factura se genera donde
+ocurre el cobro: **WooCommerce**.
 
 **Alcance propuesto (a validar con Paco/gestoría):**
 - Emisión legal: herramienta certificada VeriFactu (Holded, Quipu, FacturaDirecta…) o la propia gestoría. Averiguar **cómo facturan hoy** — puede que la gestoría ya emita y solo falte automatizar el flujo de datos.

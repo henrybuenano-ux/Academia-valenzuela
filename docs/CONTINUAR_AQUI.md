@@ -49,8 +49,15 @@ automática de correos **no está lista**: son dos canales y solo uno está abie
 **SP02 verificado tras ponerle el filtro *In calendar*:** sigue `published`,
 modificado a las 20:12:57. No se despublicó al guardar, que era el riesgo.
 
-Los dos **LEGADO** siguen publicados: son los espejos por webhook que sustituyó
-la vía API en julio. Están pendientes de despublicar desde entonces.
+Los dos **LEGADO** están en `draft` **desde el 6-ago** — se despublicaron en la
+sesión de ese día (ver «Aplicado en esta sesión» más abajo), no están pendientes.
+Verificado por API: `updatedAt` sigue en `2026-08-06T22:48`, sin tocar desde
+entonces.
+
+> Corrijo lo que escribí antes en este mismo bloque: dije que seguían
+> publicados, contradiciendo la tabla de aquí arriba. El mapa
+> `mapa_ghl_nomenclatura_casa.md` los daba por publicados desde el 24-jul y ya
+> está corregido.
 
 ## 📅 Calendario de asesorías: desbloqueado, con dos minas
 

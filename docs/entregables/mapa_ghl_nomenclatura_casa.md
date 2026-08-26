@@ -86,7 +86,7 @@
 | SP02 | (por crear con el calendario) | booking Asesorías | tag `asesoria-agendada` + mover a Agendado | ⚪ |
 | RP02 | RP02 · Dunning impago — NO ACTIVAR HASTA 1-SEP | tag `alumno-impago` | Avisos 0/3/6 + post-corte 8 | 🟡 borrador |
 | RP03 | RP03 · Bienvenida al recuperar el pago | tag `alumno-recuperado` | Confirmación + corta RP02 | 🟡 borrador |
-| — | LEGADO · Espejo Baja/Impago + Reactivación | Inbound Webhook | Renombrados como LEGADO (24-jul); pendiente despublicar | ✅ publicados |
+| — | LEGADO · Espejo Baja/Impago + Reactivación | Inbound Webhook | Renombrados como LEGADO (24-jul) y **despublicados el 6-ago**, con los pasos intactos. Inertes: producción tiene `OMNIA_GHL_PIT`, así que el plugin va por la vía API y nunca llama a estos webhooks | 🟡 borrador |
 
 ## TAB 3 — CUSTOM FIELDS (11)
 

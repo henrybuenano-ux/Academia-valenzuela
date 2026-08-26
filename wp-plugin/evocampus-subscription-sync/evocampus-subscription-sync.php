@@ -184,12 +184,20 @@ class Omnia_EvoCampus_Sync {
 
 		echo '<div class="wrap"><h1>Omnia — EvoCampus Sync</h1>';
 		printf(
-			'<p>Modo: <strong>%s</strong> · Cortesía sobre el cobro previsto: <strong>%d días</strong> · Ventana de reserva: <strong>%d días</strong> · Próxima conciliación automática: <strong>%s</strong></p>',
+			'<p>EvoCampus: <strong>%s</strong> · Espejo GoHighLevel: <strong>%s</strong> · Cortesía sobre el cobro previsto: <strong>%d días</strong> · Ventana de reserva: <strong>%d días</strong> · Próxima conciliación automática: <strong>%s</strong></p>',
 			$dryrun ? 'DRY-RUN (simulación, no toca matrículas)' : '<span style="color:#b32d2e">REAL</span>',
+			// Los dos DRY-RUN son independientes. Se muestra el de GHL porque
+			// no hay sub-cuenta de pruebas: el espejo escribe siempre sobre el
+			// CRM real, y hasta v0.8.1 había que abrir el fichero de
+			// configuración a mano para saber en qué modo estaba.
+			self::ghl_dryrun() ? 'DRY-RUN (no escribe en el CRM)' : '<span style="color:#b32d2e">REAL — escribe en el CRM de producción</span>',
 			$courtesy,
 			$grace,
 			esc_html( wp_next_scheduled( self::CRON_HOOK ) ? date_i18n( 'd M Y H:i', wp_next_scheduled( self::CRON_HOOK ) ) : '—' )
 		);
+		if ( ! self::ghl_dryrun() ) {
+			echo '<div class="notice notice-error inline"><p><strong>El espejo de GoHighLevel está en modo real.</strong> No existe una sub-cuenta de pruebas: cada conciliación etiquetará contactos y abrirá oportunidades en el CRM de producción, aunque EvoCampus siga en DRY-RUN. Para probar sin efectos, define <code>OMNIA_GHL_DRYRUN = true</code>.</p></div>';
+		}
 		if ( $ran ) {
 			echo '<div class="notice notice-success"><p>Conciliación ejecutada — resultado abajo.</p></div>';
 		}

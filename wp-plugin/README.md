@@ -57,12 +57,15 @@ define( 'OMNIA_GHL_WEBHOOK_URL_REACTIVACION', 'https://services.leadconnectorhq.
 - [x] **v0.8.1** — la cortesía se aplica ahora sobre la fecha de cobro que
       declara cada suscripción (`OMNIA_EVO_COURTESY_DAYS = 7`), no sobre una
       ventana fija. `GRACE_DAYS` queda como regla de reserva. Ver abajo.
-- [ ] **Ejecutar la conciliación con v0.8.1 y comparar con el pase anterior:**
-      ningún alumno debe cambiar de veredicto salvo los que estén en prueba
-      gratuita con cobros sincronizados.
-- [ ] **Pulsar «Sembrar veredictos (sin avisar a GHL)»** y confirmar en el log
-      que la línea final dice `0 avisos enviados`. Sin esto, el primer pase
-      real notifica a GoHighLevel el estado de TODOS los alumnos de golpe.
+- [x] **v0.8.1 probado en staging el 26-ago** — sin regresión (59 de 59
+      mantienen veredicto), la rama del calendario decide en 40 de 59 casos
+      reales, y la siembra termina en `0 avisos enviados`. Parte completo en
+      `docs/entregables/staging_v081_2026-08-26.md`.
+- [ ] ⚠️ **Antes de probar el modo real en staging: definir
+      `OMNIA_GHL_DRYRUN = true`.** No hay sub-cuenta de pruebas de GoHighLevel
+      — el PIT y los webhooks del staging apuntan al CRM de producción, y al
+      poner `OMNIA_EVO_DRYRUN = false` el espejo se activa con él. Desde
+      v0.8.1 la cabecera de la página muestra en qué modo está cada uno.
 - [ ] Pasar `OMNIA_EVO_DRYRUN` a `false` en staging → probar baja y
       reactivación reales con UN alumno de prueba → verificar en el campus.
 - [ ] Desplegar a producción (de nuevo con DRY-RUN=true 24–48 h, revisar

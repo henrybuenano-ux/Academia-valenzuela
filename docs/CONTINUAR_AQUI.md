@@ -977,17 +977,32 @@ ahora en DRY-RUN no se guardaban, así que el primer pase real habría avisado a
 GHL de los ~55 alumnos de golpe. Botón nuevo: «Sembrar veredictos (sin avisar a
 GHL)».
 
-### ⏳ Falta la prueba en staging
+### ✅ Probado en staging el 26-ago
 
-**No tengo credenciales de admin del staging en esta sesión.** Procedimiento,
-lo ejecute Henry o yo si me pasa acceso:
+Plugin actualizado de 0.8.0 a 0.8.1 en `academiavalenz.com/staging` y validado.
+Parte completo: `entregables/staging_v081_2026-08-26.md`.
 
-1. Subir el plugin parcheado con `OMNIA_EVO_DRYRUN = true`.
-2. WooCommerce → EvoCampus Sync → **Ejecutar conciliación ahora**.
-3. Comparar el log con el pase de v0.8.0: **nadie debe cambiar de veredicto**
-   salvo quien esté en prueba con cobro sincronizado.
-4. Pulsar **Sembrar veredictos** y confirmar que el log acaba en
-   `0 avisos enviados`.
+- **Sin regresión:** 59 de 59 alumnos mantienen su veredicto.
+- **La rama nueva decide en 40 de 59 casos reales.** Corrijo una suposición mía:
+  WooCommerce **no borra** la fecha de próximo cobro al pasar a *En espera*, la
+  conserva. La rama del calendario es el camino normal, no la excepción.
+- **Fecha dentro de la ventana → `activo`**, verificado con datos reales
+  subiendo temporalmente una copia con la cortesía en 90 días, sin manipular
+  ninguna suscripción.
+- **Siembra:** `59 sembrados, 0 avisos enviados`, y la pasada siguiente da
+  **0 avisos a GHL**. El estallido de ~55 notificaciones queda eliminado.
+
+### 🔴 Aviso que salió de la prueba
+
+`OMNIA_GHL_DRYRUN` es independiente de `OMNIA_EVO_DRYRUN`, y **no hay
+GoHighLevel de staging**: el PIT y los webhooks del staging apuntan al CRM de
+producción. En staging esa constante no está definida, así que hereda el
+DRY-RUN de EvoCampus y estábamos a salvo — pero el día que alguien ponga
+`OMNIA_EVO_DRYRUN = false` ahí, **el espejo se activa contra el CRM real en el
+mismo movimiento**.
+
+v0.8.1 muestra ahora los dos modos en la cabecera de la página, con aviso en
+rojo si el espejo está en vivo.
 
 Corrijo lo que escribí antes: dije «36 días, pasa por dos». Era mirando solo el
 caso del 26 de agosto.

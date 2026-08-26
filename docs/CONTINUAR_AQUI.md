@@ -4,6 +4,34 @@
 
 ---
 
+# ⏰ LUNES 1 DE SEPTIEMBRE — lo que vence
+
+Reunido aquí porque hoy está repartido entre tres documentos. **Enlaces, no
+copias**: el detalle vive en su sitio.
+
+| Qué hay que hacer | Detalle |
+|---|---|
+| **Reconfigurar el producto `#2054`.** No basta con subir la cuota de 48 a 80 €: la prueba gratuita más la sincronización al día 1 dejan huecos de 32 a 60 días según el día de compra | `entregables/precio_lanzamiento_caduca_31ago.md` |
+| **Vaciar las «Fechas del precio rebajado»** (6-ago → 31-ago). Están puestas sobre un precio rebajado vacío: no hacen nada y hacen creer que el precio está programado | idem |
+| **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
+| **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?» | `entregables/llamada_2026-08-26_acuerdos.md` |
+
+## 📨 Esperando respuesta de Paco (enviado el 26-ago)
+
+Contestada su pregunta de si había que dar de baja a los ex-alumnos para que
+pudieran inscribirse: **no, y sería un error** — perderían historial, facturas y
+el vínculo con su matrícula del campus, y no habría arreglado nada.
+
+Borrador y notas internas: `entregables/respuesta_paco_rematriculacion_2026-08-26.md`
+Versión publicada: https://claude.ai/code/artifact/1bad64f2-f1fe-4f84-acc5-a9346e7468ca
+
+**Lo que falta y solo puede venir de ellos:** que **Óscar Vargas Balboa** intente
+la compra y confirme que llega a la pasarela. Está verificado que el formulario
+de acceso aparece y funciona, pero **nadie ha completado una compra entera**
+desde el arreglo. Hasta que eso ocurra, el asunto no está cerrado del todo.
+
+---
+
 # 🔴 SESIÓN 9 (10-ago-2026) — EL EMBUDO ESTÁ TERMINADO Y VACÍO
 
 ## Estado en una línea

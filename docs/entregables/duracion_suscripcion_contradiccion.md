@@ -1,71 +1,90 @@
-# ¿Hasta cuándo tiene acceso el alumno? Tres fuentes, tres respuestas
+# ¿Hasta cuándo tiene acceso el alumno? — resuelto
 
-**26 de agosto de 2026** · pendiente de resolver con Paco **antes de que alguien
-compre creyendo otra cosa**
+**26 de agosto de 2026** · resuelto con datos del censo, no con recuerdos de
+llamada
 
-## El problema
+## La respuesta
 
-Hoy se ha publicado en la landing y en el prompt del bot que **la suscripción
-corre hasta el examen**. Al verificarlo aparece que las fuentes no coinciden.
+**El acceso llega hasta el día del examen.** Lo dice el censo de EvoCampus del
+10-jul, leyendo las fechas de fin de las matrículas reales:
 
-| Fuente | Qué dice | Fecha |
+> **TODAS las matrículas de la 132ª promoción terminan el 10-11 de julio de
+> 2026** (fecha del examen). El curso regular va **01-oct-2025 → 10-jul-2026
+> (~10 meses de cuota mensual)**; el intensivo, **13-abr → 10-jul**.
+
+Es evidencia directa: fechas de matrícula en la plataforma, no interpretación.
+
+## La contradicción aparente, y por qué se cae
+
+Durante unas horas pareció que tres fuentes decían tres cosas. No es así:
+
+| Fuente | Qué dice | Lectura correcta |
 |---|---|---|
-| **Llamada con Paco** (acta) | La suscripción corre mes a mes **hasta el examen**, que cae en **junio o julio** | 26-ago-2026 |
-| **Llamada de descubrimiento**, con Paco **y Fran** (el que lleva los pagos) | La suscripción mensual «dura hasta **abril/mayo**». El **intensivo** es un producto aparte de **pago único** (abril–junio) que «se cierra el día del examen». El examen es en **julio** | 10-jun-2026 |
-| **El producto `#2054` en producción** | «Dejar de renovar después de: **No parar hasta que se cancele**» — sin fecha de fin | verificado 26-ago |
+| Llamada 26-ago | «hasta el examen, junio o julio» | ✅ **Correcto** |
+| Llamada 10-jun | «la mensual dura hasta abril/mayo» | Se refería al **temario**, no al acceso: en abril/mayo se termina de entregar el contenido |
+| Producto `#2054` | «No parar hasta que se cancele» | Es un **agujero de configuración**, no una política. Ver abajo |
 
-Tres lecturas incompatibles: **acaba en abril/mayo**, **acaba con el examen**, o
-**no acaba nunca**.
+Las dos primeras son compatibles, y encajan con lo que Paco explicó el 26-ago
+sobre liberar el contenido poco a poco como evaluación continua: **el temario se
+acaba en abril/mayo y el alumno conserva el acceso para repasar hasta el
+examen.**
 
-Y el mes del examen tampoco cuadra: una fuente dice **julio**, la otra **junio o
-julio**.
+## Qué es el intensivo
 
-## Por qué corre
+**13-abr → 10-jul.** Tres meses, terminando el mismo día del examen. Producto
+aparte, de pago único, descrito en la llamada de descubrimiento como «para gente
+externa».
 
-**Ya está publicado.** Si la suscripción termina en abril/mayo y el tramo final
-hasta el examen exige comprar el intensivo aparte, le estamos prometiendo a cada
-lead algo que la academia no vende. Se enterarían en abril, con el examen encima
-y después de haber pagado ocho meses.
+Es decir: **para quien se acuerda dos o tres meses antes del examen y no compró
+en octubre.** No es la continuación del curso regular ni algo que un suscriptor
+tenga que comprar además — es la vía de entrada tardía.
 
-Afecta a:
+---
 
-- `entregables/landing_133.html`
-- `entregables/bot_ls02_prompts_2026-08-07.md`
-- La ficha del producto `#2054`, que hay que reconfigurar el 1-sep de todas
-  formas (`precio_lanzamiento_caduca_31ago.md`)
+## Consecuencia 1: la decisión A ya no tiene tres opciones
 
-## Límite de esta verificación
+Si el curso de la 132ª terminó el 10-11 de julio, **las suscripciones que se
+pararon el 24 de junio no son un pendiente: son el final natural del ciclo**.
 
-La transcripción de la llamada del 26-ago **no está guardada en el repositorio**:
-se pegó en el chat y esa parte de la conversación ya se ha compactado. Lo de
-arriba está contrastado contra **el acta**, no contra la fuente primaria.
+Y explica el «regalo» que contó Paco: el último cargo mensual habría cubierto
+unos días de julio de un curso que se acababa el día 10. No cobrarlos es lo
+lógico.
 
-La única cita literal que se conservó de ese tramo es la de la liberación del
-contenido — *«porque si le das todo de golpe hay algunos que se saturan»* — no la
-de la fecha de fin. **La fecha de fin es interpretación, no transcripción.**
+| | |
+|---|---|
+| ❌ Como estaba planteado | «¿Cancelar, reactivar o dejar expirar?» — tres opciones, decisión del cliente |
+| ✅ Como está ahora | **Cancelar o dejar expirar.** Reactivarlas sería cobrar por un curso terminado. Y venderles la 133ª, que es para lo que sirve la campaña de recuperación |
 
-> Para la próxima: guardar la transcripción en `docs/` antes de trabajarla. Una
-> cita que no se puede releer no sirve para verificar nada.
+Sigue siendo una confirmación que le corresponde a Paco, pero ya no es una
+disyuntiva: es validar la única acción coherente.
 
-## La pregunta para Paco
+## Consecuencia 2: el ciclo no se cierra solo, y hay que arreglarlo el lunes
 
-Concreta, para que no se pueda responder de forma ambigua:
+El producto `#2054` está en **«Dejar de renovar después de: No parar hasta que se
+cancele»**. Con eso, en julio de 2027 volverá a hacer falta que **alguien edite a
+mano unas 40 suscripciones** para cerrar el ciclo.
 
-> El alumno que se suscribe en septiembre y paga todos los meses, **¿hasta qué
-> mes tiene acceso al campus?**
->
-> - ¿Hasta abril/mayo, cuando se acaba el temario?
-> - ¿O hasta el día del examen?
->
-> Y si es hasta abril/mayo: **el intensivo de abril–junio, ¿se paga aparte?**
-> ¿Un suscriptor que lleva ocho meses pagando tiene que comprarlo también?
+Eso es exactamente lo que ocurrió el **24-jun-2026 desde la cuenta DevOmibu**, y
+que costó semanas explicar (`p2_causa_raiz_2026-07-10.md`).
 
-De la respuesta salen tres cosas: qué dice la web, qué dice el bot, y cómo se
-configura la fecha de fin del producto el 1 de septiembre.
+**Arreglo, en la misma pantalla de la reconfiguración del 1-sep:**
 
-## Hasta que conteste
+> «Dejar de renovar después de» → **el número de cuotas que llegue al examen**,
+> en lugar de «No parar hasta que se cancele».
 
-**No cambiar nada todavía.** El texto publicado hoy es el más generoso de los
-tres, así que el riesgo es de promesa excesiva, no de venta perdida. Pero no
-conviene que pasen semanas: cuanta más gente compre con la promesa de «hasta el
-examen», más caro sale corregirla.
+Para la 132ª fueron ~10 cuotas (oct → jul). La 133ª arranca el **1-sep-2026**, así
+que serían 10 u 11 según cuándo caiga el examen.
+
+**Dato que falta: la fecha del examen de la 133ª.** Es lo único que bloquea este
+arreglo, y es una pregunta de una línea a Paco.
+
+---
+
+## Nota de método
+
+La transcripción del 26-ago **no se guardó**: se pegó en el chat y se compactó.
+Esta verificación no salió de ella, sino del censo de EvoCampus — y salió mejor,
+porque son datos y no memoria.
+
+> Aun así: **guardar las transcripciones en `docs/` antes de trabajarlas.** Esta
+> vez hubo una fuente mejor; la próxima puede no haberla.

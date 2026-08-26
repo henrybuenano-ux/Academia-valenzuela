@@ -154,7 +154,7 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 
 | # | Decisión | Por qué corre |
 |---|---|---|
-| A | **Las suscripciones paradas desde el 24-jun.** ⚠️ Ya no preguntar «¿cancelar, reactivar o dejar expirar?» en abstracto — la llamada dio una formulación mucho mejor, ver abajo | ~3.100 €/mes sin facturar, y **bloquean el paso del plugin a modo real**: sin decidirlo, el primer censo real arranca sucio |
+| A | **Las suscripciones paradas desde el 24-jun.** ⚠️ **Ya no son tres opciones.** El censo demuestra que el curso de la 132ª terminó el 10-11 de julio: esas suscripciones son el final natural del ciclo, y reactivarlas sería cobrar por un curso terminado. **Cancelar o dejar expirar, y venderles la 133ª.** Solo hay que confirmarlo con Paco | Sigue bloqueando el paso del plugin a modo real: sin ejecutarlo, el primer censo real arranca sucio |
 | ~~B~~ ✅ | ~~**Los 7 becados**: opción A o B~~ **Resuelta en la llamada del 26-ago.** Paco describió lo que quería —*«exentos del tema de facturación, del tema de los avisos»*, con etiqueta de becado— sin saber que es exactamente lo que hace `OMNIA_EVO_BECADOS_EMAILS` desde julio. No hay que elegir entre A y B. **Lo que queda es un dato, no una decisión: confirmar qué 7 correos son** |
 | C | **Numeración de facturas**: ¿anual `26-0001` o mensual `26/08-0001`? | La mensual obliga a plugin de pago, y el huso horario la rompería en los cambios de mes. Recomendamos anual |
 | D | **El atrasado desde nov-2025**: ¿quién emite esas facturas? | No es trabajo nuestro, pero es volumen y es su responsabilidad |
@@ -163,9 +163,20 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 | ~~G~~ ✅ | ~~**¿Los 48 € son solo de lanzamiento?**~~ **Resuelta sin preguntar**: la landing y el bot dicen «primer mes 48 € en vez de 80», «40 % de descuento» y «sin matrícula» — es el primer mes rebajado, no una matrícula. Lo que queda no es una decisión de precio sino **de configuración**, y es nuestra: ver `precio_lanzamiento_caduca_31ago.md` |
 
 
-### 🎯 Cómo plantear la decisión A, después de la llamada
+### 🎯 La decisión A, ya casi resuelta
 
-Paco explicó **por qué** se pararon, no qué hacer ahora:
+**Actualizado con el censo.** Las matrículas de la 132ª terminaban el 10-11 de
+julio, el día del examen. Las suscripciones paradas el 24-jun son el cierre
+normal del ciclo, no un problema — y el «regalo» que contó Paco es exactamente
+eso: no cobrar un mes que cubría diez días de un curso que se acababa.
+
+Así que no hay disyuntiva: **cancelar o dejar expirar**. Reactivarlas sería
+cobrar por un curso terminado. Lo que se les vende ahora es la 133ª.
+
+Detalle: `duracion_suscripcion_contradiccion.md`.
+
+El contexto de por qué se pararon, que sigue siendo útil para el guion de la
+llamada de recuperación:
 
 > *«Como eran simplemente unos 11 días del mes de julio, quisimos tener el
 > detalle hacia ellos de que esos 11 días no los pagaran, es decir, como

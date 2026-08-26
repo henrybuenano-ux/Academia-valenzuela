@@ -13,24 +13,33 @@ copias**: el detalle vive en su sitio.
 |---|---|
 | **Reconfigurar el producto `#2054`.** No basta con subir la cuota de 48 a 80 €: la prueba gratuita más la sincronización al día 1 dejan huecos de 32 a 60 días según el día de compra | `entregables/precio_lanzamiento_caduca_31ago.md` |
 | **Vaciar las «Fechas del precio rebajado»** (6-ago → 31-ago). Están puestas sobre un precio rebajado vacío: no hacen nada y hacen creer que el precio está programado | idem |
+| **«Dejar de renovar después de» → las cuotas que lleguen al examen**, en vez de «No parar hasta que se cancele». Sin esto, el ciclo hay que cerrarlo a mano cada año. ⚠️ Necesita la fecha del examen de la 133ª | `entregables/duracion_suscripcion_contradiccion.md` |
 | **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
 | **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?» | `entregables/llamada_2026-08-26_acuerdos.md` |
 
-## ❓ Sin resolver: ¿hasta cuándo tiene acceso el alumno?
+## ✅ Resuelto: el acceso llega hasta el examen
 
-Hoy se publicó en la landing y en el bot que **la suscripción corre hasta el
-examen**. Al verificarlo, tres fuentes dicen tres cosas: la llamada del 26-ago
-dice hasta el examen (junio o julio); la de descubrimiento del 10-jun, con Fran
-delante, dice que la mensual **dura hasta abril/mayo** y que el intensivo es un
-**pago único aparte**; y el producto en producción no tiene fecha de fin.
+El censo de EvoCampus lo dice desde las matrículas reales: **todas las de la 132ª
+terminan el 10-11 de julio de 2026**, el día del examen. Curso regular
+01-oct-2025 → 10-jul-2026, ~10 cuotas. Intensivo 13-abr → 10-jul.
 
-**Ya está publicado**, así que si la buena es la de abril/mayo estamos
-prometiendo algo que no se vende. Pregunta concreta para Paco y análisis en
-`entregables/duracion_suscripcion_contradiccion.md`.
+Lo publicado en la landing y en el bot es **correcto**. El «hasta abril/mayo» de
+la llamada de junio se refería al **temario**, no al acceso. Y el intensivo es la
+vía de entrada tardía —«para gente externa»—, no la continuación del curso.
 
-⚠️ La transcripción del 26-ago **no se guardó**: se pegó en el chat y se
-compactó. La fecha de fin es interpretación del acta, no cita. **Guardar las
-transcripciones en `docs/` antes de trabajarlas.**
+Análisis: `entregables/duracion_suscripcion_contradiccion.md`.
+
+### Y desatasca dos cosas
+
+**La decisión A deja de tener tres opciones.** Las suscripciones paradas el
+24-jun son el final natural del ciclo de la 132ª: reactivarlas sería cobrar por
+un curso terminado. Cancelar o dejar expirar, y venderles la 133ª.
+
+**Falta un arreglo el 1-sep que nadie había visto.** El `#2054` está en «No parar
+hasta que se cancele», así que en julio de 2027 volverá a hacer falta editar ~40
+suscripciones a mano — que es literalmente lo que pasó el 24-jun desde DevOmibu.
+Hay que poner **«Dejar de renovar después de» = las cuotas que lleguen al
+examen**. Bloqueado por un dato: **la fecha del examen de la 133ª**.
 
 ## 📨 Esperando respuesta de Paco (enviado el 26-ago)
 

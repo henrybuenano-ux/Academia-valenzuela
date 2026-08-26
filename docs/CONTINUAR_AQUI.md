@@ -941,8 +941,53 @@ alumno saldría como **baja** con la suscripción impecable, y en modo real
 perdería el acceso al campus.
 
 **Esto convierte el parche v0.8.1 en bloqueante para quitar el DRY-RUN**, no en
-una mejora conveniente. El veredicto tiene que venir del estado de la
-suscripción en WooCommerce, no de contar días desde el último pago.
+una mejora conveniente.
+
+### ✅ v0.8.1 escrito y probado (26-ago)
+
+**Corrijo lo que escribí arriba hace unas horas:** dije que el veredicto tenía
+que venir del *estado de la suscripción*. **Es incorrecto para esta tienda**, y
+el propio plugin lo documenta desde julio — el estado no refleja el pago, las
+suscripciones viven «en espera» mientras se cobra por Redsys. Basarse en él
+daría de baja en bloque a alumnos que están pagando.
+
+Lo que se ha hecho es más pequeño y más seguro: **la ventana se deriva del
+calendario de cada suscripción**.
+
+1. Si la suscripción declara fecha de próximo cobro, manda esa fecha más los 7
+   días de cortesía de A6 (`OMNIA_EVO_COURTESY_DAYS`).
+2. Si no la declara (impago, cancelada, expirada), sigue la regla vieja por días
+   desde el último pedido pagado (`GRACE_DAYS = 38`) — que es la que da de baja
+   correctamente a las 39 de junio.
+
+**Probado aquí**, 16 casos en verde sin necesidad de WordPress:
+
+```
+php wp-plugin/tests/test-verdict.php
+```
+
+Cambian 5 veredictos respecto a v0.8.0, todos revisados: los tres de prueba
+gratuita con cobro sincronizado pasan de baja a **activo** (el arreglo), el
+cobro vencido hace 8 días pasa a **baja** (cortesía exacta de 7 en vez de 7-8
+según el mes), y quien nunca pagó pero tiene cobro previsto futuro pasa a
+**activo** (altas manuales y pruebas sin cuota de entrada).
+
+**Incluye también la siembra de veredictos**, que era el otro bloqueo: hasta
+ahora en DRY-RUN no se guardaban, así que el primer pase real habría avisado a
+GHL de los ~55 alumnos de golpe. Botón nuevo: «Sembrar veredictos (sin avisar a
+GHL)».
+
+### ⏳ Falta la prueba en staging
+
+**No tengo credenciales de admin del staging en esta sesión.** Procedimiento,
+lo ejecute Henry o yo si me pasa acceso:
+
+1. Subir el plugin parcheado con `OMNIA_EVO_DRYRUN = true`.
+2. WooCommerce → EvoCampus Sync → **Ejecutar conciliación ahora**.
+3. Comparar el log con el pase de v0.8.0: **nadie debe cambiar de veredicto**
+   salvo quien esté en prueba con cobro sincronizado.
+4. Pulsar **Sembrar veredictos** y confirmar que el log acaba en
+   `0 avisos enviados`.
 
 Corrijo lo que escribí antes: dije «36 días, pasa por dos». Era mirando solo el
 caso del 26 de agosto.

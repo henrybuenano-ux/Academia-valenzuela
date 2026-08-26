@@ -15,7 +15,42 @@ copias**: el detalle vive en su sitio.
 | **Vaciar las «Fechas del precio rebajado»** (6-ago → 31-ago). Están puestas sobre un precio rebajado vacío: no hacen nada y hacen creer que el precio está programado | idem |
 | **«Dejar de renovar después de» → las cuotas que lleguen al examen**, en vez de «No parar hasta que se cancele». Sin esto, el ciclo hay que cerrarlo a mano cada año. ⚠️ Necesita la fecha del examen de la 133ª | `entregables/duracion_suscripcion_contradiccion.md` |
 | **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
-| **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?» | `entregables/llamada_2026-08-26_acuerdos.md` |
+| **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?». ⚠️ Solo el canal telefónico: **LS03 sigue en borrador** y su email B2 espera contenido de Paco | `entregables/llamada_2026-08-26_acuerdos.md` |
+| **Publicar `RP02 · Dunning impago`** — lleva la fecha en el propio nombre («NO ACTIVAR HASTA 1-SEP») y estaba fuera de toda lista. Inofensivo mientras el plugin siga en DRY-RUN | ver el aviso de abajo |
+
+## ⚠️ El orden real del dunning (RP02)
+
+Inventario de workflows del 26-ago: **RP02 está en borrador** y su nombre dice
+«NO ACTIVAR HASTA 1-SEP». Publicarlo el lunes es inofensivo: dispara con el tag
+`alumno-impago`, que lo pone el espejo de GHL del plugin, y con el plugin en
+DRY-RUN nadie lo activa.
+
+**El interruptor de verdad no es RP02: es el DRY-RUN del plugin.** En cuanto se
+quite, empiezan a salir avisos de impago — y si las suscripciones paradas siguen
+sin cerrarse, los ex-alumnos de la 132ª recibirían correos de «no has pagado»
+por un curso que terminó en julio.
+
+> Cadena real: **cerrar las paradas → plugin a modo real → arranca el dunning.**
+> Saltarse el primer paso es lo que convierte RP02 en un problema.
+
+### Y una matización sobre la campaña de recuperación
+
+Escribí hoy que «ya se puede llamar a los 32». Cierto **para el teléfono**. Pero
+**`LS03 · Re-enganche ex-alumnos 132ª` sigue en borrador** y su email B2 espera
+las novedades de la 133ª que Paco lleva semanas sin enviar. La secuencia
+automática de correos **no está lista**: son dos canales y solo uno está abierto.
+
+### Estado de los 12 workflows (26-ago, 20:13)
+
+| Publicados | En borrador / sin estado |
+|---|---|
+| BT01, LS01, LS02, RP04, SP01, **SP02**, SP03 | **LS03** (re-enganche), **RP02** (dunning), RP03 (bienvenida al recuperar), 2 × LEGADO |
+
+**SP02 verificado tras ponerle el filtro *In calendar*:** sigue `published`,
+modificado a las 20:12:57. No se despublicó al guardar, que era el riesgo.
+
+Los dos **LEGADO** siguen publicados: son los espejos por webhook que sustituyó
+la vía API en julio. Están pendientes de despublicar desde entonces.
 
 ## 📅 Calendario de asesorías: desbloqueado, con dos minas
 

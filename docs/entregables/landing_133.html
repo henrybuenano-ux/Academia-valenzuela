@@ -77,18 +77,45 @@
   footer{background:#0d1f14;color:#8fa697;text-align:center;padding:1.8rem 1rem;font-size:.85rem}
   footer a{color:#b9d3c3}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  /* ── Full bleed: rompe el contenedor con ancho máximo de GHL ──
+     Cada bloque con fondo se estira al ancho de la ventana; .wrap sigue
+     limitando el texto a 1080px. Si aparece scroll horizontal (la barra de
+     scroll cuenta dentro de 100vw), añadir `overflow-x:hidden` al body desde
+     Settings → Custom CSS de la página del funnel, NO aquí: GHL suele quitar
+     las etiquetas html/head/body del HTML personalizado. */
+  .urgencia, .hero, section, .cierre, footer{
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+  }
 </style>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ⏰ OFERTA CON FECHA — REVISAR EL 1 DE SEPTIEMBRE DE 2026
+
+     Esta página anuncia "primer mes 48 € hasta el 31 de agosto" en cuatro
+     sitios: la barra de urgencia, el apoyo bajo el CTA, el paso "Te
+     suscribes" y la FAQ "¿Cuánto cuesta?".
+
+     Pasado el 31-ago hay que quitarlo o sustituirlo por la oferta que venga.
+     Si no, la landing promete un descuento muerto.
+
+     Estructura real del producto: 80 €/mes recurrente + 48 € de cuota de
+     registro + 1 mes de prueba, con facturación sincronizada al día 1. Los
+     48 € cubren septiembre; el primer cobro de 80 € es el 1 de octubre.
+     ═══════════════════════════════════════════════════════════════════ -->
 </head>
 <body>
 
-<div class="urgencia">📅 La <strong>133ª promoción</strong> arranca el <strong>1 de septiembre</strong> · Plazas limitadas</div>
+<div class="urgencia">🔥 <strong>Primer mes 48 €</strong> en vez de 80 € · solo hasta el <strong>31 de agosto</strong> · La 133ª arranca el <strong>1 de septiembre</strong></div>
 
 <header class="hero">
   <div class="wrap">
     <h1>Prepárate la Guardia Civil con la 133ª promoción</h1>
     <p class="sub">Campus online con temario siempre actualizado, clases grabadas y miles de test con ranking real entre opositores.</p>
     <a class="btn" href="#formulario">QUIERO INFORMARME</a>
-    <p class="apoyo">Asesoría gratuita y sin compromiso · Sin permanencia</p>
+    <p class="apoyo">Asesoría gratuita y sin compromiso · Sin permanencia · Primer mes 48 €</p>
   </div>
 </header>
 
@@ -110,7 +137,7 @@
     <h2>Cómo funciona</h2>
     <p class="lead">Tres pasos y estás dentro.</p>
     <div class="pasos">
-      <div class="paso"><h3>Te suscribes</h3><p>80 €/mes, sin matrícula y sin permanencia. La cancelas tú mismo cuando quieras.</p></div>
+      <div class="paso"><h3>Te suscribes</h3><p><strong>48 € el primer mes</strong> si te apuntas antes del 31 de agosto; después, 80 €/mes. Sin matrícula y sin permanencia: la cancelas tú mismo cuando quieras.</p></div>
       <div class="paso"><h3>Entras al campus</h3><p>Acceso inmediato a todo el contenido desde el primer día.</p></div>
       <div class="paso"><h3>Estudias con método</h3><p>Sigues el plan de la academia hasta la convocatoria.</p></div>
     </div>
@@ -156,7 +183,7 @@
     <h2>Preguntas frecuentes</h2>
     <p class="lead">Las dudas que más nos hacen antes de empezar.</p>
     <details open><summary>¿Cuándo empieza la 133ª promoción?</summary><p>El 1 de septiembre. La matrícula ya está abierta y el acceso al campus es inmediato en cuanto te suscribes.</p></details>
-    <details><summary>¿Cuánto cuesta?</summary><p>80 €/mes. Sin matrícula de entrada y sin permanencia.</p></details>
+    <details><summary>¿Cuánto cuesta?</summary><p><strong>48 € el primer mes</strong> si te matriculas antes del <strong>31 de agosto</strong> — un 40 % de descuento sobre la cuota habitual. A partir de octubre, 80 €/mes. Sin matrícula de entrada y sin permanencia.</p></details>
     <details><summary>¿Puedo darme de baja cuando quiera?</summary><p>Sí. Gestionas tu suscripción desde tu cuenta y la cancelas tú mismo en un clic, sin llamadas ni trámites.</p></details>
     <details><summary>¿Qué requisitos necesito para la oposición?</summary><p>Los que marque la convocatoria oficial. En la asesoría gratuita los repasamos contigo y te decimos si cumples.</p></details>
     <details><summary>¿Y si empiezo con retraso respecto a los demás?</summary><p>El campus completo está disponible desde tu primer día: temario, clases y test. Puedes recuperar a tu ritmo.</p></details>

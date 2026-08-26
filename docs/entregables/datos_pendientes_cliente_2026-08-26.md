@@ -170,11 +170,12 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 |---|---|---|
 | ~~Ya~~ ✅ | Marcar «Activar el inicio de sesión durante el pago» en Cuentas y privacidad | Hecho 26-ago |
 | ~~Ya~~ ✅ | «Limitar suscripción» del `#2054` (pestaña **Avanzado**) → «No limitar» | Hecho 26-ago |
-| **Ya** | **Compra de prueba en incógnito** con un email de la 132ª, hasta la pasarela | Equipo |
+| ~~Ya~~ ✅ | Verificado que el formulario de acceso aparece en la página de compra | Hecho 26-ago |
+| **Antes de llamar** | Añadir al guion la instrucción de «¿Olvidó su contraseña?» | Quien llame |
 | **1-sep** | Subir la cuota de registro del `#2054` de **48 € a 80 €** y vaciar las fechas del precio rebajado | Equipo (wp-admin) |
 
-⚠️ **Y no llamar a los 32 de la lista de recuperación** hasta que la compra de
-prueba pase.
+✅ **Ya se puede llamar a los 32 de la lista de recuperación** — el muro está
+caído. Con la instrucción de la contraseña olvidada en el guion.
 
 ---
 

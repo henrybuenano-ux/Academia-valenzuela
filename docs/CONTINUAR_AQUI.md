@@ -907,8 +907,14 @@ de otro producto. Tampoco encaja el síntoma: el límite retira el botón de
 «Añadir al carrito», no da el error del correo. Se apaga igualmente porque a
 quien le falle un cobro en la 133ª le impediría volver a comprarla.
 
-⚠️ **Y no llamar a los 32 de la lista de recuperación hasta que esté arreglado.**
-Llamarles para que se encuentren un muro es peor que no llamar.
+✅ **Verificado el 26-ago** en el HTML de `/finalizar-compra/`: el aviso
+«¿Ya eres cliente? Haz clic aquí para acceder» existe, con formulario de acceso
+y enlace de contraseña olvidada. **El muro está caído.** Aparece como una línea
+gris en lo alto de la página, al cargar — no al escribir el correo.
+
+⚠️ **La fricción que queda:** los 32 no recordarán su contraseña. El enlace
+«¿Olvidó su contraseña?» está ahí, pero **hay que decírselo en la llamada**, o se
+atascan en el mismo punto. Guion en el acta.
 
 ## 🔴 El precio de lanzamiento no caduca solo
 

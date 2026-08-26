@@ -83,8 +83,35 @@ recuperar es la que se quedaría fuera.
 Treinta segundos cada uno. **Los aplica el equipo** — nuestra IP sigue bloqueada
 en el wp-admin de producción.
 
-**Verificación:** compra de prueba en ventana de incógnito con un email que ya
-tenga cuenta (p. ej. Óscar Vargas Balboa) — debe llegar hasta la pasarela.
+## Verificado el 26-ago
+
+Comprobado el HTML de `/finalizar-compra/` con un carrito de invitado. El aviso
+existe y el formulario está completo:
+
+> **«¿Ya eres cliente? Haz clic aquí para acceder»**
+> → Correo electrónico · Contraseña · [Acceder] · Recuérdame · **¿Olvidó su contraseña?**
+
+**El muro está caído.** Quien ya tiene cuenta puede iniciar sesión desde la
+propia página de compra y terminar el pedido.
+
+**Dónde aparece** (esto confundió en la primera prueba): es una línea gris **en
+lo alto de la página**, en la zona de avisos, encima del formulario de
+facturación. Sale **al cargar**, no al escribir el correo, y hay que **pincharla**
+para que se despliegue el formulario.
+
+### ⚠️ La fricción que queda: la contraseña
+
+Los 32 de la lista de recuperación **no van a recordar su contraseña** — la
+pusieron hace meses. Llegan al formulario y se atascan ahí.
+
+El enlace **«¿Olvidó su contraseña?»** está en el mismo sitio, así que hay
+salida, pero **hay que decírselo por teléfono**. Guion para la llamada:
+
+> *«Entra en la página de compra. Arriba del todo verás "¿Ya eres cliente? Haz
+> clic aquí para acceder". Si no te acuerdas de la contraseña, justo debajo
+> tienes "¿Olvidó su contraseña?" y te llega un correo para ponerla nueva.»*
+
+Sin esa frase, se pierden en el mismo punto en el que se perdían antes.
 
 ---
 

@@ -144,21 +144,20 @@ Precio y condiciones
 > El bot no está fallando — su prompt le prohíbe inventarse precios (línea 40) y
 > obedece. **Lo que está mal es el prompt.**
 >
-> **Texto para pegar en su lugar** (revisar la fecha si la oferta se prorroga):
+> ✅ **VIGENTE desde el 1-sep-2026 — la oferta de lanzamiento terminó.**
+> Texto para pegar en su lugar:
 >
 > ```
 > Precio y condiciones
 > - 80 €/mes. Sin matrícula y sin permanencia: cancelas cuando quieras.
-> - OFERTA DE LANZAMIENTO, solo hasta el 31 de agosto: el primer mes
->   (septiembre) sale por 48 € en vez de 80 € — un 40 % de descuento.
->   A partir de octubre, 80 €/mes normales.
-> - Si preguntan por el precio, di siempre los dos: la oferta primero y
->   luego la cuota normal. No prometas descuentos distintos de este.
+> - La suscripción va mes a mes hasta el examen (verano de 2027).
+> - No hay ofertas ni descuentos activos ahora mismo. Si alguien pregunta
+>   por la oferta de los 48 €, explica que era solo hasta el 31 de agosto
+>   y ya terminó. No prometas ningún descuento.
 > ```
 >
-> **Cuando pase el 31 de agosto** hay que volver a dejarlo en "80 €/mes. Sin
-> matrícula y sin permanencia" o poner la oferta que la sustituya. Si no, el bot
-> ofrecerá un descuento caducado.
+> *(Histórico: del 6 al 31 de agosto el bloque anunciaba el primer mes a 48 €.
+> Se retiró el 31-ago a medianoche, junto con la landing.)*
 - El alumno cancela él mismo desde su cuenta, en un clic, cuando quiera.
 - El acceso al campus es inmediato al suscribirse, con todo el contenido
   desde el día 1.

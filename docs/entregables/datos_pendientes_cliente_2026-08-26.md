@@ -61,9 +61,8 @@ todavía: por eso conviene cerrarlo ahora y no en enero.
 ## 3 · WhatsApp → la aprobación de Meta tarda semanas y el curso empieza el 1-sep
 
 - [x] ~~Un número de teléfono~~ → tienen un móvil dedicado a la academia, **sin WhatsApp Business**. Sirve
-- [ ] **Acceso a su Facebook Business Manager** (o que nos añadan)
-- [ ] **Datos para la verificación de empresa** de Meta: nombre legal,
-      dirección y web
+- [x] ~~Datos para la verificación de empresa~~ → **ya los tenemos** desde lo fiscal (Francisco Valenzuela Rodríguez · Camino de Ronda 57 · academiavalenz.com)
+- [ ] **20 min de llamada con Paco por la mañana (España)**: su Facebook + el móvil a mano para el código + su tarjeta. Cierra también el Google Calendar. Runbook completo: `whatsapp_conexion_runbook.md`
 
 El bot le pide el WhatsApp a cada lead y le promete que le escribimos por ahí.
 Hoy eso se contesta a mano desde móviles personales. Si el trámite no arranca

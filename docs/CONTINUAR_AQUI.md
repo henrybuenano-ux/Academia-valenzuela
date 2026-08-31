@@ -4,6 +4,38 @@
 
 ---
 
+# 📬 27-ago · Paco contesta las tres, y el falso desfase del campus
+
+## Las tres respuestas
+
+| | Lo que dijo | Qué cierra |
+|---|---|---|
+| **1** | *«esas suscripciones están extintas ya que al ser un curso nuevo hay que hacer una suscripción nueva»* | **Decisión A cerrada.** Confirma lo que dedujimos del censo. Queda ejecutarlo |
+| **2** | *«Aproximadamente para la primera quincena del mes de julio»* | **Examen de la 133ª.** Corroborado por la plataforma: las matrículas acaban el **03-jul-2027** |
+| **3** | *«El curso de la entrevista va a parte… quien hace la entrevista ya no debe volver a estar en ningún curso, ya que ya habrían aprobado»* | **La exención de los 7 no se arrastra.** Y se resuelve sola: las 45 matrículas de entrevista **caducan el 25-sep** |
+
+Con la 1, **el último bloqueo del modo real es de ejecución, no de decisión**.
+
+## ✅ El desfase 34 / 15 no era un fallo de sincronización
+
+Paco avisó de que había «34 apuntados» en la plataforma y «15» en la web, y
+Horacio apuntó a un problema de sincronización. Consultado en directo:
+
+**72 matrículas, pero solo 18 personas.** Cada alumno se matricula en **4
+cursos** —Conocimientos, Psicotécnicos, Ortografía, Inglés—, que son las cuatro
+formaciones. 18 × 4 = 72. **Es el comportamiento correcto.**
+
+Y 18 personas frente a los 16 pedidos del 25-ago: cuadra con dos ventas más en
+dos días. **No falta nadie.**
+
+> La dirección del desfase ya lo descartaba: un fallo de sincronización daría
+> **menos** en la plataforma que en la web, no más.
+
+Diagnóstico, lista de los 18 y borrador de respuesta:
+`entregables/desfase_campus_web_2026-08-27.md`
+
+---
+
 # ⏰ LUNES 1 DE SEPTIEMBRE — lo que vence
 
 Reunido aquí porque hoy está repartido entre tres documentos. **Enlaces, no
@@ -13,7 +45,7 @@ copias**: el detalle vive en su sitio.
 |---|---|
 | **Reconfigurar el producto `#2054`.** No basta con subir la cuota de 48 a 80 €: la prueba gratuita más la sincronización al día 1 dejan huecos de 32 a 60 días según el día de compra | `entregables/precio_lanzamiento_caduca_31ago.md` |
 | **Vaciar las «Fechas del precio rebajado»** (6-ago → 31-ago). Están puestas sobre un precio rebajado vacío: no hacen nada y hacen creer que el precio está programado | idem |
-| **«Dejar de renovar después de» → las cuotas que lleguen al examen**, en vez de «No parar hasta que se cancele». Sin esto, el ciclo hay que cerrarlo a mano cada año. ⚠️ Necesita la fecha del examen de la 133ª | `entregables/duracion_suscripcion_contradiccion.md` |
+| **«Dejar de renovar después de» → las cuotas que lleguen al examen**, en vez de «No parar hasta que se cancele». Sin esto, el ciclo hay que cerrarlo a mano cada año. ✅ **Ya no bloqueado**: examen en la primera quincena de julio de 2027, matrículas del campus hasta el **03-jul-2027** | `entregables/duracion_suscripcion_contradiccion.md` |
 | **Actualizar landing y prompt del bot** con el precio nuevo | `entregables/landing_133.html` · `entregables/bot_ls02_prompts_2026-08-07.md` |
 | **Llamar a los 32 de la lista de recuperación** — ya desbloqueado. Que quien llame lleve la frase de «¿Olvidó su contraseña?». ⚠️ Solo el canal telefónico: **LS03 sigue en borrador** y su email B2 espera contenido de Paco | `entregables/llamada_2026-08-26_acuerdos.md` |
 | **Publicar `RP02 · Dunning impago`** — lleva la fecha en el propio nombre («NO ACTIVAR HASTA 1-SEP») y estaba fuera de toda lista. Inofensivo mientras el plugin siga en DRY-RUN | ver el aviso de abajo |

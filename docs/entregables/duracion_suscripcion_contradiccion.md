@@ -75,8 +75,15 @@ que costó semanas explicar (`p2_causa_raiz_2026-07-10.md`).
 Para la 132ª fueron ~10 cuotas (oct → jul). La 133ª arranca el **1-sep-2026**, así
 que serían 10 u 11 según cuándo caiga el examen.
 
-**Dato que falta: la fecha del examen de la 133ª.** Es lo único que bloquea este
-arreglo, y es una pregunta de una línea a Paco.
+**✅ Dato confirmado por Paco el 27-ago:** *«Aproximadamente para la primera
+quincena del mes de julio.»*
+
+Y lo corrobora la propia plataforma: las 72 matrículas de la 133ª en EvoCampus
+tienen fecha de fin **03-jul-2027**, todas. El acceso al campus ya está acotado
+al examen; lo que falta es que el **cobro** se pare ahí también.
+
+Curso **01-sep-2026 → 03-jul-2027**: unas **10-11 cuotas** según cómo quede la
+reconfiguración del 1-sep.
 
 ---
 

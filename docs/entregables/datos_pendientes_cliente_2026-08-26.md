@@ -154,7 +154,7 @@ la fecha de expedición de las facturas, que es un campo obligatorio.
 
 | # | Decisión | Por qué corre |
 |---|---|---|
-| A | **Las suscripciones paradas desde el 24-jun.** ⚠️ **Ya no son tres opciones.** El censo demuestra que el curso de la 132ª terminó el 10-11 de julio: esas suscripciones son el final natural del ciclo, y reactivarlas sería cobrar por un curso terminado. **Cancelar o dejar expirar, y venderles la 133ª.** Solo hay que confirmarlo con Paco | Sigue bloqueando el paso del plugin a modo real: sin ejecutarlo, el primer censo real arranca sucio |
+| ~~A~~ ✅ | ~~**Las suscripciones paradas desde el 24-jun**~~ **CERRADA por Paco el 27-ago**: *«Correcto, esas suscripciones están extintas ya que al ser un curso nuevo hay que hacer una suscripción nueva.»* Confirma lo que dedujimos del censo. **Cancelar o dejar expirar, y venderles la 133ª** | Queda **ejecutarlo**: es lo último que bloquea el paso del plugin a modo real |
 | ~~B~~ ✅ | ~~**Los 7 becados**: opción A o B~~ **Resuelta en la llamada del 26-ago.** Paco describió lo que quería —*«exentos del tema de facturación, del tema de los avisos»*, con etiqueta de becado— sin saber que es exactamente lo que hace `OMNIA_EVO_BECADOS_EMAILS` desde julio. No hay que elegir entre A y B. **Lo que queda es un dato, no una decisión: confirmar qué 7 correos son** |
 | C | **Numeración de facturas**: ¿anual `26-0001` o mensual `26/08-0001`? | La mensual obliga a plugin de pago, y el huso horario la rompería en los cambios de mes. Recomendamos anual |
 | D | **El atrasado desde nov-2025**: ¿quién emite esas facturas? | No es trabajo nuestro, pero es volumen y es su responsabilidad |

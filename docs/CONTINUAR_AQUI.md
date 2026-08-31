@@ -27,6 +27,24 @@ Detalle de cada uno en los documentos enlazados más abajo.
 
 ---
 
+# 🎯 El camino al modo real (el banner de DRY-RUN)
+
+El aviso del wp-admin — *«modo DRY-RUN activo… definir OMNIA_EVO_DRYRUN como
+false»* — es el interruptor final. **No tocarlo hasta completar esto, en orden:**
+
+| # | Paso | Estado |
+|---|---|---|
+| 1 | **Desplegar v0.8.1 a producción** — hoy producción corre v0.8.0, que cortaría en octubre a los compradores de agosto (regla fija de 38 días). v0.8.1 está probada en staging | ⏳ |
+| 2 | **Cerrar las suscripciones paradas de la 132ª** — Paco ya lo aprobó por escrito («están extintas»). Sin esto, el primer censo real arranca sucio | ⏳ |
+| 3 | **Pulsar «Sembrar veredictos (sin avisar a GHL)»** en producción (botón de v0.8.1) — evita el estallido de ~55 avisos al CRM en el primer pase real | ⏳ |
+| 4 | Revisar 24-48 h de logs en DRY-RUN con v0.8.1 (checklist del README) | ⏳ |
+| 5 | **Entonces sí**: `OMNIA_EVO_DRYRUN = false`. ⚠️ El espejo de GHL se activa en el mismo movimiento (hereda el flag) — con los veredictos sembrados solo notificará cambios reales | ⏳ |
+
+Con el paso 5 en real, decidir cuándo publicar **RP02 (dunning)**: en cuanto el
+espejo etiquete `alumno-impago` de verdad, esos correos empiezan a salir.
+
+---
+
 # 📬 27-ago · Paco contesta las tres, y el falso desfase del campus
 
 ## Las tres respuestas

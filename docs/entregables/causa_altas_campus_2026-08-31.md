@@ -1,6 +1,6 @@
 # La causa: el conector no matricula a quien ya existe en el campus
 
-**27 de agosto de 2026** · causa identificada, correlación perfecta
+**31 de agosto de 2026** · causa identificada, correlación perfecta
 
 ## El hallazgo
 
@@ -53,7 +53,7 @@ funcionar**. Los 17 ya tienen cuenta; solo hay que añadirles las matrículas.
 
 ## Qué hacer
 
-### 1 · Dar acceso a los 17 — antes del lunes
+### 1 · Dar acceso a los 17 — antes de mañana
 
 Ya tienen usuario en el campus. Hay que añadirles las **4 formaciones** del
 grupo `133 PROMOCIÓN GUARDIA CIVIL`, con alta **01-sep-2026** y fin
@@ -106,7 +106,7 @@ han topado con esto.
 
 **Tres cosas:**
 
-1. **Damos acceso a los 17 a mano** antes del lunes. Al no ser un problema de
+1. **Damos acceso a los 17 a mano** antes de mañana. Al no ser un problema de
    plazas, esto sí funciona.
 2. **Habría que pedirle a Jaime que corrija el conector** para que matricule a
    quien ya existe. Con la causa localizada debería ser rápido.

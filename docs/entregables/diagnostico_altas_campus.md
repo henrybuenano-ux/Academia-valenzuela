@@ -1,8 +1,8 @@
 # Por qué fallan las altas en el campus — guía de diagnóstico
 
-**27 de agosto de 2026** · para resolver antes del lunes
+**31 de agosto de 2026** · para resolver antes de mañana
 Contexto: 35 suscripciones activas, 18 matriculados, **17 sin acceso**
-(`altas_campus_fallando_2026-08-27.md`)
+(`altas_campus_fallando_2026-08-31.md`)
 
 ## Empieza por aquí: el estado de los pedidos
 

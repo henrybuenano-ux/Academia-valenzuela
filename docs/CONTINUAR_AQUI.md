@@ -4,6 +4,29 @@
 
 ---
 
+# 🚨 HOY ES LUNES 31 DE AGOSTO · EL CURSO EMPIEZA MAÑANA
+
+Corrección de fechas del 31-ago: varios documentos se escribieron fechados el
+**27-ago** y hablaban de «el lunes 1 de septiembre». **El 1 de septiembre es
+martes, y hoy —lunes— es el 31.** No quedan días de margen: queda hoy.
+
+## Lo que vence hoy o mañana por la mañana
+
+| Cuándo | Qué | Estado |
+|---|---|---|
+| **Hoy, sin falta** | **Dar acceso a los 17 alumnos** que pagaron y no están en el campus. Empiezan mañana | 🔴 |
+| **Hoy** | **Último día de la oferta de 48 €.** Mañana debería estar a 80: no sube sola | 🔴 |
+| **Hoy** | **Congelar la campaña de recuperación** hasta que el conector matricule a ex-alumnos | 🔴 |
+| Mañana | Reconfigurar el `#2054` (cuota, prueba, sincronización, «dejar de renovar») | 🟡 |
+| Mañana | Landing y bot con el precio nuevo | 🟡 |
+
+Detalle de cada uno en los documentos enlazados más abajo.
+
+---
+
+
+---
+
 # 📬 27-ago · Paco contesta las tres, y el falso desfase del campus
 
 ## Las tres respuestas
@@ -32,11 +55,11 @@ dos días. **No falta nadie.**
 > **menos** en la plataforma que en la web, no más.
 
 Diagnóstico, lista de los 18 y borrador de respuesta:
-`entregables/desfase_campus_web_2026-08-27.md`
+`entregables/desfase_campus_web_2026-08-31.md`
 
 ---
 
-# ⏰ LUNES 1 DE SEPTIEMBRE — lo que vence
+# ⏰ MARTES 1 DE SEPTIEMBRE — lo que vence
 
 Reunido aquí porque hoy está repartido entre tres documentos. **Enlaces, no
 copias**: el detalle vive en su sitio.
@@ -53,7 +76,7 @@ copias**: el detalle vive en su sitio.
 ## ⚠️ El orden real del dunning (RP02)
 
 Inventario de workflows del 26-ago: **RP02 está en borrador** y su nombre dice
-«NO ACTIVAR HASTA 1-SEP». Publicarlo el lunes es inofensivo: dispara con el tag
+«NO ACTIVAR HASTA 1-SEP». Publicarlo mañana es inofensivo: dispara con el tag
 `alumno-impago`, que lo pone el espejo de GHL del plugin, y con el plugin en
 DRY-RUN nadie lo activa.
 

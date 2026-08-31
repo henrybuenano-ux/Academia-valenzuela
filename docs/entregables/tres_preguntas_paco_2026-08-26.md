@@ -32,7 +32,7 @@ Con esas tres respuestas queda todo programado.
 | | Qué desbloquea | Si no contesta |
 |---|---|---|
 | **1 · Las paradas** | El último bloqueo del modo real: sin cerrarlas, el primer censo real arranca sucio | Se puede proceder igual pasado un tiempo prudencial — la evidencia es clara y la acción es la única coherente. Pero mejor con su visto bueno por escrito |
-| **2 · Fecha del examen** | Poner «Dejar de renovar después de» en el producto, y que el ciclo se cierre solo cada año | El lunes se configura con una estimación (10 u 11 cuotas desde el 1-sep) y se ajusta cuando salga la convocatoria |
+| **2 · Fecha del examen** | Poner «Dejar de renovar después de» en el producto, y que el ciclo se cierre solo cada año | Mañana se configura con una estimación (10 u 11 cuotas desde el 1-sep) y se ajusta cuando salga la convocatoria |
 | **3 · Los becados** | Que no se queden exentos por inercia y acaben con la 133ª gratis sin que nadie lo vea | Se dejan como están y se revisa en el informe mensual de acceso sin pago |
 
 ## Lo que ya NO hay que preguntarle

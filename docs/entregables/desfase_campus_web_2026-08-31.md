@@ -1,6 +1,6 @@
 # El desfase campus / web: no hay fallo de sincronización
 
-**27 de agosto de 2026** · consultado en directo contra la API de EvoCampus
+**31 de agosto de 2026** · consultado en directo contra la API de EvoCampus
 Respuesta al correo de Paco de las 6:55 y al de Horacio de las 8:47.
 
 ## La respuesta en una línea

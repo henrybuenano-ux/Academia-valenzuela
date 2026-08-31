@@ -58,7 +58,7 @@ lógico.
 Sigue siendo una confirmación que le corresponde a Paco, pero ya no es una
 disyuntiva: es validar la única acción coherente.
 
-## Consecuencia 2: el ciclo no se cierra solo, y hay que arreglarlo el lunes
+## Consecuencia 2: el ciclo no se cierra solo, y hay que arreglarlo mañana
 
 El producto `#2054` está en **«Dejar de renovar después de: No parar hasta que se
 cancele»**. Con eso, en julio de 2027 volverá a hacer falta que **alguien edite a

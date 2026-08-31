@@ -1,6 +1,6 @@
 # 🔴 17 alumnos han pagado y no tienen acceso al campus
 
-**27 de agosto de 2026** · el curso empieza **el lunes 1 de septiembre**
+**31 de agosto de 2026** · el curso empieza **el martes 1 de septiembre**
 Contrastado el listado de suscripciones de WooCommerce contra `getEnrollments`
 de EvoCampus.
 
@@ -17,7 +17,7 @@ suscripciones frente a 18 matrículas.
 
 ## Corrección de lo que escribimos esta mañana
 
-En `desfase_campus_web_2026-08-27.md` concluimos que no faltaba nadie. **Es
+En `desfase_campus_web_2026-08-31.md` concluimos que no faltaba nadie. **Es
 falso.** El error: se compararon los 18 del campus contra los **16 pedidos del
 25-ago** —una cifra de dos días antes— y se dio el cuadre por bueno. Nunca se
 verificó cuántas suscripciones había hoy.
@@ -76,7 +76,7 @@ fallaría siempre.
 
 ## Qué hacer, por orden
 
-### 1 · Dar acceso a los 17, antes del lunes
+### 1 · Dar acceso a los 17, antes de mañana
 
 Es lo que corre. Han pagado y el curso empieza en cuatro días. Se puede hacer a
 mano en el campus, o reprocesando los pedidos si el conector lo permite.
@@ -126,7 +126,7 @@ la lista con nombre y número de suscripción.
 **Entre ellos está Óscar Vargas**, el que no podía inscribirse: consiguió
 comprar y se ha quedado fuera.
 
-Lo urgente es **darles acceso antes del lunes**, que empieza el curso. Cada uno
+Lo urgente es **darles acceso antes de mañana**, que empieza el curso. Cada uno
 necesita las cuatro formaciones, con alta el 1 de septiembre y fin el 3 de
 julio, igual que los 18 que sí entraron.
 

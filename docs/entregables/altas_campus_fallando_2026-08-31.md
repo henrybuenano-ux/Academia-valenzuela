@@ -1,4 +1,20 @@
-# 🔴 17 alumnos han pagado y no tienen acceso al campus
+# ✅ RESUELTO el mismo día — los 17 tienen acceso desde esta tarde
+
+**Cierre 31-ago, por la tarde.** Carga masiva en el panel de EvoCampus (Excel de
+los 17 × 4 subidas, una por formación), verificada por API al terminar:
+
+- **35 personas** en la 133ª · **140 matrículas** (35 × 4, cada curso en 35)
+- Fechas **01-09-2026 → 03-07-2027** en todas · **cero duplicados**
+- El import reconoció a los 17 como usuarios existentes («sus datos se
+  actualizarán») — sin tocar contraseñas ni las matrículas viejas de la 132ª
+
+**Sigue vivo el fallo de fondo**: el conector no matricula a ex-alumnos. Cada
+venta nueva a uno de ellos volverá a quedarse fuera hasta que se corrija
+(`causa_altas_campus_2026-08-31.md`). Cruce diario mientras tanto.
+
+---
+
+# 🔴 (histórico de la mañana) 17 alumnos han pagado y no tienen acceso al campus
 
 **31 de agosto de 2026** · el curso empieza **el martes 1 de septiembre**
 Contrastado el listado de suscripciones de WooCommerce contra `getEnrollments`

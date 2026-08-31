@@ -14,7 +14,7 @@ martes, y hoy —lunes— es el 31.** No quedan días de margen: queda hoy.
 
 | Cuándo | Qué | Estado |
 |---|---|---|
-| **Hoy, sin falta** | **Dar acceso a los 17 alumnos** que pagaron y no están en el campus. Empiezan mañana | 🔴 |
+| ~~Hoy~~ ✅ | ~~Dar acceso a los 17~~ **HECHO el 31-ago por la tarde** — carga masiva verificada: 35 personas × 4 formaciones, cero duplicados. Falta avisarles de que recuperen contraseña | ✅ |
 | **Hoy** | **Último día de la oferta de 48 €.** Mañana debería estar a 80: no sube sola | 🔴 |
 | **Hoy** | **Congelar la campaña de recuperación** hasta que el conector matricule a ex-alumnos | 🔴 |
 | Mañana | Reconfigurar el `#2054` (cuota, prueba, sincronización, «dejar de renovar») | 🟡 |
